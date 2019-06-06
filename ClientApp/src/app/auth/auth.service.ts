@@ -37,12 +37,12 @@ export class AuthService {
         localStorage.setItem('jwt', jwt)
         localStorage.setItem('role', role);
         //redirect logic
-        // switch(role){
-        //   case 'Admin': {this.router.navigate(['/Admin']); break;}
-        //   case 'AppUser': {this.router.navigate(['/Passanger']); break;}
-        //   case 'Controllor':  {this.router.navigate(['/Home']); break} // change once added
-        //   default : {this.router.navigate(['/Home']);break;}
-        // }
+        switch(role){
+          case 'Admin': {this.router.navigate(['/Admin']); break;}
+          case 'AppUser': {this.router.navigate(['/Passenger']); break;}
+          case 'Controllor':  {this.router.navigate(['/Home']); break} // change once added
+          default : {this.router.navigate(['/Home']);break;}
+        }
 
 
       }),

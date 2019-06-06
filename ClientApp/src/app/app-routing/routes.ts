@@ -14,6 +14,7 @@ import { PricelistEditComponent } from '../AdminPage/pricelist-edit/pricelist-ed
 import { DocumentPassangerComponent } from '../HomePage/document-passanger/document-passanger.component';
 import { compileBaseDefFromMetadata } from '@angular/compiler';
 import { LineAddComponent } from '../AdminPage/line-add/line-add.component';
+import { MyProfileComponent } from '../PassangerPage/my-profile/my-profile.component';
 export const routes: Routes = [
   {path: '', redirectTo: '/Home', pathMatch: 'full'},
   {path: 'Home', component: HomePageComponent},
@@ -51,7 +52,13 @@ export const routes: Routes = [
   {
     path: 'Passenger',
     component: PassangerComponent,
-    canActivate: [PassangerAuthGuard]
+    canActivate: [PassangerAuthGuard],
+    children: [
+      {
+        path: 'MyProfile',
+        component: MyProfileComponent
+      }
+    ]
   },
   {
     path: 'Documentation',

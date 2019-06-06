@@ -44,7 +44,7 @@ namespace WebApp.Models
 
     public class DocumentationModel
     {
-        public string document { get; set; }
+        public string Document { get; set; }
         public PassengerType Type { get; set; }
     }
     public class CheckDocumentViewModel

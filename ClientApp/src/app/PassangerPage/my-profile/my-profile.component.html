@@ -1,0 +1,84 @@
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h4>Information</h4>
+                        <form [formGroup]="MyProfileForm" class="user">
+                          <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                              </div>
+                              <input formControlName="Firstname" class="form-control" placeholder="Firstname" type="text" required>
+                              <input formControlName="Lastname" class="form-control" placeholder="Lastname" type="text" required>
+                            </div> 
+                            <div class="form-group input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                              </div>
+                              <input formControlName="Email" class="form-control" placeholder="Email address" type="email" required>
+                            </div> 
+                            <div class="form-group input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                              </div>
+                                <label>Username</label>
+                                <input formControlName="Username" class="form-control" placeholder="Username" type="text" required>
+                            </div>
+                            <div class="form-group input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                              </div>
+                                <label>Password</label>
+                                <input formControlName="Password" class="form-control" placeholder="Password" type="password" required>
+                            </div>
+                            <div class="form-group input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                              </div>
+                              <input formControlName="Address" class="form-control" placeholder="Address" type="text" required>
+                            </div>
+                            <div class="form-group input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+                              </div>
+                              <label>Birthdate</label>
+                              <input formControlName="Birthdate" class="form-control" readonly type="date">
+                            </div>
+                            <div class="form-group input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-user-circle-o"></i> </span>
+                              </div>
+                              <label>Type</label>
+                              <input formControlName="Type" class="form-control" placeholder="Type" type="text">
+                            </div>
+                            <div class="form-group input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="	fa fa-handshake-o"></i> </span>
+                              </div>
+                              <label>Validated: </label>
+                              <input formControlName="Validation" class="form-control" type="text" readonly>
+                            </div> 
+                            <div class="form-group">
+                              <button type="submit" class="btn btn-primary btn-block"> Save changes  </button>
+                            </div>
+                          </form>
+                    </div>                                                                  
+                    </div>
+                </div>
+            </div>
+      </div>
+</div>
+</body>
+

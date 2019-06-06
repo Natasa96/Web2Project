@@ -20,6 +20,7 @@ import { PricelistEditComponent } from './AdminPage/pricelist-edit/pricelist-edi
 import { AuthGuard } from './auth/auth.guard';
 import { JwtInterceptor } from './auth/jwt-interceptor';
 import { LineAddComponent } from './AdminPage/line-add/line-add.component';
+import { MyProfileComponent } from './PassangerPage/my-profile/my-profile.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { LineAddComponent } from './AdminPage/line-add/line-add.component';
     TimetableEditComponent,
     PricelistEditComponent,
     LineAddComponent,
+    MyProfileComponent,
   ],
   imports: [
     BrowserModule,
