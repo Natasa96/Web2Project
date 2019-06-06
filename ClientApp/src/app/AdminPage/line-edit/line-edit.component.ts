@@ -10,12 +10,5 @@ export class LineEditComponent implements OnInit {
 
   constructor(private service: ConnectionService) { }
 
-  ngOnInit() {
-    this.getLines();
-  }
-
-  getLines() : void{
-    
-  }
-
+  ngOnInit() {}
 }

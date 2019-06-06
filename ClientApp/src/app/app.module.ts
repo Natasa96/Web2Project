@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 
@@ -17,7 +17,9 @@ import { LineEditComponent } from './AdminPage/line-edit/line-edit.component';
 import { StationEditComponent } from './AdminPage/station-edit/station-edit.component';
 import { TimetableEditComponent } from './AdminPage/timetable-edit/timetable-edit.component';
 import { PricelistEditComponent } from './AdminPage/pricelist-edit/pricelist-edit.component';
-import { ControllerComponent } from './AdminPage/controller/controller.component';
+import { AuthGuard } from './auth/auth.guard';
+import { JwtInterceptor } from './auth/jwt-interceptor';
+import { LineAddComponent } from './AdminPage/line-add/line-add.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,7 @@ import { ControllerComponent } from './AdminPage/controller/controller.component
     StationEditComponent,
     TimetableEditComponent,
     PricelistEditComponent,
-    ControllerComponent,
+    LineAddComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,14 @@ import { ControllerComponent } from './AdminPage/controller/controller.component
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

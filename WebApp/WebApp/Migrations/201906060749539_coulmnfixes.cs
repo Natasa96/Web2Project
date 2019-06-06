@@ -3,13 +3,13 @@ namespace WebApp.Migrations
     using System;
     using System.Data.Entity.Migrations;
 
-    public partial class buses : DbMigration
+    public partial class coulmnfixes : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.GeoCoords", "NetworkLine_Id", c => c.Int());
-            CreateIndex("dbo.GeoCoords", "NetworkLine_Id");
-            AddForeignKey("dbo.GeoCoords", "NetworkLine_Id", "dbo.NetworkLines", "Id");
+            AddColumn("dbo.GeoCoords", "LinesId", c => c.Int());
+            CreateIndex("dbo.GeoCoords", "LinesId");
+            AddForeignKey("dbo.GeoCoords", "LinesId", "dbo.NetworkLines", "Id");
         }
 
         public override void Down()

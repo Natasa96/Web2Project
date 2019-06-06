@@ -1,0 +1,10 @@
+<form [formGroup] = "LineAddForm" (ngSubmit)="addLine()">
+  <input type="number" formControlName="LineNumber">
+  <select ng-model="selectedType" class="lineTypes" formControlName="Type">
+    <option *ngFor="let type of lineTypes"
+      [value]="type">
+        {{type}}
+    </option>
+  </select>
+  <button type="submit">Add Line</button>
+</form>

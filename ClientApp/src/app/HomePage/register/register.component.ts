@@ -25,8 +25,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(private fb:FormBuilder, private connectionService : ConnectionService, private router: Router, private authService: AuthService) { }
   user = {
-    username : '',
-    password : '',
+    username: '',
+    password: '',
     grant_type: ''
   }
   ngOnInit() {

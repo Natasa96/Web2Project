@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { PassangerType } from './PassangerType';
 import { DocumentModel } from './documentModel';
+import { LineType } from './LineType';
 
 const httpOprions = {
   headers: new HttpHeaders({
@@ -37,6 +38,12 @@ export class ConnectionService {
     ).pipe(catchError(this.handleError<PassangerType[]>("PassangerType")));
   }
 
+  getLineTypes() : Observable<LineType[]>{
+    return this.http.get<LineType[]>(
+      this.ServiceUrl + 'Enums/GetLineType'
+    ).pipe(catchError(this.handleError<LineType[]>("LineType")));
+  }
+
   addDocumentation(documentModel: DocumentModel): Observable<DocumentModel>{
     return this.http.post<DocumentModel>(
       this.ServiceUrl + "AppUser/AddDocumentation",
@@ -45,6 +52,15 @@ export class ConnectionService {
     ).pipe(
       catchError(this.handleError<DocumentModel>("DocumentModel"))
     );
+  }
+
+  addLine(line: LineType): Observable<LineType>{
+    return this.http.post<LineType>(
+      this.ServiceUrl + "Admin/AddLine",
+      line,
+      httpOprions).pipe(
+        catchError(this.handleError<LineType>("LineType"))
+      );
   }
 
   private handleError<T>(operation = 'operation', result? : T){

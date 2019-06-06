@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,21 +17,14 @@ namespace WebApp.Controllers
     [RoutePrefix("api/Admin")]
     public class AdminController : ApiController
     {
-        private DemoUnitOfWork _unitOfWork;
+        private IUnitOfWork UnitOfWork;
+        private DbContext _conext;
 
-        public AdminController() { }
-
-        public DemoUnitOfWork UnitOfWork
-        {
-            get
-            {
-                return _unitOfWork;
-            }
-            private set
-            {
-                _unitOfWork = value;
-            }
+        public AdminController(IUnitOfWork unitOfWork, DbContext context) {
+            UnitOfWork = unitOfWork;
+            _conext = context;
         }
+
 
         //Da li mi treba sobzirom da je vec na ../Admin stranici
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }

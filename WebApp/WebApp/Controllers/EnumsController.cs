@@ -19,7 +19,7 @@ namespace WebApp.Controllers
         //GET   api/Enums/GetLineType
         public IHttpActionResult GetLineTypes()
         {
-            return Ok(Enum.GetValues(typeof(LineType)).Cast<LineType>());
+            return Ok(Enum.GetNames(typeof(LineType)).ToList());
         }
 
         [HttpGet]

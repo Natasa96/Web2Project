@@ -9,7 +9,6 @@ namespace WebApp.Persistence.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGeoCoordRepository GeoCoords { get; set; }
         INetworkLineRepository NetworkLines { get; set; }
         IPassengerRepository Passengers { get; set; }
         IStationRepository Stations { get; set; }

@@ -71,7 +71,6 @@ namespace WebApp.App_Start
            
             container.RegisterType<DbContext, ApplicationDbContext>(new PerResolveLifetimeManager());
             container.RegisterType<IUnitOfWork, DemoUnitOfWork>();
-            container.RegisterType<IGeoCoordRepository, GeoCoordRepository>();
             container.RegisterType<INetworkLineRepository, NetworkLineRepository>();
             container.RegisterType<IPricelistRepository, PricelistRepository>();
             container.RegisterType<IStationRepository, StationRepository>();

@@ -2,7 +2,7 @@ namespace WebApp.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class RowVersion : DbMigration
     {
         public override void Up()
@@ -12,16 +12,16 @@ namespace WebApp.Migrations
             CreateTable(
                 "dbo.StationNetworkLines",
                 c => new
-                    {
-                        Station_Id = c.Int(nullable: false),
-                        NetworkLine_Id = c.Int(nullable: false),
-                    })
+                {
+                    Station_Id = c.Int(nullable: false),
+                    NetworkLine_Id = c.Int(nullable: false),
+                })
                 .PrimaryKey(t => new { t.Station_Id, t.NetworkLine_Id })
                 .ForeignKey("dbo.Stations", t => t.Station_Id, cascadeDelete: true)
                 .ForeignKey("dbo.NetworkLines", t => t.NetworkLine_Id, cascadeDelete: true)
                 .Index(t => t.Station_Id)
                 .Index(t => t.NetworkLine_Id);
-            
+
             AddColumn("dbo.GeoCoords", "RowVersion", c => c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion"));
             AddColumn("dbo.NetworkLines", "RowVersion", c => c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion"));
             AddColumn("dbo.Stations", "RowVersion", c => c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion"));
@@ -32,7 +32,7 @@ namespace WebApp.Migrations
             AddColumn("dbo.Timetables", "RowVersion", c => c.Binary(nullable: false, fixedLength: true, timestamp: true, storeType: "rowversion"));
             DropColumn("dbo.Stations", "NLine_Id");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.Stations", "NLine_Id", c => c.Int());

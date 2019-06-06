@@ -16,9 +16,6 @@ namespace WebApp.Persistence.UnitOfWork
         public IPricelistRepository Pricelist { get; set; }
 
         [Dependency]
-        public IGeoCoordRepository GeoCoords { get; set; }
-
-        [Dependency]
         public INetworkLineRepository NetworkLines { get; set; }
 
         [Dependency]

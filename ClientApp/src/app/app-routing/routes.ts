@@ -11,8 +11,9 @@ import { LineEditComponent } from '../AdminPage/line-edit/line-edit.component';
 import { StationEditComponent } from '../AdminPage/station-edit/station-edit.component';
 import { TimetableEditComponent } from '../AdminPage/timetable-edit/timetable-edit.component';
 import { PricelistEditComponent } from '../AdminPage/pricelist-edit/pricelist-edit.component';
-import { ControllerComponent } from '../AdminPage/controller/controller.component';
 import { DocumentPassangerComponent } from '../HomePage/document-passanger/document-passanger.component';
+import { compileBaseDefFromMetadata } from '@angular/compiler';
+import { LineAddComponent } from '../AdminPage/line-add/line-add.component';
 export const routes: Routes = [
   {path: '', redirectTo: '/Home', pathMatch: 'full'},
   {path: 'Home', component: HomePageComponent},
@@ -23,27 +24,29 @@ export const routes: Routes = [
   {
     path: 'Admin', 
     component: AdminPageComponent, 
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'LineEdit',
-    component: LineEditComponent
-  },
-  {
-    path: 'StationEdit',
-    component: StationEditComponent
-  },
-  {
-    path: 'TimetableEdit',
-    component: TimetableEditComponent
-  },
-  {
-    path: 'PricelistEdit',
-    component: PricelistEditComponent
-  },
-  {
-    path: 'AddController',
-    component: ControllerComponent
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'LineEdit',
+        component: LineEditComponent
+      },
+      {
+        path: 'StationEdit',
+        component: StationEditComponent
+      },
+      {
+        path: 'TimetableEdit',
+        component: TimetableEditComponent
+      },
+      {
+        path: 'PricelistEdit',
+        component: PricelistEditComponent
+      },
+      {
+        path: 'AddLine',
+        component: LineAddComponent
+      }
+    ]
   },
   {
     path: 'Passenger',

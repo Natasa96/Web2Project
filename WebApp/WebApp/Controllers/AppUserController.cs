@@ -14,13 +14,15 @@ using WebApp.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace WebApp.Controllers
 {
-    [RoutePrefix("api/AppUser")]
+    [RoutePrefix("api/AppUser"), Authorize(Roles ="AppUser")]
     public class AppUserController : ApiController
     {
         private IUnitOfWork UnitOfWork;
+        private DbContext Context;
         private ApplicationUserManager _passanger;
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
@@ -35,12 +37,10 @@ namespace WebApp.Controllers
                 _passanger = value;
             }
         }
-
-        public AppUserController() { }
-        public AppUserController(ApplicationUserManager passanger,ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+        public AppUserController(IUnitOfWork unitOfWork, DbContext context)
         {
-            Passanger = passanger;
-            AccessTokenFormat = accessTokenFormat;
+            Context = context;
+            UnitOfWork = unitOfWork;
         }
 
         [Route("BuyTicket"), HttpPost]
@@ -124,29 +124,26 @@ namespace WebApp.Controllers
         [Route("AddDocumentation"),HttpPost]
         public async Task<IHttpActionResult> AddDocumentation(DocumentationModel documentModel)
         {
-            //try
-            //{
-            //    IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
+            try
+            {
+                IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
 
-            //    if (user == null)
-            //    {
-            //        return null;
-            //    }
+                if (user == null)
+                {
+                    return null;
+                }
 
-            //    Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
-            //    p.Document = documentModel.document;
-            //    p.Type = documentModel.Type;
-            //    UnitOfWork.Passengers.Update(p);
-            //    UnitOfWork.Complete();
-            //    return Ok("Documentation added");
-            //}
-            //catch(Exception e)
-            //{
-            //    return BadRequest(e.Message);
-            //}
-            IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
-            var user2 = RequestContext.Principal;
-            return Ok();
+                Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
+                p.Document = documentModel.document;
+                p.Type = documentModel.Type;
+                UnitOfWork.Passengers.Update(p);
+                UnitOfWork.Complete();
+                return Ok("Documentation added");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

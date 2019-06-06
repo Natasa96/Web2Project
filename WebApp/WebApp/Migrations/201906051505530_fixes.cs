@@ -2,7 +2,7 @@ namespace WebApp.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class fixes : DbMigration
     {
         public override void Up()
@@ -11,7 +11,7 @@ namespace WebApp.Migrations
             CreateIndex("dbo.Tickets", "Passenger_Id");
             AddForeignKey("dbo.Tickets", "Passenger_Id", "dbo.AspNetUsers", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Tickets", "Passenger_Id", "dbo.AspNetUsers");

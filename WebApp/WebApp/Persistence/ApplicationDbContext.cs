@@ -18,7 +18,6 @@ namespace WebApp.Persistence
         public DbSet<NetworkLine> NetworkLineDb { get; set; }
         public DbSet<Timetable> TimetableDb { get; set; }
         public DbSet<Station> StationDb { get; set; }
-        public DbSet<GeoCoord> GeoCoordDb { get; set; }
         public DbSet<Ticket> TicketDb { get; set; }
         public DbSet<Pricelist> PricelistDb { get; set; }
 
