@@ -1,0 +1,11 @@
+<form [formGroup]="StationAddForm" (ngSubmit)="addStation()">
+  <input type="text" formControlName="Name" required>
+  <input type="text" formControlName="Address">
+  <select ng-model="selectedType" class="stationLines" formControlName="NLine">
+    <option *ngFor="let line of stationLines"
+    value="{{line}}">
+    {{line}}
+  </option>
+  </select>
+  <button type="submit">Add station</button>
+</form>

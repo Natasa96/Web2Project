@@ -44,6 +44,7 @@ namespace WebApp.Controllers
         {
             try
             {
+                IEnumerable<NetworkLine> temp = UnitOfWork.NetworkLines.GetAll();
                 return Ok(UnitOfWork.NetworkLines.GetAll());
             }
             catch (Exception ex)
@@ -194,8 +195,18 @@ namespace WebApp.Controllers
         {
             try
             {
+                model.Lines.Add(UnitOfWork.NetworkLines.Get(1));
+                model.Departures = new List<DateTime>();
+                model.Departures.Add(DateTime.Now);
+                model.Departures.Add(DateTime.Now);
+                model.Departures.Add(DateTime.Now);
+                model.Departures.Add(DateTime.Now);
+                model.Departures.Add(DateTime.Now);
                 UnitOfWork.Timetables.Add(model);
                 UnitOfWork.Complete();
+
+                IEnumerable<Timetable> dkfv = UnitOfWork.Timetables.GetAll();
+
                 return Ok($"Timetable {model.Id} successfully added.");
             }
             catch (Exception ex)

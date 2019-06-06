@@ -14,6 +14,10 @@ import { PricelistEditComponent } from '../AdminPage/pricelist-edit/pricelist-ed
 import { DocumentPassangerComponent } from '../HomePage/document-passanger/document-passanger.component';
 import { compileBaseDefFromMetadata } from '@angular/compiler';
 import { LineAddComponent } from '../AdminPage/line-add/line-add.component';
+import { StationAddComponent } from '../AdminPage/station-add/station-add.component';
+import { TimetableAddComponent } from '../AdminPage/timetable-add/timetable-add.component';
+
+
 export const routes: Routes = [
   {path: '', redirectTo: '/Home', pathMatch: 'full'},
   {path: 'Home', component: HomePageComponent},
@@ -45,6 +49,14 @@ export const routes: Routes = [
       {
         path: 'AddLine',
         component: LineAddComponent
+      },
+      {
+        path: 'AddStation',
+        component: StationAddComponent
+      },
+      {
+        path: 'AddTimetable',
+        component: TimetableAddComponent
       }
     ]
   },
