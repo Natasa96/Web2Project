@@ -1,0 +1,16 @@
+<div>
+  <h2>Please provide us with your documentation</h2>
+  <form [formGroup]= "DocumentForm" (ngSubmit)="addDocumentation()">
+      <label>Select type: </label>
+      <select ng-model="selectedType" formControlName="Type"  class="passangerTypes">
+          <option *ngFor="let type of passangerTypes" 
+            [value]="type">
+          {{type}}
+        </option>
+        </select>
+        <label>Choose document</label>
+        <input type="file" formControlName="Document" accept="image/png, image/jpeg">
+    <input type="submit"/>
+  </form>
+  <p>... or you can skip it: <a href="/Passenger">Click here!</a></p>
+</div>

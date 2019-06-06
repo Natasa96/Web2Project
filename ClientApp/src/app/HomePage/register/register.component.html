@@ -1,0 +1,74 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!-- All the files that are required -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Where all the magic happens -->
+<!-- REGISTRATION FORM -->
+<div>
+		<ul>
+			<li><a href="\Home">Home</a></li>
+			<li><a href="\Register">Register</a></li>
+			<li><a href="\Login">Login</a></li>
+			<li><a href="\About">About</a></li>
+		  </ul>
+	  </div>
+<body>
+<div class="text-center" style="padding:50px 0">
+	<div class="logo">register</div>
+	<!-- Main Form -->
+	<div class="login-form-1">
+		<form [formGroup]="registerForm" (ngSubmit)="register()" class="text-left">
+			<div class="login-form-main-message"></div>
+			<div class="main-login-form">
+				<div class="login-group">
+					<div class="form-group">
+						<label for="reg_username" class="sr-only">Username</label>
+						<input type="text" formControlName="Username" class="form-control"  placeholder="username">
+					</div>
+					<div class="form-group">
+						<label for="reg_password" class="sr-only">Password</label>
+						<input type="password" formControlName="Password" class="form-control"  placeholder="password">
+					</div>
+					<div class="form-group">
+						<label for="reg_password_confirm" class="sr-only">Password Confirm</label>
+						<input type="password" formControlName="ConfirmPassword" class="form-control"  placeholder="confirm password">
+					</div>
+					
+					<div class="form-group">
+						<label for="reg_email" class="sr-only">Email</label>
+						<input type="text" formControlName="Email" class="form-control"  placeholder="email">
+					</div>
+					<div class="form-group">
+						<label for="reg_firstname" class="sr-only">FirstName</label>
+						<input type="text" formControlName="Firstname" class="form-control"  placeholder="Firstname">
+          			</div>
+					<div class="form-group">
+						<label for="reg_lastname" class="sr-only">LastName</label>
+						<input type="text" class="form-control" formControlName="Lastname"  placeholder="Lastname">
+					</div>
+					<div class="form-group">
+						<label for="reg_address" class="sr-only">Address</label>
+						<input type="text" class="form-control" formControlName="Address" placeholder="Address">
+					</div>
+					<div class="form-group">
+						<label for="reg_birthdate" class="sr-only">Birthdate</label>
+						<input type="date" class="form-control" formControlName="Birthdate"  placeholder="Birthdate">
+					</div>
+				</div>
+				<button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+			</div>
+			<div class="etc-login-form">
+				<p>already have an account? <a href="\Login">login here</a></p>
+			</div>
+		</form>
+	</div>
+	<!-- end:Main Form -->
+</div>
+</body>
