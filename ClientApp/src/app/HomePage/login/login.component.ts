@@ -19,6 +19,6 @@ export class LoginComponent {
   constructor(public authService: AuthService, public router: Router, private fb: FormBuilder) { }
 
   login() {
-    this.authService.login(this.loginForm.value).subscribe((data) => { });
+    this.authService.login(this.loginForm.value).subscribe((data) => {console.log("Logged in:" + data) });
   }
 }

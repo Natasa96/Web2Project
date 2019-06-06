@@ -18,6 +18,7 @@ import { StationAddComponent } from '../AdminPage/station-add/station-add.compon
 import { TimetableAddComponent } from '../AdminPage/timetable-add/timetable-add.component';
 
 
+import { MyProfileComponent } from '../PassangerPage/my-profile/my-profile.component';
 export const routes: Routes = [
   {path: '', redirectTo: '/Home', pathMatch: 'full'},
   {path: 'Home', component: HomePageComponent},
@@ -63,7 +64,13 @@ export const routes: Routes = [
   {
     path: 'Passenger',
     component: PassangerComponent,
-    canActivate: [PassangerAuthGuard]
+    canActivate: [PassangerAuthGuard],
+    children: [
+      {
+        path: 'MyProfile',
+        component: MyProfileComponent
+      }
+    ]
   },
   {
     path: 'Documentation',

@@ -22,6 +22,7 @@ import { JwtInterceptor } from './auth/jwt-interceptor';
 import { LineAddComponent } from './AdminPage/line-add/line-add.component';
 import { StationAddComponent } from './AdminPage/station-add/station-add.component';
 import { TimetableAddComponent } from './AdminPage/timetable-add/timetable-add.component';
+import { MyProfileComponent } from './PassangerPage/my-profile/my-profile.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { TimetableAddComponent } from './AdminPage/timetable-add/timetable-add.c
     LineAddComponent,
     StationAddComponent,
     TimetableAddComponent,
+    MyProfileComponent,
   ],
   imports: [
     BrowserModule,

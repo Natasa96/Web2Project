@@ -15,6 +15,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.IO;
+using System.Drawing;
+using System.Web;
 
 namespace WebApp.Controllers
 {
@@ -122,22 +125,89 @@ namespace WebApp.Controllers
             }
         }
         [Route("AddDocumentation"),HttpPost]
-        public async Task<IHttpActionResult> AddDocumentation(DocumentationModel documentModel)
+        public IHttpActionResult AddDocumentation()
         {
             try
             {
-                IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
-
-                if (user == null)
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                try
                 {
-                    return null;
+
+                    var httpRequest = HttpContext.Current.Request;
+
+                    foreach (string file in httpRequest.Files)
+                    {
+                        HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+
+                        var postedFile = httpRequest.Files[file];
+                        if (postedFile != null && postedFile.ContentLength > 0)
+                        {
+
+                            int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB  
+
+                            IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                            var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
+                            var extension = ext.ToLower();
+                            if (!AllowedFileExtensions.Contains(extension))
+                            {
+
+                                var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
+
+                                dict.Add("error", message);
+                                return Ok();
+                            }
+                            else if (postedFile.ContentLength > MaxContentLength)
+                            {
+
+                                var message = string.Format("Please Upload a file upto 1 mb.");
+
+                                dict.Add("error", message);
+                                return Ok();
+                            }
+                            else
+                            {
+
+
+
+                                var filePath = HttpContext.Current.Server.MapPath("~/Userimage/" + postedFile.FileName + extension);
+
+                                postedFile.SaveAs(filePath);
+
+                            }
+                        }
+
+                        var message1 = string.Format("Image Updated Successfully.");
+                        return Ok();
+                    }
+                    var res = string.Format("Please Upload a image.");
+                    dict.Add("error", res);
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    var res = string.Format("some Message");
+                    dict.Add("error", res);
+                    return Ok();
                 }
 
-                Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
-                p.Document = documentModel.document;
-                p.Type = documentModel.Type;
-                UnitOfWork.Passengers.Update(p);
-                UnitOfWork.Complete();
+
+                //if(!ModelState.IsValid)
+                //{
+                //    return BadRequest();
+                //}
+                //IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
+
+                //if (user == null)
+                //{
+                //    return null;
+                //}
+
+                //Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
+                //p.Document = documentModel.document;
+                //p.Type = documentModel.Type;
+                //UnitOfWork.Passengers.Update(p);
+                //UnitOfWork.Complete();
+
                 return Ok("Documentation added");
             }
             catch (Exception e)
