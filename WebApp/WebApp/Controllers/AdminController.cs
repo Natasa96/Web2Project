@@ -25,14 +25,15 @@ namespace WebApp.Controllers
             _conext = context;
         }
 
-
-        //Da li mi treba sobzirom da je vec na ../Admin stranici
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         [Route("AddLine")]
         [HttpPost]
         public IHttpActionResult AddLine(NetworkLine model)
         {
+            //model.Departures.Add()
+            
+
             UnitOfWork.NetworkLines.Add(model);
             UnitOfWork.Complete();
             return Ok($"Line {model.LineNumber} successfully added!");
@@ -196,16 +197,9 @@ namespace WebApp.Controllers
             try
             {
                 model.Lines.Add(UnitOfWork.NetworkLines.Get(1));
-                model.Departures = new List<DateTime>();
-                model.Departures.Add(DateTime.Now);
-                model.Departures.Add(DateTime.Now);
-                model.Departures.Add(DateTime.Now);
-                model.Departures.Add(DateTime.Now);
-                model.Departures.Add(DateTime.Now);
+
                 UnitOfWork.Timetables.Add(model);
                 UnitOfWork.Complete();
-
-                IEnumerable<Timetable> dkfv = UnitOfWork.Timetables.GetAll();
 
                 return Ok($"Timetable {model.Id} successfully added.");
             }

@@ -1,10 +1,24 @@
 <form [formGroup]="LineAddForm" (ngSubmit)="addLine()">
+  
   <input type="number" formControlName="LineNumber">
+  
   <select ng-model="selectedType" class="lineTypes" formControlName="Type">
     <option *ngFor="let type of lineTypes"
       [value]="type">
         {{type}}
     </option>
   </select>
+
+  <div formArrayName="Departures">
+    <h4>Departures</h4>
+    <button type="button" (click)="addTime()">Add time</button>
+    <div *ngFor="let t of Departures.controls; let i=index">
+      <label>Time: 
+        <input type="time" [formControlName]="i">
+      </label>
+    </div>
+  </div>
+
   <button type="submit">Add Line</button>
+
 </form>

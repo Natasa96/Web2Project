@@ -20,7 +20,7 @@ export class StationAddComponent implements OnInit {
     Latitude: ['']
   })
 
-  lines: NetworkLineModel[];
+  stationLines: NetworkLineModel[];
 
   constructor(private fb: FormBuilder, private Service: ConnectionService) { }
 
@@ -29,8 +29,8 @@ export class StationAddComponent implements OnInit {
   }
 
   getNetworkLines(){
-    this.Service.getLines().subscribe((result) => this.lines = result);
-    console.log(this.lines);
+    this.Service.getLines().subscribe((result) => this.stationLines = result);
+    console.log(this.stationLines);
   }
 
   addStation(){
