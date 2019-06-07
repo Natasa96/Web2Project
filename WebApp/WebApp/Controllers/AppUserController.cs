@@ -18,10 +18,12 @@ using System.Data.Entity;
 using System.IO;
 using System.Drawing;
 using System.Web;
+using WebApp.Models.Enums;
+using System.Globalization;
 
 namespace WebApp.Controllers
 {
-    [RoutePrefix("api/AppUser"), Authorize(Roles ="AppUser")]
+    [RoutePrefix("api/AppUser"), Authorize(Roles = "AppUser")]
     public class AppUserController : ApiController
     {
         private IUnitOfWork UnitOfWork;
@@ -66,12 +68,12 @@ namespace WebApp.Controllers
                 else
                     throw new Exception("Error occured. Cannot add ticket to Passanger.");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
-        [Route("UpdateProfile"),HttpPost]
+        [Route("UpdateProfile"), HttpPost]
         public IHttpActionResult UpdateProfile(Passenger userInfo)
         {
             try
@@ -80,12 +82,12 @@ namespace WebApp.Controllers
                 UnitOfWork.Complete();
                 return Ok("User info has beed updated.");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
-        [Route("MyInfo"),HttpGet]
+        [Route("MyInfo"), HttpGet]
         public async Task<IHttpActionResult> MyInfo()
         {
             try
@@ -99,16 +101,16 @@ namespace WebApp.Controllers
 
                 Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
                 if (p != null)
-                    return Ok(p);
+                    return Ok(CreatePassengerInfo(p));
                 else
                     throw new Exception("User is null");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return InternalServerError(e);
             }
         }
-        [Route("GetNetworkLines"),HttpGet]
+        [Route("GetNetworkLines"), HttpGet]
         public IHttpActionResult GetNetworkLines()
         {
             try
@@ -119,100 +121,86 @@ namespace WebApp.Controllers
                 else
                     throw new Exception("Lines are null");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return InternalServerError(e);
             }
         }
-        [Route("AddDocumentation"),HttpPost]
-        public IHttpActionResult AddDocumentation()
+        [Route("AddDocumentation"), HttpPost]
+        public async Task<IHttpActionResult> AddDocumentation()
         {
-            try
-            {
-                Dictionary<string, object> dict = new Dictionary<string, object>();
-                try
+             try
+             {
+                var httpRequest = HttpContext.Current.Request;
+                var typeP = HttpContext.Current.Request.Params["UserType"];
+                string path = string.Empty;
+                foreach (string file in httpRequest.Files)
                 {
-
-                    var httpRequest = HttpContext.Current.Request;
-
-                    foreach (string file in httpRequest.Files)
+                    var postedFile = httpRequest.Files[file];
+                    if (postedFile != null && postedFile.ContentLength > 0)
                     {
-                        HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
-
-                        var postedFile = httpRequest.Files[file];
-                        if (postedFile != null && postedFile.ContentLength > 0)
+                        int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB  
+                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                        var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
+                        var extension = ext.ToLower();
+                        if (!AllowedFileExtensions.Contains(extension))
                         {
-
-                            int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB  
-
-                            IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
-                            var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
-                            var extension = ext.ToLower();
-                            if (!AllowedFileExtensions.Contains(extension))
-                            {
-
-                                var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
-
-                                dict.Add("error", message);
-                                return Ok();
-                            }
-                            else if (postedFile.ContentLength > MaxContentLength)
-                            {
-
-                                var message = string.Format("Please Upload a file upto 1 mb.");
-
-                                dict.Add("error", message);
-                                return Ok();
-                            }
-                            else
-                            {
-
-
-
-                                var filePath = HttpContext.Current.Server.MapPath("~/Userimage/" + postedFile.FileName + extension);
-
-                                postedFile.SaveAs(filePath);
-
-                            }
+                            var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
+                            return Ok(message);
                         }
-
-                        var message1 = string.Format("Image Updated Successfully.");
-                        return Ok();
+                        else if (postedFile.ContentLength > MaxContentLength)
+                        {
+                            var message = string.Format("Please Upload a file upto 1 mb.");
+                            return Ok(message);
+                        }
+                        else
+                        {
+                            var filePath = @"C:\Users\Nenad\Desktop\Web2Project\WebApp\WebApp\Content\" + postedFile.FileName + extension;
+                            path = filePath;
+                            postedFile.SaveAs(filePath);
+                        }
                     }
-                    var res = string.Format("Please Upload a image.");
-                    dict.Add("error", res);
-                    return Ok();
+                    IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
+                    if (user == null)
+                        return InternalServerError();
+
+                    Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
+                    p.Document = path;
+                    p.Type = ConvertType(typeP);
+                    UnitOfWork.Passengers.Update(p);
+                    UnitOfWork.Complete();
+                    var message1 = string.Format("Documentation added.");
+                    return Ok(message1);
                 }
-                catch (Exception ex)
-                {
-                    var res = string.Format("some Message");
-                    dict.Add("error", res);
-                    return Ok();
-                }
-
-
-                //if(!ModelState.IsValid)
-                //{
-                //    return BadRequest();
-                //}
-                //IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
-
-                //if (user == null)
-                //{
-                //    return null;
-                //}
-
-                //Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
-                //p.Document = documentModel.document;
-                //p.Type = documentModel.Type;
-                //UnitOfWork.Passengers.Update(p);
-                //UnitOfWork.Complete();
-
-                return Ok("Documentation added");
-            }
-            catch (Exception e)
+                var res = string.Format("Please Upload a image.");
+                return Ok(res);
+             }
+             catch (Exception ex)
+             {
+                 return Ok(ex.Message);
+             }
+        }
+        private PassengerInfoViewModel CreatePassengerInfo(Passenger p)
+        {
+            return new PassengerInfoViewModel()
             {
-                return BadRequest(e.Message);
+                Username = p.UserName,
+                Firstname = p.Firstname,
+                Lastname = p.Lastname,
+                Address = p.Address,
+                Email = p.Email,
+                Birthdate = p.Birthdate.Value.Date,
+                Document = p.Document,
+                Validation = p.Validation
+            };
+        }
+        private PassengerType ConvertType(string typeP)
+        {
+            switch(typeP)
+            {
+                case "Student": return PassengerType.Student;
+                case "Penzioner": return PassengerType.Penzioner;
+                default: return PassengerType.Regular;
             }
         }
     }

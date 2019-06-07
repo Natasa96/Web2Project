@@ -38,13 +38,6 @@
                             </div>
                             <div class="form-group input-group">
                               <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                              </div>
-                                <label>Password</label>
-                                <input formControlName="Password" class="form-control" placeholder="Password" type="password" required>
-                            </div>
-                            <div class="form-group input-group">
-                              <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-building"></i> </span>
                               </div>
                               <input formControlName="Address" class="form-control" placeholder="Address" type="text" required>
@@ -53,8 +46,8 @@
                               <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
                               </div>
-                              <label>Birthdate</label>
-                              <input formControlName="Birthdate" class="form-control" readonly type="date">
+                              <label>Birthdate: </label>
+                              <label> {{user.Birthdate}}</label>
                             </div>
                             <div class="form-group input-group">
                               <div class="input-group-prepend">

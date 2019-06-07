@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using WebApp.Models.Enums;
 
 namespace WebApp.Models
@@ -44,7 +45,7 @@ namespace WebApp.Models
 
     public class DocumentationModel
     {
-        public string Document { get; set; }
+        public FileInfo Document { get; set; }
         public PassengerType Type { get; set; }
     }
     public class CheckDocumentViewModel

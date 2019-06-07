@@ -23,6 +23,7 @@ import { LineAddComponent } from './AdminPage/line-add/line-add.component';
 import { StationAddComponent } from './AdminPage/station-add/station-add.component';
 import { TimetableAddComponent } from './AdminPage/timetable-add/timetable-add.component';
 import { MyProfileComponent } from './PassangerPage/my-profile/my-profile.component';
+import { BuyTicketComponent } from './PassangerPage/buy-ticket/buy-ticket.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { MyProfileComponent } from './PassangerPage/my-profile/my-profile.compon
     StationAddComponent,
     TimetableAddComponent,
     MyProfileComponent,
+    BuyTicketComponent,
   ],
   imports: [
     BrowserModule,

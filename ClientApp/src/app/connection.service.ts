@@ -62,14 +62,11 @@ export class ConnectionService {
     ).pipe(catchError(this.handleError<NetworkLineModel[]>("NetworkLineModel")));
   }
 
-  addDocumentation(selectedFile: File, type: string){
-    const fd : FormData = new FormData();
-    fd.append('Image',selectedFile,selectedFile.name);
-    fd.append('AppUserType',type);
-    console.log("data in service: " + selectedFile.name);
+  addDocumentation(formData: FormData){
+    console.log("data in service: " + formData.get("Image"));
     return this.http.post<any>(
       this.ServiceUrl + "AppUser/AddDocumentation",
-      fd,
+      formData,
       httpOprions
     )
   }

@@ -12,7 +12,6 @@ namespace WebApp.Controllers
     [RoutePrefix("api/Enums")]
     public class EnumsController : ApiController
     {
-        IUnitOfWork unitOfWork;
         [HttpGet]
         [Route("GetLineType")]
         [AllowAnonymous]
