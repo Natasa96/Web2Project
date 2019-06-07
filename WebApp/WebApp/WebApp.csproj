@@ -295,6 +295,10 @@
     <Compile Include="Migrations\201906061013092_LocationFixes.Designer.cs">
       <DependentUpon>201906061013092_LocationFixes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906070934345_DepartureTable.cs" />
+    <Compile Include="Migrations\201906070934345_DepartureTable.Designer.cs">
+      <DependentUpon>201906070934345_DepartureTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -306,6 +310,7 @@
     <Compile Include="Models\TicketService\Pricelist.cs" />
     <Compile Include="Models\TicketService\Ticket.cs" />
     <Compile Include="Models\TicketService\TicketPrice.cs" />
+    <Compile Include="Models\TrafficSystem\Departures.cs" />
     <Compile Include="Models\TrafficSystem\NetworkLine.cs" />
     <Compile Include="Models\TrafficSystem\Station.cs" />
     <Compile Include="Models\TrafficSystem\Timetable.cs" />
@@ -452,6 +457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906061013092_LocationFixes.resx">
       <DependentUpon>201906061013092_LocationFixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906070934345_DepartureTable.resx">
+      <DependentUpon>201906070934345_DepartureTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

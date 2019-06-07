@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ConnectionService } from 'src/app/connection.service';
+import { LineType } from 'src/app/LineType';
 
 @Component({
   selector: 'app-line-add',
@@ -13,8 +14,11 @@ export class LineAddComponent implements OnInit {
     LineNumber: ['', Validators.required],
     Stations: [''],
     Type: ['', Validators.required],
-    Buses: ['']
-  })
+    Departures: this.fb.array([
+      this.fb.control('')
+    ])
+  });
+
 
   constructor(private fb: FormBuilder, private Service: ConnectionService) {}
 
@@ -24,6 +28,16 @@ export class LineAddComponent implements OnInit {
 
   lineTypes = []
   selectedLine = ""
+  addedDeparture = []    //Dodamo sve polaske kroz
+                         //klijenta i stavimo ih u addedDepartures
+
+  get Departures(){
+    return this.LineAddForm.get('Departures') as FormArray;
+  }
+
+  addTime(){
+    this.Departures.push(this.fb.control(''));
+  }
 
   getLineTypes(): void {
     this.Service.getLineTypes().subscribe((result) => this.lineTypes = result);
@@ -32,8 +46,10 @@ export class LineAddComponent implements OnInit {
   addLine(){
     let lineData = {
       LineNumber: this.LineAddForm.controls["LineNumber"].value,
-      Type: this.LineAddForm.controls["Type"].value
+      Type: this.LineAddForm.controls["Type"].value,
+      Departures: this.LineAddForm.controls["Departures"].value
     }
+    console.log(lineData);
     this.Service.addLine(lineData).subscribe((result) => console.log(result));
   }
 }

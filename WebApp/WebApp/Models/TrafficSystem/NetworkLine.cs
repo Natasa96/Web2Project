@@ -12,12 +12,14 @@ namespace WebApp.Models.TrafficSystem
     {
         private int id;
         private int lineNumber;
+        private List<Departures> departures;
         private List<Station> stations;
         private LineType type;
 
         public NetworkLine()
         {
             Stations = new List<Station>();
+            Departures = new List<Departures>();
         }
 
         public int Id { get => id; set => id = value; }
@@ -30,5 +32,7 @@ namespace WebApp.Models.TrafficSystem
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
+
+        public List<Departures> Departures { get => departures; set => departures = value; }
     }
 }
