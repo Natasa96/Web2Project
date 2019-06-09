@@ -24,6 +24,8 @@ import { StationAddComponent } from './AdminPage/station-add/station-add.compone
 import { TimetableAddComponent } from './AdminPage/timetable-add/timetable-add.component';
 import { MyProfileComponent } from './PassangerPage/my-profile/my-profile.component';
 import { BuyTicketComponent } from './PassangerPage/buy-ticket/buy-ticket.component';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+
 
 @NgModule({
   declarations: [
@@ -43,14 +45,15 @@ import { BuyTicketComponent } from './PassangerPage/buy-ticket/buy-ticket.compon
     StationAddComponent,
     TimetableAddComponent,
     MyProfileComponent,
-    BuyTicketComponent,
+    BuyTicketComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularMultiSelectModule
   ],
   providers: [
     AuthGuard,

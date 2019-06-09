@@ -62,6 +62,12 @@ export class ConnectionService {
     ).pipe(catchError(this.handleError<NetworkLineModel[]>("NetworkLineModel")));
   }
 
+  getStations(): Observable<StationModel[]>{
+    return this.http.get<StationModel[]>(
+      this.ServiceUrl + 'Admin/GetStations'
+    ).pipe(catchError(this.handleError<StationModel[]>("StationModel")));
+  }
+
   addDocumentation(formData: FormData){
     console.log("data in service: " + formData.get("Image"));
     return this.http.post<any>(

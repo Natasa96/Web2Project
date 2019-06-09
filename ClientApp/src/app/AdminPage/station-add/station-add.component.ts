@@ -20,17 +20,34 @@ export class StationAddComponent implements OnInit {
     Latitude: ['']
   })
 
+  //linije dobijene iz back-enda
   stationLines: NetworkLineModel[];
 
   constructor(private fb: FormBuilder, private Service: ConnectionService) { }
 
   ngOnInit() {
     this.getNetworkLines();
+    this.dropdownSettings;
   }
 
+  /*onItemSelected(item: any){
+    console.log(item);
+    console.log(this.selectedLines);
+  }*/
+
+  dropdownSettings = { 
+    singleSelection: false, 
+    text:"Select Lines",
+    enableSearchFilter: true,
+    classes:"myclass custom-class"
+  };  
+
   getNetworkLines(){
-    this.Service.getLines().subscribe((result) => this.stationLines = result);
-    console.log(this.stationLines);
+    this.Service.getLines().subscribe((result) => 
+        {
+          this.stationLines = result 
+          console.log(this.stationLines)
+        });
   }
 
   addStation(){
