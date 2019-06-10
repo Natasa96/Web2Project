@@ -81,7 +81,7 @@ namespace WebApp.Controllers
             try
             {
                 if (model.Type == Models.Enums.TicketType.Dnevna)
-                    if (model.ValidationTime == DateTime.Today)
+                    if (model.ValidationTime.Value.Day == DateTime.Today.Day)
                         return Ok($"User has valid ticket.");
                     else
                         return Ok("Ticket is not valid. Please step out off bus.");

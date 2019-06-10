@@ -9,6 +9,13 @@
     </option>
   </select>
 
+  <select multiple ng-model="selectedType" class="nlStations" formControlName="Stations">
+    <option *ngFor="let station of nlStations"
+    [value]="station.Name">
+      {{station.Name}}
+  </option>
+  </select>
+
   <div formArrayName="Departures">
     <h4>Departures</h4>
     <button type="button" (click)="addTime()">Add time</button>
