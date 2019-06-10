@@ -10,6 +10,9 @@ import { StationModel } from './StationModel';
 import { NetworkLineModel } from './NetworkLineModel';
 import { TimetableModel } from './TimetableModel';
 import { MyInfo } from './PassangerPage/UserInfo';
+import { Pricelist } from './PassangerPage/Pricelist';
+import { BuyTicketModel } from './PassangerPage/BuyTicketModel';
+import { TicketType } from './PassangerPage/TicketType';
 
 const httpOprions = {
   headers: new HttpHeaders({
@@ -22,9 +25,32 @@ const httpOprions = {
 })
 export class ConnectionService {
 
+
   private ServiceUrl = 'http://localhost:52295/api/';
 
   constructor(private http: HttpClient) { }
+
+  getPricelist() : Observable<string[]> {
+    return this.http.get<string[]>(this.ServiceUrl+"AppUser/GetPricelist")
+    .pipe(catchError(this.handleError<string[]>("GetPricelist")));
+  }
+
+  buyTicket(data: BuyTicketModel) : Observable<any>{
+    return this.http.post<any>(
+      this.ServiceUrl+ 'Appuser/BuyTicket',
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<any>("Error")));
+  }
+
+  calculatePrice(Type: TicketType): Observable<number>{
+    return this.http.post<number>(
+      this.ServiceUrl+ 'Appuser/CalculatePrice',
+      Type,
+      httpOprions
+    ).pipe(catchError(this.handleError<number>("calculatePrice")));
+  }
+
 
   addUser(user: AppUser) : Observable<AppUser>{
     return this.http.post<AppUser>(

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using WebApp.Models.Enums;
+using WebApp.Models.Users;
 
 namespace WebApp.Models.TicketService
 {
@@ -22,6 +23,7 @@ namespace WebApp.Models.TicketService
         public TicketType Type { get => type; set => type = value; }
         public DateTime? ValidationTime { get => validationTime; set => validationTime = value; }
         public decimal Discount { get => discount; set => discount = value; }
+        public Passenger Passenger { get; set; }
         public decimal DiscountPrice { get => price - price * (discount / 100); }
 
         [Timestamp]

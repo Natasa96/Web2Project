@@ -12,6 +12,7 @@ using Unity.Lifetime;
 using WebApp.Models;
 using WebApp.Persistence;
 using WebApp.Persistence.Repository;
+using WebApp.Persistence.Repository.Interfaces;
 using WebApp.Persistence.UnitOfWork;
 using WebApp.Providers;
 
@@ -77,6 +78,7 @@ namespace WebApp.App_Start
             container.RegisterType<ITicketRepository, TicketRepository>();
             container.RegisterType<ITimetableRepositiry, TimetableRepository>();
             container.RegisterType<IPassengerRepository, PassengerRepository>();
+            container.RegisterType<ITicketPriceRepository, TicketPriceRepository>();
         }
 
         public void Dispose()

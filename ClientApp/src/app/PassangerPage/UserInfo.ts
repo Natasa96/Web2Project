@@ -7,4 +7,6 @@ export class MyInfo {
     Birthdate : Date;
     Validation : boolean;
     Document : string;
+    Type: string;
+    TypeList: [];
 }

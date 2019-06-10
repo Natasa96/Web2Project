@@ -7,6 +7,7 @@ namespace WebApp.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
     using WebApp.Models;
+    using WebApp.Models.TicketService;
 
     internal sealed class Configuration : DbMigrationsConfiguration<WebApp.Persistence.ApplicationDbContext>
     {
@@ -64,6 +65,44 @@ namespace WebApp.Migrations
                 var user = new ApplicationUser() { Id = "appu", UserName = "appu@yahoo.com", Email = "appu@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Appu123!") };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "AppUser");
+            }
+            if(context.PricelistDb.Count() == 0)
+            {
+                var Pricelist = new Pricelist()
+                {
+                    Active = true,
+                    StartTime = DateTime.Now,
+                    Id = 1,
+                    ActivePrices = new System.Collections.Generic.List<TicketPrice>()
+                    {
+                        new TicketPrice()
+                        {
+                            Id = 1,
+                            Price = 300,
+                            Type = Models.Enums.TicketType.Dnevna
+                        },
+                        new TicketPrice()
+                        {
+                            Id = 2,
+                            Price = 100,
+                            Type= Models.Enums.TicketType.Vremenska
+                        },
+                        new TicketPrice()
+                        {
+                            Id = 3,
+                            Price = 1000,
+                            Type = Models.Enums.TicketType.Mesecna
+                        },
+                        new TicketPrice()
+                        {
+                            Id = 4,
+                            Price = 10000,
+                            Type = Models.Enums.TicketType.Godisnja
+                        }
+                    }
+                };
+                context.PricelistDb.Add(Pricelist);
+                context.SaveChanges();
             }
         }
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Unity;
 using WebApp.Persistence.Repository;
+using WebApp.Persistence.Repository.Interfaces;
 
 namespace WebApp.Persistence.UnitOfWork
 {
@@ -29,6 +30,9 @@ namespace WebApp.Persistence.UnitOfWork
 
         [Dependency]
         public ITimetableRepositiry Timetables { get; set; }
+
+        [Dependency]
+        public ITicketPriceRepository TicketPrice { get; set; }
 
         public DemoUnitOfWork(DbContext context)
         {

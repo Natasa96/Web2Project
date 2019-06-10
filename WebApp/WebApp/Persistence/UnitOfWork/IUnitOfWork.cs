@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebApp.Persistence.Repository;
+using WebApp.Persistence.Repository.Interfaces;
 
 namespace WebApp.Persistence.UnitOfWork
 {
@@ -15,6 +16,7 @@ namespace WebApp.Persistence.UnitOfWork
         ITicketRepository Tickets { get; set; }
         ITimetableRepositiry Timetables { get; set; }
         IPricelistRepository Pricelist { get; set; }
+        ITicketPriceRepository TicketPrice { get; set; }
 
         int Complete();
     }

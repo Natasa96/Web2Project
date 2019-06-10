@@ -7,15 +7,20 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="col-md-10">
             <div class="well well-sm">
                 <div class="row">
-                    <div class="col-sm-6 col-md-4">
-                        <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+                    <div class="col-sm-10 col-md-5">
+                      <div class="image-upload">
+                        <label for="file-input">
+                          <img [src]="imageSrc || 'http://placehold.it/380x500'" alt="document" style="width: 380px; height: 500px"/>
+                        </label>
+                        <input id="file-input" type="file" (change)="newImage($event)"/>
+                      </div>
                     </div>
                     <div class="col-sm-6 col-md-8">
                         <h4>Information</h4>
-                        <form [formGroup]="MyProfileForm" class="user">
+                        <form [formGroup]="MyProfileForm" (ngSubmit)="onSubmit()" class="user">
                           <div class="form-group input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
@@ -54,7 +59,9 @@
                                 <span class="input-group-text"> <i class="fa fa-user-circle-o"></i> </span>
                               </div>
                               <label>Type</label>
-                              <input formControlName="Type" class="form-control" placeholder="Type" type="text">
+                              <select  (change)="onChange($event.target.value)" formControlName="Type">
+                                <option *ngFor="let type of typeList"  [value]="type"> {{type}} </option>
+                              </select>
                             </div>
                             <div class="form-group input-group">
                               <div class="input-group-prepend">

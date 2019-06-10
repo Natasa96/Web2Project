@@ -19,6 +19,7 @@ import { TimetableAddComponent } from '../AdminPage/timetable-add/timetable-add.
 
 
 import { MyProfileComponent } from '../PassangerPage/my-profile/my-profile.component';
+import { BuyTicketComponent } from '../PassangerPage/buy-ticket/buy-ticket.component';
 export const routes: Routes = [
   {path: '', redirectTo: '/Home', pathMatch: 'full'},
   {path: 'Home', component: HomePageComponent},
@@ -69,6 +70,10 @@ export const routes: Routes = [
       {
         path: 'MyProfile',
         component: MyProfileComponent
+      },
+      {
+        path: 'BuyTicket',
+        component: BuyTicketComponent
       }
     ]
   },

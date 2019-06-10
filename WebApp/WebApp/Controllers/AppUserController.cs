@@ -26,8 +26,9 @@ namespace WebApp.Controllers
     [RoutePrefix("api/AppUser"), Authorize(Roles = "AppUser")]
     public class AppUserController : ApiController
     {
+        #region Constructor+Props
         private IUnitOfWork UnitOfWork;
-        private DbContext Context;
+        private readonly DbContext Context;
         private ApplicationUserManager _passanger;
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
@@ -47,9 +48,10 @@ namespace WebApp.Controllers
             Context = context;
             UnitOfWork = unitOfWork;
         }
+        #endregion Constructor+Props
 
         [Route("BuyTicket"), HttpPost]
-        public async Task<IHttpActionResult> BuyTicket(Ticket ticket)
+        public async Task<IHttpActionResult> BuyTicket(TicketDataViewModel model)
         {
             try
             {
@@ -60,10 +62,10 @@ namespace WebApp.Controllers
                     return null;
                 }
 
-                if (UnitOfWork.Passengers.BuyTicket(user.Id, ticket))
+                if (UnitOfWork.Passengers.BuyTicket(user.Id, model))
                 {
                     UnitOfWork.Complete();
-                    return Ok();
+                    return Ok("Ticket purchased!");
                 }
                 else
                     throw new Exception("Error occured. Cannot add ticket to Passanger.");
@@ -131,55 +133,80 @@ namespace WebApp.Controllers
         {
              try
              {
-                var httpRequest = HttpContext.Current.Request;
-                var typeP = HttpContext.Current.Request.Params["UserType"];
-                string path = string.Empty;
-                foreach (string file in httpRequest.Files)
+                string path = SaveImage();
+                if (path != "Error")
                 {
-                    var postedFile = httpRequest.Files[file];
-                    if (postedFile != null && postedFile.ContentLength > 0)
-                    {
-                        int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB  
-                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
-                        var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
-                        var extension = ext.ToLower();
-                        if (!AllowedFileExtensions.Contains(extension))
-                        {
-                            var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
-                            return Ok(message);
-                        }
-                        else if (postedFile.ContentLength > MaxContentLength)
-                        {
-                            var message = string.Format("Please Upload a file upto 1 mb.");
-                            return Ok(message);
-                        }
-                        else
-                        {
-                            var filePath = @"C:\Users\Nenad\Desktop\Web2Project\WebApp\WebApp\Content\" + postedFile.FileName + extension;
-                            path = filePath;
-                            postedFile.SaveAs(filePath);
-                        }
-                    }
                     IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
                     if (user == null)
                         return InternalServerError();
-
+                    var typeP = HttpContext.Current.Request.Params["UserType"];
+                    Enum.TryParse(typeP, out PassengerType type);
                     Passenger p = UnitOfWork.Passengers.Find(x => x.Id == user.Id).First();
                     p.Document = path;
-                    p.Type = ConvertType(typeP);
+                    p.Type = type;
                     UnitOfWork.Passengers.Update(p);
                     UnitOfWork.Complete();
                     var message1 = string.Format("Documentation added.");
                     return Ok(message1);
                 }
-                var res = string.Format("Please Upload a image.");
-                return Ok(res);
+                else
+                    return BadRequest("Cannot add image");
+
              }
              catch (Exception ex)
              {
                  return Ok(ex.Message);
              }
         }
+
+
+
+        [Route("GetPricelist"),HttpGet]
+        public IHttpActionResult GetPricelist()
+        {
+            List<string> TicketTypes = new List<string>();
+            var pricelist = UnitOfWork.Pricelist.GetAll().Where(x=> x.Active == true).First();
+            foreach(var node in UnitOfWork.TicketPrice.GetAll().Where(x=> x.Pricelist.Id == pricelist.Id))
+            {
+                TicketTypes.Add(node.Type.ToString());
+            }
+            return Ok(TicketTypes);
+        }
+
+        [Route("CalculatePrice"),HttpPost]
+        public async Task<IHttpActionResult> CalculatePrice(GetPriceViewModel model)
+        {
+            try
+            {
+                var pricelist = UnitOfWork.Pricelist.GetAll().Where(x => x.Active == true).First();
+
+                int price = (int)UnitOfWork.TicketPrice.GetAll().Where(x => x.Pricelist.Id == pricelist.Id).Where(y=> y.Type.ToString() == model.Type).First().Price;
+                IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
+                if (user == null)
+                    return InternalServerError();
+                Passenger p = UnitOfWork.Passengers.GetAll().Where(x => x.Id == user.Id).First();
+                if (p.Type == PassengerType.Regular || (p.Type != PassengerType.Regular && p.Validation == false))
+                {
+                    return Ok(price);
+                }
+                else
+                {
+                    price = price - price * (DiscountPrice.GetDiscount(p.Type) / 100);
+                    return Ok(price);
+                }
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        #region Utils
+        /// <summary>
+        /// Converts Passenger class into PassengerInfoViewModel used in client
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         private PassengerInfoViewModel CreatePassengerInfo(Passenger p)
         {
             return new PassengerInfoViewModel()
@@ -190,18 +217,50 @@ namespace WebApp.Controllers
                 Address = p.Address,
                 Email = p.Email,
                 Birthdate = p.Birthdate.Value.Date,
-                Document = p.Document,
-                Validation = p.Validation
+                Document = Path.GetFileName(p.Document),
+                Validation = p.Validation,
+                Type = p.Type.ToString(),
+                Types = Enum.GetNames(typeof(PassengerType)).ToList()
             };
         }
-        private PassengerType ConvertType(string typeP)
+        
+        /// <summary>
+        /// Saves image to Content folder.
+        /// Returns path to the file.
+        /// </summary>
+        /// <returns>Path to the file.</returns>
+        private string SaveImage()
         {
-            switch(typeP)
+            HttpRequest httpRequest = HttpContext.Current.Request;
+            string path = string.Empty;
+            foreach (string file in httpRequest.Files)
             {
-                case "Student": return PassengerType.Student;
-                case "Penzioner": return PassengerType.Penzioner;
-                default: return PassengerType.Regular;
+                var postedFile = httpRequest.Files[file];
+                if (postedFile != null && postedFile.ContentLength > 0)
+                {
+                    int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB  
+                    IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                    var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
+                    var extension = ext.ToLower();
+                    if (!AllowedFileExtensions.Contains(extension))
+                    {
+                        return "Error";
+                    }
+                    else if (postedFile.ContentLength > MaxContentLength)
+                    {
+                        return "Error";
+                    }
+                    else
+                    {
+                        var filePath = @"C:\Users\Nenad\Desktop\Web2Project\WebApp\WebApp\Content\" + postedFile.FileName + extension;
+                        path = filePath;
+                        postedFile.SaveAs(filePath);
+                        return path;
+                    }
+                }
             }
+            return "Error";
         }
+        #endregion Utils
     }
 }

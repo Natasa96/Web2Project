@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,8 +7,20 @@ using WebApp.Models.Enums;
 
 namespace WebApp.Models
 {
+    public class GetPriceViewModel
+    {
+        public string Type { get; set; }
+    }
+
+    public class TicketDataViewModel
+    {
+        public int Price { get; set; }
+        public string Type { get; set; }
+    }
+
     public class PassengerInfoViewModel
     {
+        public PassengerInfoViewModel() { Types = new List<string>(); }
         public string Username { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
@@ -16,6 +29,8 @@ namespace WebApp.Models
         public DateTime? Birthdate { get; set; }
         public bool Validation { get; set; }
         public string Document { get; set; }
+        public string Type { get; set; }
+        public List<string> Types {get;set;}
     }
 
     public class TicketPriceInfoViewModel

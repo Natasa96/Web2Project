@@ -16,14 +16,27 @@ export class MyProfileComponent implements OnInit {
     Firstname: ['', Validators.required],
     Lastname: ['', Validators.required],
     Address: ['', Validators.required],
-    Type: ['', Validators.required],
+    Type: [''],
     Document: [''],
     Validation: ['']
   });
 
   user= new MyInfo;
+  imageSrc: any;
+  typeList: [];
   
   constructor(private fb: FormBuilder, private connectionService: ConnectionService) { }
+
+  newImage(event){
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc = reader.result;
+
+      reader.readAsDataURL(file);
+  }
+  }
 
   ngOnInit() {
     this.GetUserInfo();
@@ -40,7 +53,12 @@ export class MyProfileComponent implements OnInit {
       this.user.Birthdate = result.Birthdate;
       this.MyProfileForm.controls['Validation'].patchValue(result.Validation);
       this.MyProfileForm.controls['Document'].patchValue(result.Document);
+      this.typeList = result.TypeList;
     });
+  }
+
+  onSubmit(){
+    let newData = new MyInfo();
   }
 
 }
