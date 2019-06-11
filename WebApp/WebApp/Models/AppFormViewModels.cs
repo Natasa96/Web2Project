@@ -35,6 +35,26 @@ namespace WebApp.Models
         }
     }
 
+
+    public class TicketInfoViewModel
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Message { get; set; }
+    }
+    public class ValidateUserInfoViewModel
+    {
+        public string Id { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string Document { get; set; }
+        public string Type { get; set; }
+    }
+
+    public class CheckTicketViewModel
+    {
+        public int TicketID { get; set; }
+    }
     public class GetPriceViewModel
     {
         public string Type { get; set; }

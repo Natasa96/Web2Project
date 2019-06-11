@@ -28,6 +28,13 @@ import { MapComponent } from './map/map.component';
 import {AgmCoreModule} from '@agm/core';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { LineEditInfoComponent } from './AdminPage/line-edit-info/line-edit-info.component';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+import { ControllerPageComponent } from './ControllerPage/controller-page/controller-page.component';
+import { ValidateUserComponent } from './ControllerPage/validate-user/validate-user.component';
+import { CheckTicketComponent } from './ControllerPage/check-ticket/check-ticket.component';
+import { UserValidateInfoComponent } from './ControllerPage/user-validate-info/user-validate-info.component';
+import { CheckTicketInfoComponent } from './ControllerPage/check-ticket-info/check-ticket-info.component';
+
 
 @NgModule({
   declarations: [
@@ -50,6 +57,11 @@ import { LineEditInfoComponent } from './AdminPage/line-edit-info/line-edit-info
     BuyTicketComponent,
     MapComponent,
     LineEditInfoComponent
+    ControllerPageComponent,
+    ValidateUserComponent,
+    CheckTicketComponent,
+    UserValidateInfoComponent,
+    CheckTicketInfoComponent
   ],
   imports: [
     BrowserModule,

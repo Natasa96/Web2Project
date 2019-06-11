@@ -10,12 +10,21 @@
         <div class="col-md-10">
             <div class="well well-sm">
                 <div class="row">
-                    <div class="col-sm-10 col-md-5">
+                    <div class="col-sm-10 col-md-5 col-sm-6">
                       <div class="image-upload">
                         <label for="file-input">
                           <img [src]="imageSrc || 'http://placehold.it/380x500'" alt="document" style="width: 380px; height: 500px"/>
                         </label>
                         <input id="file-input" type="file" (change)="newImage($event)"/>
+                      </div>
+                      <h4>Change password</h4>
+                      <div>
+                        <form (ngSubmit)="ChangePassword()" [formGroup]="ChangePasswordForm">
+                          <label>Old password: <input type="password" formControlName="OldPassword" required></label>
+                          <label>New password: <input type="password" formControlName="NewPassword" required></label>
+                          <label>Confirm password: <input type="password" formControlName="ConfirmPassword" required></label>
+                          <button type="submit" class="btn btn-primary btn-block">Change password</button>
+                        </form>
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-8">
@@ -59,7 +68,7 @@
                                 <span class="input-group-text"> <i class="fa fa-user-circle-o"></i> </span>
                               </div>
                               <label>Type</label>
-                              <select  (change)="onChange($event.target.value)" formControlName="Type">
+                              <select  (change)="onChange($event.target.value)" formControlName="Type" class="typeList">
                                 <option *ngFor="let type of typeList"  [value]="type"> {{type}} </option>
                               </select>
                             </div>

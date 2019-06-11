@@ -1,0 +1,14 @@
+<body>
+  <div>
+      <ul class="users">
+          <li *ngFor="let user of users"
+            [class.selected]="user === selectedUser"
+            (click)="onSelect(user)">
+            <span class="badge">{{user.Id}}</span> {{user.Firstname}} {{user.Lastname}}
+          </li>
+        </ul>
+  </div>
+  <div>
+    <app-user-validate-info [user]="selectedUser"></app-user-validate-info>
+  </div>
+</body>

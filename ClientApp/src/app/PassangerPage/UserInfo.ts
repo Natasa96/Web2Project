@@ -8,5 +8,5 @@ export class MyInfo {
     Validation : boolean;
     Document : string;
     Type: string;
-    TypeList: [];
+    Types: [];
 }

@@ -16,10 +16,20 @@ import { TicketType } from './PassangerPage/TicketType';
 import { SchaduleType } from './SchaduleType';
 import { templateJitUrl } from '@angular/compiler';
 import { EditLineInfoModel } from './AdminPage/EditLineInfoModel';
+import { PasswordModel } from './PassangerPage/PasswordModel';
+import { UserModel } from './ControllerPage/UserModel';
+import { ValidateModel } from './ControllerPage/ValidateModel';
+import { CheckTicketModel } from './ControllerPage/CheckTicketModel';
+import { TicketModel } from './ControllerPage/TicketModel';
 
 const httpOprions = {
   headers: new HttpHeaders({
     'Content-Type' : 'application/json'
+  })
+};
+const httpdataOption ={
+  headers: new HttpHeaders({
+    'Content-Type' : 'multipart/form-data'
   })
 };
 
@@ -37,6 +47,51 @@ export class ConnectionService {
     return this.http.get<EditLineInfoModel>(
       this.ServiceUrl+"Admin/FullLineInfo/"+id
     ).pipe(catchError(this.handleError<EditLineInfoModel>("Error")));
+  }
+    
+  CheckTicket(data : CheckTicketModel) : Observable<TicketModel>{
+    return this.http.post<TicketModel>(
+      this.ServiceUrl+"Controller/CheckTicket",
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<TicketModel>("TicketModel")));
+  }
+
+  validateUser(data: ValidateModel): Observable<any>{
+    return this.http.post<any>(
+      this.ServiceUrl+"Controller/CheckDocument",
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<any>("ValidateModel")));
+  }
+
+  getAllUsers(): Observable<UserModel[]>{
+    return this.http.get<UserModel[]>(
+      this.ServiceUrl+"Controller/GetPassengers"
+    ).pipe(catchError(this.handleError<UserModel[]>("UserMOdel")));
+  }
+
+  updateProfile(data: MyInfo) : Observable<any>{
+    let fd = new FormData();
+    fd.append("Username", data.Username);
+    fd.append("Firstname", data.Firstname);
+    fd.append("Lastname", data.Lastname);
+    fd.append("Address", data.Address);
+    fd.append("Email", data.Email);
+    fd.append("file", data.Document);
+    fd.append("Type", data.Type);
+    return this.http.post<any>(
+      this.ServiceUrl+"AppUser/UpdateProfile",
+      fd
+    ).pipe(catchError(this.handleError<any>("Update profile")));
+  }
+
+  changePassword(data: PasswordModel): Observable<any>{
+    return this.http.post(
+      this.ServiceUrl + "Account/ChangePassword",
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<any>("ChangePassword")));
   }
 
   getPricelist() : Observable<string[]> {

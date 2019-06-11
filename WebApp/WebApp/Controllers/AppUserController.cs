@@ -76,11 +76,23 @@ namespace WebApp.Controllers
             }
         }
         [Route("UpdateProfile"), HttpPost]
-        public IHttpActionResult UpdateProfile(Passenger userInfo)
+        public async Task<IHttpActionResult> UpdateProfile()
         {
             try
             {
-                UnitOfWork.Passengers.Update(userInfo);
+                var path = SaveImage();
+                IdentityUser user = await Passanger.FindByIdAsync(User.Identity.GetUserId());
+                if (user == null)
+                    return BadRequest();
+                Passenger P = UnitOfWork.Passengers.GetAll().Where(x => x.Id == user.Id).First();
+                P.Document = path;
+                P.UserName = HttpContext.Current.Request["Username"];
+                P.Firstname = HttpContext.Current.Request["Firstname"];
+                P.Lastname = HttpContext.Current.Request["Lastname"];
+                P.Email = HttpContext.Current.Request["Email"];
+                P.Address = HttpContext.Current.Request["Address"];
+                P.Type =(PassengerType)Enum.Parse(typeof(PassengerType),HttpContext.Current.Request["Type"]);
+                UnitOfWork.Passengers.Update(P);
                 UnitOfWork.Complete();
                 return Ok("User info has beed updated.");
             }
@@ -158,9 +170,6 @@ namespace WebApp.Controllers
                  return Ok(ex.Message);
              }
         }
-
-
-
         [Route("GetPricelist"),HttpGet]
         public IHttpActionResult GetPricelist()
         {
@@ -172,7 +181,6 @@ namespace WebApp.Controllers
             }
             return Ok(TicketTypes);
         }
-
         [Route("CalculatePrice"),HttpPost]
         public async Task<IHttpActionResult> CalculatePrice(GetPriceViewModel model)
         {
@@ -200,7 +208,6 @@ namespace WebApp.Controllers
                 return BadRequest(e.Message);
             }
         }
-
         #region Utils
         /// <summary>
         /// Converts Passenger class into PassengerInfoViewModel used in client
@@ -217,7 +224,7 @@ namespace WebApp.Controllers
                 Address = p.Address,
                 Email = p.Email,
                 Birthdate = p.Birthdate.Value.Date,
-                Document = Path.GetFileName(p.Document),
+                Document = "http://localhost:52295/Content/"+ Path.GetFileName(p.Document),
                 Validation = p.Validation,
                 Type = p.Type.ToString(),
                 Types = Enum.GetNames(typeof(PassengerType)).ToList()
@@ -252,10 +259,31 @@ namespace WebApp.Controllers
                     }
                     else
                     {
-                        var filePath = @"C:\Users\Nenad\Desktop\Web2Project\WebApp\WebApp\Content\" + postedFile.FileName + extension;
-                        path = filePath;
-                        postedFile.SaveAs(filePath);
-                        return path;
+                        //var Filename = "Document" + UnitOfWork.Passengers.GetAll().Count().ToString() + extension;
+                        var filePath = string.Format(System.Web.Hosting.HostingEnvironment.MapPath("~/Content") + "\\" + postedFile.FileName);
+                        if(UnitOfWork.Passengers.GetAll().ToList().Exists(x=> x.Document == filePath))
+                        {
+                            postedFile.SaveAs(filePath);
+                            return filePath;
+                        }
+                        else
+                        {
+                            string[] parts = postedFile.FileName.Split('.');
+                            int copynum = 1;
+                            while (true)
+                            {
+                                var newfile = string.Format(System.Web.Hosting.HostingEnvironment.MapPath("~/Content") + "\\" + parts[0]+ copynum.ToString()+"."+parts[1]);
+                                if (!UnitOfWork.Passengers.GetAll().ToList().Exists(x=> x.Document == newfile))
+                                {
+                                    postedFile.SaveAs(newfile);
+                                    return newfile;
+                                }
+                                copynum++;
+                            }
+
+                        }
+                        
+                        
                     }
                 }
             }

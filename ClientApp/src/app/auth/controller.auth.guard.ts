@@ -10,16 +10,16 @@ import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class PassangerAuthGuard implements CanActivate, CanActivateChild {
+export class ControllerAuthGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {    
-    if (localStorage.role === 'AppUser') {
+    if (localStorage.role === 'Controller') {
       return true;
     }
     // not logged in so redirect to login page
     else {
-      console.error("Can't access, not AppUser");
+      console.error("Can't access, not controller");
       this.router.navigate(['/Login']);
       return false;
     }
