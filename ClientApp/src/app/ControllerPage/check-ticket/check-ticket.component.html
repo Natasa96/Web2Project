@@ -1,0 +1,11 @@
+<body>
+  <div class="row">
+    <div class="col-md-5">
+      <form [formGroup]="ticketForm" (ngSubmit)="CheckTicket()">
+        <label>Ticket ID: <input type="number" formControlName="TicketID" placeholder="Id"></label>
+        <button type="submit" class="btn btn-block btn-primary">Check ticket</button>
+      </form>
+    </div>
+    <app-check-ticket-info [ticket]="selectedTicket"></app-check-ticket-info>
+  </div>
+</body>

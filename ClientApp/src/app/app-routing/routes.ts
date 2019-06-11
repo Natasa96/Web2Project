@@ -20,6 +20,10 @@ import { TimetableAddComponent } from '../AdminPage/timetable-add/timetable-add.
 
 import { MyProfileComponent } from '../PassangerPage/my-profile/my-profile.component';
 import { BuyTicketComponent } from '../PassangerPage/buy-ticket/buy-ticket.component';
+import { ControllerPageComponent } from '../ControllerPage/controller-page/controller-page.component';
+import { ControllerAuthGuard } from '../auth/controller.auth.guard';
+import { ValidateUserComponent } from '../ControllerPage/validate-user/validate-user.component';
+import { CheckTicketComponent } from '../ControllerPage/check-ticket/check-ticket.component';
 export const routes: Routes = [
   {path: '', redirectTo: '/Home', pathMatch: 'full'},
   {path: 'Home', component: HomePageComponent},
@@ -74,6 +78,21 @@ export const routes: Routes = [
       {
         path: 'BuyTicket',
         component: BuyTicketComponent
+      }
+    ]
+  },
+  {
+    path: "Controller",
+    component: ControllerPageComponent,
+    canActivate: [ControllerAuthGuard],
+    children:[
+      {
+        path: "Validate",
+        component: ValidateUserComponent
+      },
+      {
+        path:"CheckTicket",
+        component: CheckTicketComponent
       }
     ]
   },

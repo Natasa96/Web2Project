@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConnectionService } from 'src/app/connection.service';
 import { MyInfo } from '../UserInfo';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+
+const httpdataOption ={
+  headers: new HttpHeaders({
+    'Content-Type' : 'multipart/form-data'
+  })
+};
 
 @Component({
   selector: 'app-my-profile',
@@ -21,20 +28,27 @@ export class MyProfileComponent implements OnInit {
     Validation: ['']
   });
 
+  ChangePasswordForm = this.fb.group({
+    OldPassword: ['',Validators.required],
+    NewPassword: ['',Validators.required],
+    ConfirmPassword: ['',Validators.required]
+  });
+
   user= new MyInfo;
   imageSrc: any;
   typeList: [];
+  selectedFile: null;
   
-  constructor(private fb: FormBuilder, private connectionService: ConnectionService) { }
+  constructor(private fb: FormBuilder, private connectionService: ConnectionService, private http: HttpClient) { }
 
   newImage(event){
     if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
+      this.selectedFile = event.target.files[0];
 
       const reader = new FileReader();
       reader.onload = e => this.imageSrc = reader.result;
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(this.selectedFile);
   }
   }
 
@@ -53,12 +67,33 @@ export class MyProfileComponent implements OnInit {
       this.user.Birthdate = result.Birthdate;
       this.MyProfileForm.controls['Validation'].patchValue(result.Validation);
       this.MyProfileForm.controls['Document'].patchValue(result.Document);
-      this.typeList = result.TypeList;
+      this.typeList = result.Types;
+      this.MyProfileForm.controls['Type'].patchValue(result.Type);
+      this.imageSrc = result.Document;
     });
   }
 
   onSubmit(){
-    let newData = new MyInfo();
+    this.MyProfileForm.get('Document').setValue(this.selectedFile);
+    this.connectionService.updateProfile(this.MyProfileForm.value).subscribe((res)=>
+    {
+      console.log(res)
+    });
+  }
+  ChangePassword(){
+    this.connectionService.changePassword(this.ChangePasswordForm.value).subscribe((res)=>{
+      console.log(res);
+    });
+  }
+
+  onChange(type){
+    this.MyProfileForm.get('Type').setValue(type);
+  }
+
+  changePassword(){
+    this.connectionService.changePassword(this.ChangePasswordForm.value).subscribe((result)=>{
+      console.log("Password changed");
+    });
   }
 
 }

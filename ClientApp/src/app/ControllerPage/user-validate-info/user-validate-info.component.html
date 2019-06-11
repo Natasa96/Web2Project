@@ -1,0 +1,21 @@
+<div *ngIf="user">
+    <h2>{{user.name | uppercase}} Details</h2>
+    <div><span>Id: </span>{{user.Id}}</div>
+    <div class="col-md-10">
+        <img [src]="user.Document" style="width: 450px; height:600px;"/>
+    </div>
+    <div class="col-md-10">
+        <label>Firstname:
+            <input [(ngModel)]="user.Firstname" placeholder="Firstname"/>
+        </label>
+        <label>Lastname:
+            <input [(ngModel)]="user.Lastname" placeholder="Lastname"/>
+        </label>
+        <label>Type: 
+            <input [(ngModel)]="user.Type" placeholder="Type"/>
+        </label>
+    </div>
+    <button (click)="DenyClick()">Deny</button>
+    <button (click)="ApproveClick()">Approve</button>
+</div>
+  

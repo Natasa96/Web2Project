@@ -1,6 +1,9 @@
-﻿using Microsoft.Owin.Security;
+﻿using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,31 +19,37 @@ namespace WebApp.Controllers
     [RoutePrefix("api/Controller")]
     public class CheckerController : ApiController
     {
-        private DemoUnitOfWork _unitOfWork;
-
-        public CheckerController() { }
-
+        #region Constructor+Props
+        private IUnitOfWork UnitOfWork;
+        private readonly DbContext Context;
+        private ApplicationUserManager _passanger;
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
-        public DemoUnitOfWork UnitOfWork
+        public ApplicationUserManager Passanger
         {
             get
             {
-                return _unitOfWork;
+                return _passanger ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
             private set
             {
-                _unitOfWork = value;
+                _passanger = value;
             }
         }
+        public CheckerController(IUnitOfWork unitOfWork, DbContext context)
+        {
+            Context = context;
+            UnitOfWork = unitOfWork;
+        }
+        #endregion Constructor+Props
 
-        [Route("CheckDocument")]
+        [Route("GetPassengers")]
         [HttpGet]
         public IHttpActionResult GetPassengrs()
         {
             try
             {
-                return Ok(UnitOfWork.Passengers.GetAll());
+                return Ok(ConvertToUserinfoModel(UnitOfWork.Passengers.GetAll()));
             }
             catch(Exception ex)
             {
@@ -48,7 +57,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [Route("CheckDocument/id")]
+        [Route("CheckDocument")]
         [HttpPost]
         public IHttpActionResult CheckDoucment(CheckDocumentViewModel model)
         {
@@ -56,16 +65,26 @@ namespace WebApp.Controllers
             {
                 if(model.option == "Accepted")
                 {
-                    UnitOfWork.Passengers.Find(x => x.Id == model.id).First().Validation = true;
+                    Passenger P = UnitOfWork.Passengers.Find(x => x.Id == model.id).First();
+                    if (P == null)
+                        return InternalServerError();
+                    P.Validation = true;
+                    UnitOfWork.Passengers.Update(P);
                     UnitOfWork.Complete();
-                    return Ok("Your document has been accepted.");            
+                    return Ok("Document approved.");            
                 }
                 else
                 {
-                    UnitOfWork.Passengers.Find(x => x.Id == model.id).First().Document = "";
-                    UnitOfWork.Passengers.Find(x => x.Id == model.id).First().Type = Models.Enums.PassengerType.Regular;
+                    Passenger P = UnitOfWork.Passengers.Find(x => x.Id == model.id).First();
+                    if (P == null)
+                        return InternalServerError();
+                    if (File.Exists(P.Document))
+                        File.Delete(P.Document);
+                    P.Document = null;
+                    P.Type = Models.Enums.PassengerType.Regular;
+                    UnitOfWork.Passengers.Update(P);
                     UnitOfWork.Complete();
-                    return Ok("You didn't put a valid document.");        
+                    return Ok("Document denied.");        
                 }
             }
             catch (Exception ex)
@@ -76,37 +95,100 @@ namespace WebApp.Controllers
 
         [Route("CheckTicket")]
         [HttpPost]
-        public IHttpActionResult CheckTicket(Ticket model)
+        public IHttpActionResult CheckTicket(CheckTicketViewModel model)
         {
             try
             {
-                if (model.Type == Models.Enums.TicketType.Dnevna)
-                    if (model.ValidationTime.Value.Day == DateTime.Today.Day)
-                        return Ok($"User has valid ticket.");
-                    else
-                        return Ok("Ticket is not valid. Please step out off bus.");
-                else if (model.Type == Models.Enums.TicketType.Vremenska)
-                    if (model.ValidationTime <= model.ValidationTime.Value.AddHours(24))
-                        return Ok($"User has valid ticket.");
-                    else
-                        return Ok("Your ticket has expired.");
-                else if (model.Type == Models.Enums.TicketType.Mesecna)
-                    if (model.ValidationTime <= DateTime.Now.AddMonths(1))
-                        return Ok($"User has valid ticket.");
-                    else
-                        return Ok("Ticket is not valid. Please step out off bus.");
-                else if (model.Type == Models.Enums.TicketType.Godisnja)
-                    if (model.ValidationTime <= DateTime.Now.AddYears(1))
-                        return Ok($"User has valid ticket.");
-                    else
-                        return Ok("Ticket is not valid. Please step out off bus.");
-                else
-                    return InternalServerError();
+                Ticket ticket = UnitOfWork.Tickets.GetAll().Where(x => x.Id == model.TicketID).First();
+                TicketInfoViewModel ticketModel = new TicketInfoViewModel();
+                string message = string.Empty;
+                switch (ticket.Type)
+                {
+                    case Models.Enums.TicketType.Vremenska:
+                        {
+                            if(ticket.ValidationTime == null)
+                            {
+                                ticket.ValidationTime = DateTime.Now;
+                                message = "Ticket checked";
+                                UnitOfWork.Complete();
+                            }
+                            else
+                            {
+                                if (ticket.ValidationTime.Value.Date.AddDays(1) > DateTime.Now.Date)
+                                {
+                                    message = "Ticket is valid";
+                                }
+                                else
+                                    message = "Ticket expired";
+                            }
+                            break;
+                        }
+                    case Models.Enums.TicketType.Dnevna:
+                        {
+                            if (ticket.ValidationTime.Value.Date.Day < DateTime.Now.Date.Day && ticket.ValidationTime.Value.Month <= DateTime.Now.Month && ticket.ValidationTime.Value.Year <= DateTime.Now.Year)
+                            {
+                                message = "Ticket is valid";
+                            }
+                            else
+                                message = "Ticket expired";
+                            break;
+                        }
+                    case Models.Enums.TicketType.Mesecna:
+                        {
+                            if(DateTime.Now.Date < ticket.ValidationTime.Value.Date.AddMonths(1))
+                            {
+                                message = "Ticket is valid";
+                            }
+                            else
+                            {
+                                message = "Ticket expired";
+                            }
+                            break;
+                        }
+                    case Models.Enums.TicketType.Godisnja:
+                        {
+                            if(DateTime.Now.Date < ticket.ValidationTime.Value.Date.AddYears(1))
+                            {
+                                message = "Ticket is valid";
+                            }
+                            else
+                            {
+                                message = "Ticket expired";
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            return BadRequest("Unknown error occured");
+                        }
+                }
+                ticketModel.Id = ticket.Id;
+                ticketModel.Type = ticket.Type.ToString();
+                ticketModel.Message = message;
+                return Ok(ticketModel);
             }
             catch(Exception ex)
             {
                 return InternalServerError(ex);
             }
         }
+
+        private List<ValidateUserInfoViewModel> ConvertToUserinfoModel(IEnumerable<Passenger> enumerable)
+        {
+            List<ValidateUserInfoViewModel> model = new List<ValidateUserInfoViewModel>();
+            foreach (var node in enumerable)
+            {
+                model.Add(new ValidateUserInfoViewModel()
+                {
+                    Id = node.Id,
+                    Firstname = node.Firstname,
+                    Lastname = node.Lastname,
+                    Type = node.Type.ToString(),
+                    Document = "http://localhost:52295/Content/" + Path.GetFileName(node.Document)
+                });
+            }
+            return model;
+        }
+
     }
 }
