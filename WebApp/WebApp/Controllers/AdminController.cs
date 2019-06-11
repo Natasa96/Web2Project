@@ -51,6 +51,40 @@ namespace WebApp.Controllers
                 return InternalServerError(ex);
             }
         }
+        
+        [Route("FullLineInfo/{id}")]
+        [HttpGet]
+        public IHttpActionResult GetFullInfo(int id)
+        {
+            try
+            {
+                EditLineInfoModel model = new EditLineInfoModel();
+                NetworkLine line = UnitOfWork.NetworkLines.Find(x => x.LineNumber == id).First();
+                model.LineNumber = line.LineNumber;
+                var departures = UnitOfWork.Departures.GetAll();
+                List<DeparturesViewModel> newmodel = new List<DeparturesViewModel>();
+                foreach (var node in departures)
+                    newmodel.Add(new DeparturesViewModel() {
+                        Id = node.Id,
+                        Time = node.Time
+                    });
+                model.Departures = newmodel;
+                model.SelectedType = line.Type.ToString();
+                model.AllTypes = Enum.GetNames(typeof(LineType)).ToList();
+                foreach (var node in line.Stations)
+                    model.SelectedStations.Add(AdaptStationViewModel(node));
+                foreach (var node in UnitOfWork.Stations.GetAll())
+                    model.AllStations.Add(AdaptStationViewModel(node));
+                foreach (var node in line.ScheduleDays)
+                    model.SelectedSchedule.Add(node.Type.ToString());
+                model.AllSchedule = Enum.GetNames(typeof(TimetableType)).ToList();
+                return Ok(model);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         [Route("AddLine")]
         [HttpPost]
@@ -80,11 +114,11 @@ namespace WebApp.Controllers
 
         [Route("UpdateLine")]
         [HttpPost]
-        public IHttpActionResult UpdateLine(NetworkLine model)
+        public IHttpActionResult UpdateLine(NetworkLineViewModel model)
         {
             try
             {
-                UnitOfWork.NetworkLines.Update(model);
+                UnitOfWork.NetworkLines.Update(AdaptNetworkLine(model));
                 UnitOfWork.Complete();
                 return Ok($"Line {model.LineNumber} successfully updated!");
             }
@@ -134,15 +168,37 @@ namespace WebApp.Controllers
                     }
             }
 
+            if (model.Departures == null)
+                model.Departures = new List<DateTime>();
+
             foreach (var d in model.Departures)
             {
-                networkLine.Departures.Add(new Departures() { Time = d });
+                networkLine.Departures.Add(new Departures() { Time = d, NetworkLine=networkLine});
             }
+
+            if (model.Stations == null)
+                model.Stations = new List<int>();
 
             foreach (var s in model.Stations) 
             {
-                networkLine.Stations.Add(UnitOfWork.Stations.Find(
-                    x => x.Name == s.ToString()).First());
+                var station = UnitOfWork.Stations.Find(
+                    x => x.Name == s.ToString()).First();
+                station.NLine.Add(networkLine);
+                UnitOfWork.Stations.Update(station);
+                networkLine.Stations.Add(station);
+            }
+
+            if (model.ScheduleDays == null)
+                model.ScheduleDays = new List<string>();
+
+            foreach (var s in model.ScheduleDays)
+            {
+                if (s == "RadniDan")
+                    networkLine.ScheduleDays.Add(new Schedule() { Type = TimetableType.RadniDan, NetworkLine=networkLine });
+                else if (s == "Praznik")
+                    networkLine.ScheduleDays.Add(new Schedule() { Type = TimetableType.Praznik, NetworkLine = networkLine });
+                else if (s == "Vikend")
+                    networkLine.ScheduleDays.Add(new Schedule() { Type = TimetableType.Vikend, NetworkLine = networkLine });
             }
 
             return networkLine;
@@ -172,9 +228,28 @@ namespace WebApp.Controllers
                     }
             }
 
-            foreach (var d in model.Departures)
+            if (line.Departures == null)
+                line.Departures = new List<Departures>();
+
+            foreach (var d in line.Departures)
             {
-                model.Departures.Add(d);
+                model.Departures.Add(d.Time);
+            }
+
+            if (line.Stations == null)
+                line.Stations = new List<Station>();
+
+            foreach(var s in line.Stations)
+            {
+                model.Stations.Add(Convert.ToInt32(s.Name));
+            }
+
+            if (line.ScheduleDays == null)
+                line.ScheduleDays = new List<Schedule>();
+
+            foreach(var s in line.ScheduleDays)
+            {
+                model.ScheduleDays.Add(s.ToString());
             }
 
             return model;
@@ -216,11 +291,16 @@ namespace WebApp.Controllers
                 station.Longitude = model.Longitude;
                 station.Name = model.Name;
 
+                if(model.NLine == null)
+                    model.NLine = new List<int>();
+
                 foreach (var line in model.NLine)
                 {
                     station.NLine.Add(UnitOfWork.NetworkLines.Find(x => x.LineNumber == line).First());
+                    var networkline = UnitOfWork.NetworkLines.Find(x => x.LineNumber == line).First();
+                    networkline.Stations.Add(station);
+                    UnitOfWork.NetworkLines.Update(networkline);
                 }
-
                 UnitOfWork.Stations.Add(station);
                 UnitOfWork.Complete();
                 return Ok($"Station {model.Name} successfully added.");
@@ -272,6 +352,9 @@ namespace WebApp.Controllers
             model.Latitude = station.Latitude;
             model.Address = station.Address;
 
+            if (station.NLine == null)
+                station.NLine = new List<NetworkLine>();
+
             foreach (var line in station.NLine)
                 model.NLine.Add(line.LineNumber);
 
@@ -298,16 +381,23 @@ namespace WebApp.Controllers
 
         [Route("AddTimetable")]
         [HttpPost]
-        public IHttpActionResult AddTimetable(Timetable model)
+        public IHttpActionResult AddTimetable(TimetableViewModel model)
         {
             try
             {
-                model.Lines.Add(UnitOfWork.NetworkLines.Get(1));
+                Timetable timetable = AdaptTimetable(model);
 
-                UnitOfWork.Timetables.Add(model);
+                foreach(var t in timetable.Lines)
+                {
+                    UnitOfWork.NetworkLines.Find(x => x.Id == t.Id).First().TimeOfGoing = timetable;
+                }
+
+                //model.Lines.Add(UnitOfWork.NetworkLines.Get(1));
+
+                UnitOfWork.Timetables.Add(timetable);
                 UnitOfWork.Complete();
 
-                return Ok($"Timetable {model.Id} successfully added.");
+                return Ok($"Timetable {timetable.Id} successfully added.");
             }
             catch (Exception ex)
             {
@@ -345,6 +435,54 @@ namespace WebApp.Controllers
             {
                 return InternalServerError(ex);
             }
+        }
+
+        public TimetableViewModel AdaptTimetableViewModel(Timetable timetable)
+        {
+            TimetableViewModel model = new TimetableViewModel();
+
+            model.Day = timetable.TTDay.ToString();
+            
+            foreach(var t in timetable.Lines)
+            {
+                model.NLine.Add(t.LineNumber);
+            }
+
+            return model;
+        }
+
+        public Timetable AdaptTimetable(TimetableViewModel model)
+        {
+            Timetable timetable = new Timetable();
+
+            switch (model.Day)
+            {
+                case "RadniDan":
+                    {
+                        timetable.TTDay = TimetableType.RadniDan;
+                        break;
+                    }
+                case "Praznik":
+                    {
+                        timetable.TTDay = TimetableType.Praznik;
+                        break;
+                    }
+                case "Vikend":
+                    {
+                        timetable.TTDay = TimetableType.Vikend;
+                        break;
+                    }
+            }
+
+            if (model.NLine == null)
+                model.NLine = new List<int>();
+
+            foreach(var nl in model.NLine)
+            {
+                timetable.Lines.Add(UnitOfWork.NetworkLines.Find(x => x.LineNumber == nl).First());
+            }
+
+            return timetable;
         }
 
         #endregion

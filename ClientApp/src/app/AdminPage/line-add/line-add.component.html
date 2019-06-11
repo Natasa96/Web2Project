@@ -1,6 +1,6 @@
 <form [formGroup]="LineAddForm" (ngSubmit)="addLine()">
   
-  <input type="number" formControlName="LineNumber">
+  <input type="number" formControlName="LineNumber" placeholder="LineNumber">
   
   <select ng-model="selectedType" class="lineTypes" formControlName="Type">
     <option *ngFor="let type of lineTypes"
@@ -13,6 +13,13 @@
     <option *ngFor="let station of nlStations"
     [value]="station.Name">
       {{station.Name}}
+  </option>
+  </select>
+
+  <select multiple ng-model="selectedType" class="schedule" formControlName="ScheduleDays">
+    <option *ngFor="let s of schedule"
+    [value]="s">
+      {{s}}
   </option>
   </select>
 

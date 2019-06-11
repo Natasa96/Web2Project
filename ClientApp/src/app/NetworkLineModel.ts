@@ -6,4 +6,5 @@ export class NetworkLineModel{
     Stations: [];
     Type: string;
     Departures: Time[];
+    ScheduleDays: string[];
 }

@@ -13,6 +13,9 @@ import { MyInfo } from './PassangerPage/UserInfo';
 import { Pricelist } from './PassangerPage/Pricelist';
 import { BuyTicketModel } from './PassangerPage/BuyTicketModel';
 import { TicketType } from './PassangerPage/TicketType';
+import { SchaduleType } from './SchaduleType';
+import { templateJitUrl } from '@angular/compiler';
+import { EditLineInfoModel } from './AdminPage/EditLineInfoModel';
 
 const httpOprions = {
   headers: new HttpHeaders({
@@ -29,6 +32,12 @@ export class ConnectionService {
   private ServiceUrl = 'http://localhost:52295/api/';
 
   constructor(private http: HttpClient) { }
+
+  getFullInfo(id: number) : Observable<EditLineInfoModel>{
+    return this.http.get<EditLineInfoModel>(
+      this.ServiceUrl+"Admin/FullLineInfo/"+id
+    ).pipe(catchError(this.handleError<EditLineInfoModel>("Error")));
+  }
 
   getPricelist() : Observable<string[]> {
     return this.http.get<string[]>(this.ServiceUrl+"AppUser/GetPricelist")
@@ -88,10 +97,25 @@ export class ConnectionService {
     ).pipe(catchError(this.handleError<NetworkLineModel[]>("NetworkLineModel")));
   }
 
+  //Get one NetworkLine with ID for edit
+  getLineID() : Observable<NetworkLineModel>{
+    return this.http.get<NetworkLineModel>(
+      this.ServiceUrl + 'Admin/GetLines/id'
+    ).pipe(catchError(this.handleError<NetworkLineModel>("NetworkLineModel")));
+  }
+
+  //Stations from db
   getStations(): Observable<StationModel[]>{
     return this.http.get<StationModel[]>(
       this.ServiceUrl + 'Admin/GetStations'
     ).pipe(catchError(this.handleError<StationModel[]>("StationModel")));
+  }
+
+  //Enum for schedule
+  getScheduleTypes(): Observable<SchaduleType[]>{
+    return this.http.get<SchaduleType[]>(
+      this.ServiceUrl + 'Enums/GetTimetableType'
+    ).pipe(catchError(this.handleError<SchaduleType[]>("SchaduleType")));
   }
 
   addDocumentation(formData: FormData){
@@ -127,6 +151,15 @@ export class ConnectionService {
       timetable,
       httpOprions).pipe(
         catchError(this.handleError<TimetableModel>("TimetableModel"))
+      );
+  }
+
+  updateLine(networkLine: NetworkLineModel){
+    return this.http.post<NetworkLineModel>(
+      this.ServiceUrl + "Admin/UpdateLine",
+      networkLine,
+      httpOprions).pipe(
+        catchError(this.handleError<NetworkLineModel>("NetworkLineModel"))
       );
   }
 

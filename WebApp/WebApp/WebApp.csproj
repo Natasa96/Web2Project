@@ -307,6 +307,30 @@
     <Compile Include="Migrations\201906091110115_TicketPassengerFK.Designer.cs">
       <DependentUpon>201906091110115_TicketPassengerFK.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906101004317_scheduleType.cs" />
+    <Compile Include="Migrations\201906101004317_scheduleType.Designer.cs">
+      <DependentUpon>201906101004317_scheduleType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906101125220_scheduleFix.cs" />
+    <Compile Include="Migrations\201906101125220_scheduleFix.Designer.cs">
+      <DependentUpon>201906101125220_scheduleFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906101258500_TimetableFK.cs" />
+    <Compile Include="Migrations\201906101258500_TimetableFK.Designer.cs">
+      <DependentUpon>201906101258500_TimetableFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906111411313_departuresFixes.cs" />
+    <Compile Include="Migrations\201906111411313_departuresFixes.Designer.cs">
+      <DependentUpon>201906111411313_departuresFixes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906111535591_DbFixes.cs" />
+    <Compile Include="Migrations\201906111535591_DbFixes.Designer.cs">
+      <DependentUpon>201906111535591_DbFixes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906111642125_DbFixes1.cs" />
+    <Compile Include="Migrations\201906111642125_DbFixes1.Designer.cs">
+      <DependentUpon>201906111642125_DbFixes1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -315,20 +339,25 @@
     <Compile Include="Models\Enums\LineType.cs" />
     <Compile Include="Models\Enums\PassengerType.cs" />
     <Compile Include="Models\Enums\TicketType.cs" />
+    <Compile Include="Models\Enums\TimetableType.cs" />
     <Compile Include="Models\TicketService\DiscountPrice.cs" />
     <Compile Include="Models\TicketService\Pricelist.cs" />
     <Compile Include="Models\TicketService\Ticket.cs" />
     <Compile Include="Models\TicketService\TicketPrice.cs" />
     <Compile Include="Models\TrafficSystem\Departures.cs" />
     <Compile Include="Models\TrafficSystem\NetworkLine.cs" />
+    <Compile Include="Models\TrafficSystem\Schedule.cs" />
     <Compile Include="Models\TrafficSystem\Station.cs" />
     <Compile Include="Models\TrafficSystem\Timetable.cs" />
     <Compile Include="Models\Users\Passenger.cs" />
     <Compile Include="Persistence\ApplicationDbContext.cs" />
+    <Compile Include="Persistence\Repository\DepartureRepository.cs" />
+    <Compile Include="Persistence\Repository\Interfaces\IDepartureRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\INetworkLineRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IPassengerRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IPricelistRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IRepository.cs" />
+    <Compile Include="Persistence\Repository\Interfaces\IScheduleRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IStationRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\ITicketPriceRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\ITicketRepository.cs" />
@@ -337,6 +366,7 @@
     <Compile Include="Persistence\Repository\PassengerRepository.cs" />
     <Compile Include="Persistence\Repository\PricelistRepository.cs" />
     <Compile Include="Persistence\Repository\Repository.cs" />
+    <Compile Include="Persistence\Repository\ScheduleRepository.cs" />
     <Compile Include="Persistence\Repository\StationRepository.cs" />
     <Compile Include="Persistence\Repository\TicketPriceRepository.cs" />
     <Compile Include="Persistence\Repository\TicketRepository.cs" />
@@ -477,6 +507,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906091110115_TicketPassengerFK.resx">
       <DependentUpon>201906091110115_TicketPassengerFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906101004317_scheduleType.resx">
+      <DependentUpon>201906101004317_scheduleType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906101125220_scheduleFix.resx">
+      <DependentUpon>201906101125220_scheduleFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906101258500_TimetableFK.resx">
+      <DependentUpon>201906101258500_TimetableFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906111411313_departuresFixes.resx">
+      <DependentUpon>201906111411313_departuresFixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906111535591_DbFixes.resx">
+      <DependentUpon>201906111535591_DbFixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906111642125_DbFixes1.resx">
+      <DependentUpon>201906111642125_DbFixes1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

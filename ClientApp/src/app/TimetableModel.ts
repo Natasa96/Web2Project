@@ -4,6 +4,5 @@ import { Time } from "@angular/common";
 
 export class TimetableModel{
     Day: Date;
-    Lines: NetworkLineModel[];
-    Departures: Time[]; 
+    NLine: NetworkLineModel[];
 }

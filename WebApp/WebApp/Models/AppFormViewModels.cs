@@ -4,9 +4,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApp.Models.Enums;
+using WebApp.Models.TrafficSystem;
 
 namespace WebApp.Models
 {
+    public class DeparturesViewModel
+    {
+        public int Id { get; set; }
+        public DateTime Time { get; set; }
+    }
+    public class EditLineInfoModel
+    {
+        public int LineNumber { get; set; }
+        public string SelectedType { get; set; }
+        public List<string> AllTypes { get; set; }
+        public List<StationViewModel> SelectedStations { get; set; }
+        public List<StationViewModel> AllStations { get; set; }
+        public List<string> SelectedSchedule { get; set; }
+        public List<string> AllSchedule { get; set; }
+        public List<DeparturesViewModel> Departures { get; set; }
+        
+        public EditLineInfoModel()
+        {
+            SelectedSchedule = new List<string>();
+            SelectedStations = new List<StationViewModel>();
+            AllSchedule = new List<string>();
+            AllStations = new List<StationViewModel>();
+            Departures = new List<DeparturesViewModel>();
+            AllTypes = new List<string>();
+        }
+    }
+
     public class GetPriceViewModel
     {
         public string Type { get; set; }
@@ -45,12 +73,19 @@ namespace WebApp.Models
         public string Type { get; set; }
         public List<int> Stations { get; set; }
         public List<DateTime> Departures { get; set; }
+        public List<string> ScheduleDays { get; set; }
 
         public NetworkLineViewModel()
         {
             Stations = new List<int>();
             Departures = new List<DateTime>();
+            ScheduleDays = new List<string>();
         }
+    }
+
+    public class SchaduleType
+    {
+        public string Type { get; set; }
     }
 
     public class StationViewModel
@@ -62,6 +97,17 @@ namespace WebApp.Models
         public double Latitude { get; set; }
 
         public StationViewModel()
+        {
+            NLine = new List<int>();
+        }
+    }
+
+    public class TimetableViewModel
+    {
+        public string Day { get; set; }
+        public List<int> NLine { get; set; }
+
+        public TimetableViewModel()
         {
             NLine = new List<int>();
         }

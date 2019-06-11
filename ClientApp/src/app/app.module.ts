@@ -24,8 +24,10 @@ import { StationAddComponent } from './AdminPage/station-add/station-add.compone
 import { TimetableAddComponent } from './AdminPage/timetable-add/timetable-add.component';
 import { MyProfileComponent } from './PassangerPage/my-profile/my-profile.component';
 import { BuyTicketComponent } from './PassangerPage/buy-ticket/buy-ticket.component';
-import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
-
+import { MapComponent } from './map/map.component';
+import {AgmCoreModule} from '@agm/core';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { LineEditInfoComponent } from './AdminPage/line-edit-info/line-edit-info.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
     StationAddComponent,
     TimetableAddComponent,
     MyProfileComponent,
-    BuyTicketComponent
+    BuyTicketComponent,
+    MapComponent,
+    LineEditInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,8 @@ import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AngularMultiSelectModule
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyDnihJyw_34z5S1KZXp90pfTGAqhFszNJk'}),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     AuthGuard,

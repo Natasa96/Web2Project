@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConnectionService } from 'src/app/connection.service';
 import { resource } from 'selenium-webdriver/http';
 import { ConditionalExpr } from '@angular/compiler';
 import { NetworkLineModel } from 'src/app/NetworkLineModel';
+import { MarkerInfo } from 'src/app/map/Model/markerInfoModel';
+import { GeoLocation } from 'src/app/map/Model/geolocation';
 
 @Component({
   selector: 'app-station-add',
@@ -22,25 +24,36 @@ export class StationAddComponent implements OnInit {
 
   //linije dobijene iz back-enda
   stationLines: NetworkLineModel[];
+  stationInfo: MarkerInfo;
+  selectedItems: NetworkLineModel[];
+  dropdownSettings = {};
+
+  onItemSelect(item: any) {
+    console.log(item);
+  }
+  onSelectAll(items: any) {
+    console.log(items);
+  }
 
   constructor(private fb: FormBuilder, private Service: ConnectionService) { }
 
   ngOnInit() {
     this.getNetworkLines();
-    this.dropdownSettings;
+    this.stationInfo = new MarkerInfo(new GeoLocation(0,0),"","","","");
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'LineNumber',
+      textField: 'LineNumber',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
   }
 
-  /*onItemSelected(item: any){
-    console.log(item);
-    console.log(this.selectedLines);
-  }*/
-
-  dropdownSettings = { 
-    singleSelection: false, 
-    text:"Select Lines",
-    enableSearchFilter: true,
-    classes:"myclass custom-class"
-  };  
+  getCoordsFromMap(coords: GeoLocation){
+    this.stationInfo.location = coords;
+  }
 
   getNetworkLines(){
     this.Service.getLines().subscribe((result) => 
@@ -55,8 +68,8 @@ export class StationAddComponent implements OnInit {
       Name: this.StationAddForm.controls["Name"].value,
       Address: this.StationAddForm.controls["Address"].value,
       NLine: this.StationAddForm.controls["NLine"].value,
-      Longitude: 0,
-      Latitude: 0
+      Longitude: this.stationInfo.location.longitude,
+      Latitude: this.stationInfo.location.latitude
     }
     this.Service.addStations(stationData).subscribe((result) => console.log(result));
   }

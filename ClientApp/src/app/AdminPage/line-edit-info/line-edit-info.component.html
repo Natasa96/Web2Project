@@ -1,0 +1,46 @@
+<div *ngIf="selectedLine">
+  <label>{{selectedLine.LineNumber}}</label>
+   <form [formGroup]="EditLineForm" (ngSubmit)="updateLine()">
+  
+        <input type="number" formControlName="LineNumber" placeholder="LineNumber">
+        
+        <select ng-model="selectedType" class="selectedLine.AllTypes" formControlName="Type">
+          <option *ngFor="let type of selectedLine.AllTypes"
+            [value]="type">
+              {{type}}
+          </option>
+        </select>
+      
+        <select multiple ng-model="selectedType" class="selectedLine.AllStations" formControlName="Stations">
+          <option *ngFor="let station of selectedLine.AllStations"
+          [value]="station.Name">
+            {{station.Name}}
+        </option>
+        </select>
+      
+        <select multiple ng-model="selectedType" class="selectedLine.AllSchedule" formControlName="ScheduleDays">
+          <option *ngFor="let s of selectedLine.AllSchedule"
+          [value]="s">
+            {{s}}
+        </option>
+        </select>
+      
+        <div formArrayName="Departures">
+          <h4>Departures</h4>
+          <button type="button" (click)="addTime()">Add time</button>
+          <div *ngFor="let t of selectedLine.Departures">
+              <label>Time: 
+                <!--<input type="text" [value]="t.Time">-->
+              </label>
+            </div>
+          <div *ngFor="let t of Departures.controls; let i=index">
+            <label>Time: 
+              <input type="time" [formControlName]="i">
+            </label>
+          </div>
+        </div>
+      
+        <button type="submit">Add Line</button>
+      
+      </form>
+</div>

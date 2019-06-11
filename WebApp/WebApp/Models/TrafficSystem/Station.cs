@@ -13,7 +13,6 @@ namespace WebApp.Models.TrafficSystem
         private int id;
         private string name;
         private string address;
-        private List<NetworkLine> nLine;
         private double longitude;
         private double latitude;
 
@@ -25,9 +24,8 @@ namespace WebApp.Models.TrafficSystem
         public int Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string Address { get => address; set => address = value; }
-
-        [ForeignKey("LinesID")]
-        public List<NetworkLine>NLine { get => nLine; set => nLine = value; }
+        
+        public virtual ICollection<NetworkLine>NLine { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }

@@ -14,5 +14,6 @@ namespace WebApp.Models.TrafficSystem
 
         public DateTime Time { get => time; set => time = value; }
         public int Id { get => id; set => id = value; }
+        public NetworkLine NetworkLine { get; set; }
     }
 }

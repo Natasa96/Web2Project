@@ -1,3 +1,11 @@
-<div>
-  <select ng-model="" ng-options=""></select>
+<div class="col-md-5">
+    <label>Lines: <ng-multiselect-dropdown
+      [placeholder]="'Selecte Line'"
+      [data]="lines"
+      [settings]="dropdownSettings"
+      (onSelect)="onItemSelect($event)"
+    >
+    </ng-multiselect-dropdown></label>
 </div>
+
+<app-line-edit-info [selectedLine]="FullLineInfo"></app-line-edit-info>

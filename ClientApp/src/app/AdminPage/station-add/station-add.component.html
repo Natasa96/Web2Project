@@ -1,22 +1,29 @@
+<div class="col-md-8">
 <form [formGroup]="StationAddForm" (ngSubmit)="addStation()">
   
-  <input type="text" formControlName="Name" required>
+  <input type="text" formControlName="Name" placeholder="Station Name" required>
   
-  <input type="text" formControlName="Address">
+  <input type="text" formControlName="Address" placeholder="Address">
   
-  <select multiple ng-model="selectedType" class="stationLines" formControlName="NLine">
+  <!--<select multiple ng-model="selectedType" class="stationLines" formControlName="NLine">
     <option *ngFor="let line of stationLines"
     [value]="line.LineNumber">
       {{line.LineNumber}}
   </option>
-  </select>
-<!--
-  <angular2-multiselect 
-    [data]="stationLines" 
-    formControlName="NLine"
-    [settings]="dropdownSettings"
-    (onSelect) = "onItemSelected($event)">
-  </angular2-multiselect>-->
-  
+  </select>-->
+
+  <ng-multiselect-dropdown
+  [placeholder]="'Select LineNumbers'"
+  formControlName="NLine"
+  [data]="stationLines"
+  [settings]="dropdownSettings"
+  (onSelect)="onItemSelect($event)"
+  (onSelectAll)="onSelectAll($event)"
+>
+</ng-multiselect-dropdown>
+  <div>
+    <app-map (childEvent)="getCoordsFromMap($event)"></app-map>
+  </div>
   <button type="submit">Add station</button>
 </form>
+</div>

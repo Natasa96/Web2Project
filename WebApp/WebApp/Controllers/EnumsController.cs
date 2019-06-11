@@ -36,7 +36,15 @@ namespace WebApp.Controllers
         //GET   api/Enums/GetTicketType
         public IHttpActionResult GetTicketTypes()
         {
-            return Ok(Enum.GetValues(typeof(TicketType)).Cast<TicketType>());
+            return Ok(Enum.GetNames(typeof(TicketType)).ToList());
+        }
+
+        //GET   api/Enums/GetTimetableType
+        [HttpGet]
+        [Route("GetTimetableType")]
+        public IHttpActionResult GetTimetableType()
+        {
+            return Ok(Enum.GetNames(typeof(TimetableType)).ToList());
         }
     }
 }

@@ -12,6 +12,10 @@ namespace WebApp.Persistence.UnitOfWork
     public class DemoUnitOfWork : IUnitOfWork
     {
         private readonly DbContext _context;
+        [Dependency]
+        public IScheduleRepository Schedules { get; set; }
+        [Dependency]
+        public IDepartureRepository Departures { get; set; }
 
         [Dependency]
         public IPricelistRepository Pricelist { get; set; }

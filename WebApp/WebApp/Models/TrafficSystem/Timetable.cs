@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using WebApp.Models.Enums;
 
 namespace WebApp.Models.TrafficSystem
 {
     public class Timetable
     {
-        private DateTime? day;
-        private List<NetworkLine> lines;
+        private TimetableType days;
         private int id;
 
         public Timetable()
@@ -17,8 +17,8 @@ namespace WebApp.Models.TrafficSystem
             Lines = new List<NetworkLine>();
         }
 
-        public DateTime? Day { get => day; set => day = value; }
-        public List<NetworkLine> Lines { get => lines; set => lines = value; }
+        public TimetableType TTDay { get => days; set => days = value; }
+        public virtual  ICollection<NetworkLine> Lines { get; set; }
         public int Id { get => id; set => id = value; }
 
         [Timestamp]

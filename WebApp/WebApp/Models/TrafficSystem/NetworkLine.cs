@@ -12,27 +12,32 @@ namespace WebApp.Models.TrafficSystem
     {
         private int id;
         private int lineNumber;
-        private List<Departures> departures;
-        private List<Station> stations;
         private LineType type;
+        private Timetable timeOfGoing;
 
         public NetworkLine()
         {
             Stations = new List<Station>();
             Departures = new List<Departures>();
+            ScheduleDays = new List<Schedule>();
+            //TimeOfGoing = new Timetable();
         }
 
         public int Id { get => id; set => id = value; }
         public int LineNumber { get => lineNumber; set => lineNumber = value; }
 
-        [ForeignKey("StationsID")]
-        public List<Station> Stations { get => stations; set => stations = value; }
+        
+        public virtual ICollection<Station> Stations { get; set; }
 
         public LineType Type { get => type; set => type = value; }
+
+        public virtual ICollection<Schedule> ScheduleDays { get ; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
-        public List<Departures> Departures { get => departures; set => departures = value; }
+        public virtual ICollection<Departures> Departures { get ; set; }
+
+        public Timetable TimeOfGoing { get => timeOfGoing; set => timeOfGoing = value; }
     }
 }

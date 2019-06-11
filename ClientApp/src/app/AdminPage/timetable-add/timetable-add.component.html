@@ -1,5 +1,18 @@
 <form [formGroup]="TimetableAddForm" (ngSubmit)="addTimetable()">
-  <input type="date" formControlName="Day" required>
-  <input type="time" fromControlName="Departures" required>
+
+  <select ng-model="selectedType" class="days" formControlName="Day" class="row">
+    <option *ngFor="let d of days"
+    [value]="d">
+      {{d}}
+  </option>
+  </select>
+
+  <select multiple ng-model="selectedType" class="lines" formControlName="Lines" class="row">
+    <option *ngFor="let l of lines"
+    [value]="l.LineNumber">
+      {{l.LineNumber}}
+  </option>
+  </select>
+
   <button type="submit">Add timetable</button>
 </form>

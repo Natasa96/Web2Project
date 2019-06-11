@@ -1,0 +1,7 @@
+<p>
+  <agm-map [latitude]="markerInfo.location.latitude" [longitude]="markerInfo.location.longitude" 
+    [zoom]="18" (mapClick)="placeMarker($event)">
+    <agm-marker *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude" [iconUrl]="polyline.icon">
+      </agm-marker>
+  </agm-map>
+</p>

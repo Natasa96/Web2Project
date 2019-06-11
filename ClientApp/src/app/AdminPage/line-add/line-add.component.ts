@@ -5,6 +5,7 @@ import { LineType } from 'src/app/LineType';
 import { NetworkLineModel } from 'src/app/NetworkLineModel';
 import { LineEditComponent } from '../line-edit/line-edit.component';
 import { StationModel } from 'src/app/StationModel';
+import { SchaduleType } from 'src/app/SchaduleType';
 
 @Component({
   selector: 'app-line-add',
@@ -19,7 +20,8 @@ export class LineAddComponent implements OnInit {
     Type: ['', Validators.required],
     Departures: this.fb.array([
       this.fb.control('')
-    ])
+    ]),
+    ScheduleDays: ['']
   });
 
 
@@ -28,10 +30,12 @@ export class LineAddComponent implements OnInit {
   ngOnInit() {
     this.getLineTypes();
     this.getStations();
+    this.getScheduleTypes();
   }
 
   lineTypes = [];
   nlStations: StationModel[];
+  schedule: SchaduleType[];
 
   //Zapamti departure time iz prethodnog inputa
   get Departures(){
@@ -57,12 +61,22 @@ export class LineAddComponent implements OnInit {
     });
   }
 
+  // Radni dan / vikend / praznik 
+  getScheduleTypes() {
+    this.Service.getScheduleTypes().subscribe((result) =>
+    {
+      this.schedule = result
+      console.log(result);
+    });
+  }
+
   addLine(){
     let lineData = new NetworkLineModel();
     lineData.LineNumber = this.LineAddForm.controls["LineNumber"].value;
     lineData.Stations = this.LineAddForm.controls["Stations"].value;
     lineData.Type = this.LineAddForm.controls["Type"].value;
     lineData.Departures = this.LineAddForm.controls["Departures"].value;
+    lineData.ScheduleDays = this.LineAddForm.controls["ScheduleDays"].value;
 
     console.log(lineData);
     this.Service.addLine(lineData).subscribe((result) => console.log(result));
