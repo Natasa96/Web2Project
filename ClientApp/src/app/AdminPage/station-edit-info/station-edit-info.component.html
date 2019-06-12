@@ -1,0 +1,24 @@
+<div *ngIf="selectedStation">
+  <form [formGroup]="EditStationForm" (ngSubmit)="updateStation()">
+    <div class="col-md-5">
+      <h3>Station info: </h3>
+      <div class="row">
+        <label>Name: <input type="text" formControlName="Name"></label>
+      </div>
+      <div class="row">
+        <label>Address: <input type="text" formControlName="Address"></label>
+      </div>
+      <div class="row">
+          <label>Lines</label>
+          <select style="width: 50px;" multiple ng-model="selectedType" class="selectedStation.NLine" formControlName="NLine">
+              <option *ngFor="let line of selectedStation.NLine"
+              [value]="line">
+                {{line}}
+            </option>
+            </select>
+      </div>
+      <app-map (childEvent)="getCoordsFromMap($event)"></app-map>
+    </div>
+  <button type="submit" class="btn btn-primary btn-block btn-large">Update station</button>
+  </form>
+</div>

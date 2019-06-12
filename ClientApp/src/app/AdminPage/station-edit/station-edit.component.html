@@ -1,3 +1,11 @@
-<p>
-  station-edit works!
-</p>
+<div>
+    <label>Stations: 
+        <ng-multiselect-dropdown
+        [placeholder]="'Select Station'"
+        [data]="stations"
+        [settings]="dropdownSettings"
+        (onSelect)="onItemSelect($event)"
+      >
+      </ng-multiselect-dropdown></label>
+</div>
+<app-station-edit-info [selectedStation]="selectedStation"></app-station-edit-info>

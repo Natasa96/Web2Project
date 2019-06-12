@@ -24,12 +24,11 @@ namespace WebApp.Models.TrafficSystem
         public int Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string Address { get => address; set => address = value; }
-        
         public virtual ICollection<NetworkLine>NLine { get; set; }
+        public double Longitude { get => longitude; set => longitude = value; }
+        public double Latitude { get => latitude; set => latitude = value; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
-        public double Longitude { get => longitude; set => longitude = value; }
-        public double Latitude { get => latitude; set => latitude = value; }
     }
 }

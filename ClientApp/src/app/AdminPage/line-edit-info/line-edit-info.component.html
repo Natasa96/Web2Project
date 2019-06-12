@@ -1,16 +1,25 @@
 <div *ngIf="selectedLine">
-  <label>{{selectedLine.LineNumber}}</label>
+
    <form [formGroup]="EditLineForm" (ngSubmit)="updateLine()">
   
-        <input type="number" formControlName="LineNumber" placeholder="LineNumber">
+        <input type="number" formControlName="LineNumber" placeholder="LineNumber" [value]="selectedLine.LineNumber">
         
-        <select ng-model="selectedType" class="selectedLine.AllTypes" formControlName="Type">
+        <!--<select ng-model="selectedType" class="selectedLine.AllTypes" formControlName="Type">
           <option *ngFor="let type of selectedLine.AllTypes"
-            [value]="type">
+            [value]="type" [selected]="selectedLine.selectedType">
               {{type}}
           </option>
-        </select>
-      
+        </select>-->
+
+        <ng-multiselect-dropdown
+        [placeholder]="'Selecte Line'"
+        [data]="selectedLine.AllTypes"
+        [settings]="dropdownSettings"
+        (onSelect)="onItemSelect($event)"
+        formControlName="Type"
+      >
+      </ng-multiselect-dropdown>
+
         <select multiple ng-model="selectedType" class="selectedLine.AllStations" formControlName="Stations">
           <option *ngFor="let station of selectedLine.AllStations"
           [value]="station.Name">
@@ -30,7 +39,8 @@
           <button type="button" (click)="addTime()">Add time</button>
           <div *ngFor="let t of selectedLine.Departures">
               <label>Time: 
-                <!--<input type="text" [value]="t.Time">-->
+                <input type="text" [value]="t.Time" readonly>
+                <button type="button" (click)="DeleteDeparture(t.Id)">Delete</button>
               </label>
             </div>
           <div *ngFor="let t of Departures.controls; let i=index">

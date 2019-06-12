@@ -3,6 +3,7 @@ import { TimetableModel } from "../TimetableModel";
 import { DepartureModel } from "./DepartureModel";
 
 export class EditLineInfoModel{
+    Id: number;
     LineNumber: number;
     SelectedType: string;
     AllTypes: string[];

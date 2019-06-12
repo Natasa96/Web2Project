@@ -34,6 +34,8 @@ import { ValidateUserComponent } from './ControllerPage/validate-user/validate-u
 import { CheckTicketComponent } from './ControllerPage/check-ticket/check-ticket.component';
 import { UserValidateInfoComponent } from './ControllerPage/user-validate-info/user-validate-info.component';
 import { CheckTicketInfoComponent } from './ControllerPage/check-ticket-info/check-ticket-info.component';
+import { StationEditInfoComponent } from './AdminPage/station-edit-info/station-edit-info.component';
+import { TimetableNetworklinesComponent } from './AdminPage/timetable-networklines/timetable-networklines.component';
 
 
 @NgModule({
@@ -56,12 +58,14 @@ import { CheckTicketInfoComponent } from './ControllerPage/check-ticket-info/che
     MyProfileComponent,
     BuyTicketComponent,
     MapComponent,
-    LineEditInfoComponent
+    LineEditInfoComponent,
     ControllerPageComponent,
     ValidateUserComponent,
     CheckTicketComponent,
     UserValidateInfoComponent,
-    CheckTicketInfoComponent
+    CheckTicketInfoComponent,
+    StationEditInfoComponent,
+    TimetableNetworklinesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConnectionService } from 'src/app/connection.service';
-import { resource } from 'selenium-webdriver/http';
-import { ConditionalExpr } from '@angular/compiler';
 import { NetworkLineModel } from 'src/app/NetworkLineModel';
 import { MarkerInfo } from 'src/app/map/Model/markerInfoModel';
 import { GeoLocation } from 'src/app/map/Model/geolocation';
@@ -65,6 +63,7 @@ export class StationAddComponent implements OnInit {
 
   addStation(){
     let stationData ={
+      Id: 0,
       Name: this.StationAddForm.controls["Name"].value,
       Address: this.StationAddForm.controls["Address"].value,
       NLine: this.StationAddForm.controls["NLine"].value,

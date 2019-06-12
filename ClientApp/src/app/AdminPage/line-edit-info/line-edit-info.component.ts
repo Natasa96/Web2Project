@@ -11,7 +11,10 @@ import { EditLineInfoModel } from '../EditLineInfoModel';
 })
 export class LineEditInfoComponent implements OnInit {
 
+  dropdownSettings
+
   @Input() selectedLine: EditLineInfoModel;
+
 
   EditLineForm = this.fb.group({
     LineNumber: [''],
@@ -26,24 +29,60 @@ export class LineEditInfoComponent implements OnInit {
   constructor(private Service: ConnectionService, private fb: FormBuilder) { }
 
   ngOnInit() {
-    
+    this.dropdownSettings = {
+      singleSelection: true,
+      idField: 'Type',
+      textField: 'Type',
+      itemsShowLimit: 1,
+      allowSearchFilter: true,
+    };
+  }
+
+  onItemSelect(item: any) {
+    console.log(item);
+    this.selectedLine.SelectedType = item;
   }
 
   get Departures(){
        return this.EditLineForm.get('Departures') as FormArray;
  }
 
-  /*updateLine(){
-    let lineData = {
-      LineNumber: this.EditLineForm.controls['LineNumber'].value,
-      Stations: this.EditLineForm.controls['Stations'].value,
-      Type: this.EditLineForm.controls['Type'].value,
-      Departures: this.EditLineForm.controls['Departures'].value,
-      ScheduleDays: this.EditLineForm.controls['ScheduleDays'].value
+ DeleteDeparture(id: number){
+   const index = this.selectedLine.Departures.indexOf(this.selectedLine.Departures.find(x => x.Id == id), 0);
+    if(index > -1){
+      this.selectedLine.Departures.splice(index, 1);
     }
+ }
 
+  //Dodaj jos jedan input za departure time
+  addTime(){
+    this.Departures.push(this.fb.control(''));
+  }
+
+  populateForm(selectedLine: EditLineInfoModel){
+    this.EditLineForm.get("LineNumber").patchValue(selectedLine.LineNumber);
+    this.EditLineForm.get("Stations").patchValue(selectedLine.SelectedStations);
+    this.EditLineForm.get("Type").patchValue(selectedLine.SelectedType);
+    this.EditLineForm.get("Departures").patchValue(selectedLine.Departures);
+    this.EditLineForm.get("ScheduleDays").patchValue(selectedLine.SelectedSchedule);
+  }
+
+  updateLine(){
+    let lineData = new NetworkLineModel();
+
+    lineData.Id = this.selectedLine.Id;
+    lineData.LineNumber = this.EditLineForm.controls["LineNumber"].value;
+    lineData.Stations = this.EditLineForm.controls["Stations"].value;
+    lineData.Type = this.EditLineForm.controls["Type"].value[0];
+    lineData.Departures = this.EditLineForm.controls["Departures"].value;
+    lineData.ScheduleDays = this.EditLineForm.controls["ScheduleDays"].value;
+
+    this.selectedLine.Departures.map(time => {
+      lineData.Departures.push(time.Time);
+    });
+
+    console.log(lineData);
     this.Service.updateLine(lineData).subscribe((result) => console.log(result));
-  }*/
-
+  }
 
 }

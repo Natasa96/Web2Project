@@ -51,7 +51,34 @@ namespace WebApp.Controllers
                 return InternalServerError(ex);
             }
         }
-        
+        [Route("GetFullStationInfo/{id}")]
+        [HttpGet]
+        public IHttpActionResult GetStationFullInfo(int id)
+        {
+            EditStationViewModel model = CreateEditStationViewModel(id);
+            if (model == null)
+                return BadRequest();
+            return Ok(model);
+        }
+
+        private EditStationViewModel CreateEditStationViewModel(int id)
+        {
+            Station s = UnitOfWork.Stations.Get(id);
+            EditStationViewModel model = new EditStationViewModel()
+            {
+                Id = s.Id,
+                Address = s.Address,
+                Latitude = s.Latitude,
+                Longitude = s.Longitude,
+                Name = s.Name
+            };
+            foreach (var node in s.NLine)
+                model.SelectedLines.Add(node.LineNumber);
+            foreach (var node in UnitOfWork.NetworkLines.GetAll())
+                model.NLine.Add(node.LineNumber);
+            return model;
+        }
+
         [Route("FullLineInfo/{id}")]
         [HttpGet]
         public IHttpActionResult GetFullInfo(int id)
@@ -60,13 +87,15 @@ namespace WebApp.Controllers
             {
                 EditLineInfoModel model = new EditLineInfoModel();
                 NetworkLine line = UnitOfWork.NetworkLines.Find(x => x.LineNumber == id).First();
+
+                model.Id = line.Id;
                 model.LineNumber = line.LineNumber;
                 var departures = UnitOfWork.Departures.GetAll();
                 List<DeparturesViewModel> newmodel = new List<DeparturesViewModel>();
                 foreach (var node in departures)
                     newmodel.Add(new DeparturesViewModel() {
                         Id = node.Id,
-                        Time = node.Time
+                        Time = node.Time.ToUniversalTime()
                     });
                 model.Departures = newmodel;
                 model.SelectedType = line.Type.ToString();
@@ -90,7 +119,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public IHttpActionResult AddLine(NetworkLineViewModel model)
         {
-            NetworkLine networkLine = AdaptNetworkLine(model);
+            NetworkLine networkLine = AdaptNetworkLine(model, 0);
 
             UnitOfWork.NetworkLines.Add(networkLine);
             UnitOfWork.Complete();
@@ -118,7 +147,9 @@ namespace WebApp.Controllers
         {
             try
             {
-                UnitOfWork.NetworkLines.Update(AdaptNetworkLine(model));
+                NetworkLine line = AdaptNetworkLine(model, 1);
+ 
+                UnitOfWork.NetworkLines.Update(line);
                 UnitOfWork.Complete();
                 return Ok($"Line {model.LineNumber} successfully updated!");
             }
@@ -144,9 +175,46 @@ namespace WebApp.Controllers
             }
         }
 
-        private NetworkLine AdaptNetworkLine(NetworkLineViewModel model)
+        //COMMAND - add == 0, update == 1
+        private NetworkLine AdaptNetworkLine(NetworkLineViewModel model, int command)
         {
-            NetworkLine networkLine = new NetworkLine();
+
+            NetworkLine networkLine;
+
+            if (command == 0)
+                networkLine = new NetworkLine();
+            else
+            {
+                networkLine = UnitOfWork.NetworkLines.Get(model.Id);
+
+                int cntDepartures = networkLine.Departures.Count;
+                for (int item = 0; item < cntDepartures; item++)
+                {
+                    UnitOfWork.Departures.Remove(networkLine.Departures.ToList()[0]);
+
+                }
+
+                int cntSchedule = networkLine.ScheduleDays.Count;
+                for (int item = 0; item < cntSchedule; item++)
+                {
+                    UnitOfWork.Schedules.Remove(networkLine.ScheduleDays.ToList()[0]);
+                    //networkLine.ScheduleDays.Remove(networkLine.ScheduleDays.ToList()[item]);
+                }
+
+                int cntStations = networkLine.Stations.Count;
+                for (int item = 0; item < cntStations; item++)
+                {
+                    var station = networkLine.Stations.ToList()[0];
+                    station.NLine.Remove(networkLine);
+                    networkLine.Stations.Remove(station);
+                }
+
+                UnitOfWork.Complete();
+            }
+
+            if (UnitOfWork.NetworkLines.GetAll().ToList().Exists(x => x.LineNumber == model.LineNumber))
+                return null;
+
             networkLine.LineNumber = model.LineNumber;
 
             switch (model.Type)
@@ -184,7 +252,6 @@ namespace WebApp.Controllers
                 var station = UnitOfWork.Stations.Find(
                     x => x.Name == s.ToString()).First();
                 station.NLine.Add(networkLine);
-                UnitOfWork.Stations.Update(station);
                 networkLine.Stations.Add(station);
             }
 
@@ -313,11 +380,11 @@ namespace WebApp.Controllers
 
         [Route("UpdateStation")]
         [HttpPost]
-        public IHttpActionResult UpdateStation(Station model)
+        public IHttpActionResult UpdateStation(StationViewModel model)
         {
             try
             {
-                UnitOfWork.Stations.Update(model);
+                UnitOfWork.Stations.Update(AdaptStation(model));
                 UnitOfWork.Complete();
                 return Ok($"Station {model.Name} successfully updated.");
             }
@@ -343,6 +410,30 @@ namespace WebApp.Controllers
             }
         }
 
+        private Station AdaptStation(StationViewModel model)
+        {
+            Station s = UnitOfWork.Stations.Get(model.Id);
+            s.Name = model.Name;
+            s.Address = model.Address;
+            s.Latitude = model.Latitude;
+            s.Longitude = model.Longitude;
+            int cnt = s.NLine.Count;
+            for(int i = 0; i < cnt; i++)
+            {
+                var line = s.NLine.ToList()[i];
+                line.Stations.Remove(s);
+                s.NLine.Remove(line);
+            }
+            UnitOfWork.Complete();
+
+            foreach(var node in model.NLine)
+            {
+                s.NLine.Add(UnitOfWork.NetworkLines.Find(x => x.LineNumber == node).First());
+                UnitOfWork.NetworkLines.Find(x => x.LineNumber == node).First().Stations.Add(s);
+            }
+            return s;
+        }
+
         private static StationViewModel AdaptStationViewModel(Station station)
         {
             StationViewModel model = new StationViewModel();
@@ -351,6 +442,7 @@ namespace WebApp.Controllers
             model.Longitude = station.Longitude;
             model.Latitude = station.Latitude;
             model.Address = station.Address;
+            model.Id = station.Id;
 
             if (station.NLine == null)
                 station.NLine = new List<NetworkLine>();
@@ -365,55 +457,72 @@ namespace WebApp.Controllers
 
         #region Timetabe
 
-        [Route("GetTimetable")]
+        [Route("GetLinesSchedule/{type}")]
         [HttpGet]
-        public IHttpActionResult GetTimetable()
+        public IHttpActionResult GetTimetable(string type)
         {
             try
             {
-                return Ok(UnitOfWork.Timetables.GetAll());
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
-
-        [Route("AddTimetable")]
-        [HttpPost]
-        public IHttpActionResult AddTimetable(TimetableViewModel model)
-        {
-            try
-            {
-                Timetable timetable = AdaptTimetable(model);
-
-                foreach(var t in timetable.Lines)
+                List<ScheduleNLineViewModel> model = new List<ScheduleNLineViewModel>();
+                var schedules = UnitOfWork.Schedules.GetAll();
+                var networkList = UnitOfWork.NetworkLines.GetAll();
+                
+                foreach(var line in networkList)
                 {
-                    UnitOfWork.NetworkLines.Find(x => x.Id == t.Id).First().TimeOfGoing = timetable;
+                    foreach(var item in line.ScheduleDays)
+                    {
+                        if(item.Type.ToString() == type)
+                            model.Add(new ScheduleNLineViewModel()
+                            {
+                                Id = item.NetworkLine.Id,
+                                LineNumber = item.NetworkLine.LineNumber
+                            });
+                    }
                 }
 
-                //model.Lines.Add(UnitOfWork.NetworkLines.Get(1));
-
-                UnitOfWork.Timetables.Add(timetable);
-                UnitOfWork.Complete();
-
-                return Ok($"Timetable {timetable.Id} successfully added.");
+                return Ok(model);
             }
             catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
         }
+
+        [Route("GetDeparturesLine/{id}")]
+        [HttpGet]
+        public IHttpActionResult GetDepartures(int id)
+        {
+            try
+            {
+                List<DeparturesViewModel> dep = new List<DeparturesViewModel>();
+                var lines = UnitOfWork.NetworkLines.Get(id);
+
+                foreach(var item in lines.Departures)
+                {
+                    dep.Add(new DeparturesViewModel()
+                    {
+                        Id = item.Id,
+                        Time = item.Time
+                    });
+                }
+
+                return Ok(dep);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
 
         [Route("UpdateTimetable")]
         [HttpPost]
-        public IHttpActionResult UpdateTimetable(Timetable model)
+        public IHttpActionResult UpdateTimetable(ScheduleDeparturesViewModel model)
         {
             try
             {
-                UnitOfWork.Timetables.Update(model);
-                UnitOfWork.Complete();
-                return Ok($"Timetable {model.Id} successfully updated.");
+                AdaprtTimetable(model);
+                return Ok($"Timetable {model.selectedNLine} successfully updated.");
             }
             catch (Exception ex)
             {
@@ -421,68 +530,27 @@ namespace WebApp.Controllers
             }
         }
 
-        [Route("DeleteTimetable")]
-        [HttpPost]
-        public IHttpActionResult DeleteTimetable(Timetable model)
+        private void AdaprtTimetable(ScheduleDeparturesViewModel model)
         {
-            try
+            var line = UnitOfWork.NetworkLines.Get(model.selectedNLine);
+            var deps = UnitOfWork.Departures.GetAll().Where(x => x.NetworkLine.Id == line.Id).ToList();
+            int cnt = deps.Count;
+            for(int i = 0; i < cnt; i++)
             {
-                UnitOfWork.Timetables.Remove(model);
-                UnitOfWork.Complete();
-                return Ok($"Timetable {model.Id} deleted.");
+                UnitOfWork.Departures.Remove(line.Departures.ToList()[0]);
             }
-            catch (Exception ex)
+            UnitOfWork.Complete();
+            line.Departures.Clear();
+            foreach(var item in model.Departures)
             {
-                return InternalServerError(ex);
+                line.Departures.Add(new Departures()
+                {
+                    Time = DateTime.Parse(item),
+                    NetworkLine = line
+                });
             }
-        }
-
-        public TimetableViewModel AdaptTimetableViewModel(Timetable timetable)
-        {
-            TimetableViewModel model = new TimetableViewModel();
-
-            model.Day = timetable.TTDay.ToString();
-            
-            foreach(var t in timetable.Lines)
-            {
-                model.NLine.Add(t.LineNumber);
-            }
-
-            return model;
-        }
-
-        public Timetable AdaptTimetable(TimetableViewModel model)
-        {
-            Timetable timetable = new Timetable();
-
-            switch (model.Day)
-            {
-                case "RadniDan":
-                    {
-                        timetable.TTDay = TimetableType.RadniDan;
-                        break;
-                    }
-                case "Praznik":
-                    {
-                        timetable.TTDay = TimetableType.Praznik;
-                        break;
-                    }
-                case "Vikend":
-                    {
-                        timetable.TTDay = TimetableType.Vikend;
-                        break;
-                    }
-            }
-
-            if (model.NLine == null)
-                model.NLine = new List<int>();
-
-            foreach(var nl in model.NLine)
-            {
-                timetable.Lines.Add(UnitOfWork.NetworkLines.Find(x => x.LineNumber == nl).First());
-            }
-
-            return timetable;
+            UnitOfWork.NetworkLines.Update(line);
+            UnitOfWork.Complete();
         }
 
         #endregion
@@ -495,7 +563,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                return Ok(UnitOfWork.Pricelist.GetAll());
+                return Ok(AdaptPricelistViewModel());
             }
             catch (Exception ex)
             {
@@ -503,15 +571,59 @@ namespace WebApp.Controllers
             }
         }
 
+        private PricelistViewModel AdaptPricelistViewModel()
+        {
+            PricelistViewModel model = new PricelistViewModel();
+            model.TicketPrice = new Dictionary<string, int>();
+            foreach(var item in UnitOfWork.TicketPrice.GetAll())
+            {
+                model.TicketPrice.Add(item.Type.ToString(), (int)item.Price);
+            }
+            return model;
+        }
+
         [Route("UpdatePricelist")]
         [HttpPost]
-        public IHttpActionResult UpdatePricelist(Pricelist model)
+        public IHttpActionResult UpdatePricelist(PricelistViewModel model)
         {
             try
             {
-                UnitOfWork.Pricelist.Update(model);
+                Pricelist plist = UnitOfWork.Pricelist.Find(x => x.Active == true).First();
+                plist.Active = false;
+                plist.EndTime = DateTime.Today;
+                UnitOfWork.Pricelist.Update(plist);
+                Pricelist newplist = new Pricelist();
+                newplist.Active = true;
+                newplist.ActivePrices = plist.ActivePrices;
+                var tPrice = UnitOfWork.TicketPrice.GetAll().ToList();
+                for(int i =0; i < 4; i++)
+                {
+                    tPrice[i].Pricelist = newplist;
+                    if(tPrice[i].Type == TicketType.Dnevna)
+                    {
+                        tPrice[i].Price = model.TicketPrice["Dnevna"];
+                    }
+                    else if(tPrice[i].Type == TicketType.Godisnja)
+                    {
+                        tPrice[i].Price = model.TicketPrice["Godisnja"];
+                    }
+                    else if(tPrice[i].Type == TicketType.Mesecna)
+                    {
+                        tPrice[i].Price = model.TicketPrice["Mesecna"];
+                    }
+                    else
+                    {
+                        tPrice[i].Price = model.TicketPrice["Vremenska"];
+                    }
+                }
                 UnitOfWork.Complete();
-                return Ok($"Pricelist {model.Id} successfully updated.");
+                newplist.EndTime = null;
+                newplist.StartTime = DateTime.Today;
+                foreach (var node in UnitOfWork.TicketPrice.GetAll())
+                    newplist.ActivePrices.Add(node);
+                UnitOfWork.Pricelist.Add(newplist);
+                UnitOfWork.Complete();
+                return Ok($"Pricelist successfully updated.");
             }
             catch (Exception ex)
             {

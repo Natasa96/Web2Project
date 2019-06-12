@@ -13,8 +13,10 @@ namespace WebApp.Models
         public int Id { get; set; }
         public DateTime Time { get; set; }
     }
+
     public class EditLineInfoModel
     {
+        public int Id { get; set; }
         public int LineNumber { get; set; }
         public string SelectedType { get; set; }
         public List<string> AllTypes { get; set; }
@@ -85,10 +87,11 @@ namespace WebApp.Models
     {
         public TicketType TicketType { get; set; }
     }
+    
 
-    //MOZDA CE SE MORATI PROSIRIVATI
     public class NetworkLineViewModel
     {
+        public int Id { get; set; }
         public int LineNumber { get; set; }
         public string Type { get; set; }
         public List<int> Stations { get; set; }
@@ -110,6 +113,7 @@ namespace WebApp.Models
 
     public class StationViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public List<int> NLine { get; set; }
@@ -122,14 +126,55 @@ namespace WebApp.Models
         }
     }
 
-    public class TimetableViewModel
+    public class EditStationViewModel
     {
-        public string Day { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
         public List<int> NLine { get; set; }
+        public List<int> SelectedLines { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
 
-        public TimetableViewModel()
+        public EditStationViewModel()
         {
             NLine = new List<int>();
+            SelectedLines = new List<int>();
         }
+    }
+
+    //model za red voznje
+    public class ScheduleViewModel
+    {
+        public List<string> Days { get; set; }
+
+        public ScheduleViewModel()
+        {
+            Days = new List<string>();
+        }
+    }
+
+    public class ScheduleNLineViewModel
+    {
+
+        public int Id{ get; set; }
+        public int LineNumber { get; set; }
+
+        public ScheduleNLineViewModel(){}
+    }
+
+    public class ScheduleDeparturesViewModel
+    {
+        public List<string> Departures { get; set; }
+        public int selectedNLine { get; set; }
+
+        public ScheduleDeparturesViewModel()
+        {
+            Departures = new List<string>();
+        }
+    }
+    public class PricelistViewModel
+    {
+        public Dictionary<string,int> TicketPrice { get; set; }
     }
 }

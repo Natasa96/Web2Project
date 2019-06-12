@@ -1,3 +1,12 @@
-<p>
-  pricelist-edit works!
-</p>
+<div *ngIf="Pricelist">
+    <div class="col-md-5">
+        <div class="row">
+            <ul>
+                <li *ngFor="let price of Pricelist.TicketPrice | keyvalue">
+                    {{price.key}}  <input name="{{price.key}}" type="number"([ngModel])="price.value" (input)="ChangeValue($event.target)" value="{{price.value}}">
+                </li>
+            </ul>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary"(click)="ChangePrices()">Change Prices</button>
+</div>

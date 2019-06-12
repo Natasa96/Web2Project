@@ -22,7 +22,6 @@ export class TimetableAddComponent implements OnInit {
 
   ngOnInit() {
     this.getLines();
-    this.getSchedule();
   }
 
   lines: NetworkLineModel[];
@@ -35,14 +34,7 @@ export class TimetableAddComponent implements OnInit {
       console.log(result);
     });
   }
-
-  getSchedule(){
-    this.Service.getScheduleTypes().subscribe((result) =>{
-      this.days = result
-      console.log(result)
-    });
-  }
-
+  
   addTimetable(){
     let timetableData = {
       Day: this.TimetableAddForm.controls["Day"].value,

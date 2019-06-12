@@ -1,10 +1,9 @@
-import { NetworkLineModel } from "./NetworkLineModel";
-
-export class StationModel{
+export class EditStationsModel{
     Id: number;
     Name: string;
     Address: string;
     NLine: [];
+    SelectedLines: [];
     Longitude: number;
     Latitude: number;
 }

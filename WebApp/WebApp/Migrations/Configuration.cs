@@ -85,7 +85,7 @@ namespace WebApp.Migrations
                         {
                             Id = 1,
                             Price = 300,
-                            Type = Models.Enums.TicketType.Dnevna
+                            Type = Models.Enums.TicketType.Dnevna,
                         },
                         new TicketPrice()
                         {
@@ -107,6 +107,8 @@ namespace WebApp.Migrations
                         }
                     }
                 };
+                foreach (var node in Pricelist.ActivePrices)
+                    node.Pricelist = Pricelist;
                 context.PricelistDb.Add(Pricelist);
                 context.SaveChanges();
             }

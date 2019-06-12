@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConnectionService } from 'src/app/connection.service';
 import { FormBuilder, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -8,6 +8,7 @@ import { NetworkLineModel } from 'src/app/NetworkLineModel';
 import { readElementValue } from '@angular/core/src/render3/util';
 import { timeInterval } from 'rxjs/operators';
 import { EditLineInfoModel } from '../EditLineInfoModel';
+import { LineEditInfoComponent } from '../line-edit-info/line-edit-info.component';
 
 @Component({
   selector: 'app-line-edit',
@@ -42,6 +43,7 @@ export class LineEditComponent implements OnInit {
     this.Service.getFullInfo(id).subscribe((res)=>{
       this.FullLineInfo = res;
       console.log(res);
+      this.child.populateForm(this.FullLineInfo);
     });
   }
 
@@ -64,6 +66,8 @@ export class LineEditComponent implements OnInit {
       console.log(res);
     });
   }
+
+  @ViewChild(LineEditInfoComponent) child: LineEditInfoComponent;
 
 // //Zapamti departure time iz prethodnog inputa
 // get Departures(){

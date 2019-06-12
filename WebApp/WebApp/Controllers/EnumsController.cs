@@ -41,7 +41,7 @@ namespace WebApp.Controllers
 
         //GET   api/Enums/GetTimetableType
         [HttpGet]
-        [Route("GetTimetableType")]
+        [Route("GetSchedule")]
         public IHttpActionResult GetTimetableType()
         {
             return Ok(Enum.GetNames(typeof(TimetableType)).ToList());

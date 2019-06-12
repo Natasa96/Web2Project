@@ -16,16 +16,22 @@ export class MapComponent implements OnInit {
   public zoom: number
   @Output() public childEvent = new EventEmitter();
 
-  constructor(private ngZone: NgZone) { }
+  constructor() { }
 
   ngOnInit() {
-    this.markerInfo = new MarkerInfo(new GeoLocation(45.242268, 19.842954), "assets/images/busicon.png", "jugodrvo", "", "");
+    this.markerInfo = new MarkerInfo(new GeoLocation(45.242268, 19.842954), "assets/images/busicon.png", "", "", "");
     this.polyline = new Polyline([], 'blue', { url:"assets/images/busicon.png", scaledSize: {width: 50, height: 50}});
   }
 
   placeMarker($event){
     this.polyline.addLocation(new GeoLocation($event.coords.lat, $event.coords.lng))
     this.markerInfo.location = new GeoLocation($event.coords.lat,$event.coords.lng);
+    this.childEvent.emit(this.markerInfo.location);
+    console.log(this.markerInfo);
+  }
+  initMarker(lat: number, lng: number){
+    this.polyline.addLocation(new GeoLocation(lat, lng))
+    this.markerInfo.location = new GeoLocation(lat,lng);
     this.childEvent.emit(this.markerInfo.location);
     console.log(this.markerInfo);
   }

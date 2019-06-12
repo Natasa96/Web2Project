@@ -21,6 +21,11 @@ import { UserModel } from './ControllerPage/UserModel';
 import { ValidateModel } from './ControllerPage/ValidateModel';
 import { CheckTicketModel } from './ControllerPage/CheckTicketModel';
 import { TicketModel } from './ControllerPage/TicketModel';
+import { EditStationsModel } from './AdminPage/EditStationsMode';
+import { DepartureModel } from './AdminPage/DepartureModel';
+import { ScheduleLineModel } from './AdminPage/ScheduleLineModel';
+import { NewDepartures } from './AdminPage/NewDepartures';
+import { PricelistModel } from './AdminPage/PricelistModel';
 
 const httpOprions = {
   headers: new HttpHeaders({
@@ -43,10 +48,24 @@ export class ConnectionService {
 
   constructor(private http: HttpClient) { }
 
+  updateStation(data: EditStationsModel): Observable<any>{
+    return this.http.post<any>(
+      this.ServiceUrl+"Admin/UpdateStation",
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<any>("Error")));
+  }
+
   getFullInfo(id: number) : Observable<EditLineInfoModel>{
     return this.http.get<EditLineInfoModel>(
       this.ServiceUrl+"Admin/FullLineInfo/"+id
     ).pipe(catchError(this.handleError<EditLineInfoModel>("Error")));
+  }
+
+  getFullStationInfo(id: number): Observable<EditStationsModel>{
+    return this.http.get<EditStationsModel>(
+      this.ServiceUrl + "Admin/GetFullStationInfo/" + id
+    ).pipe(catchError(this.handleError<EditStationsModel>("Error")));
   }
     
   CheckTicket(data : CheckTicketModel) : Observable<TicketModel>{
@@ -97,6 +116,11 @@ export class ConnectionService {
   getPricelist() : Observable<string[]> {
     return this.http.get<string[]>(this.ServiceUrl+"AppUser/GetPricelist")
     .pipe(catchError(this.handleError<string[]>("GetPricelist")));
+  }
+
+  getEditPricelist() : Observable<PricelistModel> {
+    return this.http.get<PricelistModel>(this.ServiceUrl+"Admin/GetPricelist")
+    .pipe(catchError(this.handleError<PricelistModel>("Error")));
   }
 
   buyTicket(data: BuyTicketModel) : Observable<any>{
@@ -169,8 +193,20 @@ export class ConnectionService {
   //Enum for schedule
   getScheduleTypes(): Observable<SchaduleType[]>{
     return this.http.get<SchaduleType[]>(
-      this.ServiceUrl + 'Enums/GetTimetableType'
+      this.ServiceUrl + 'Enums/GetSchedule'
     ).pipe(catchError(this.handleError<SchaduleType[]>("SchaduleType")));
+  }
+
+  getLinesSchedule(type: string): Observable<ScheduleLineModel[]>{
+    return this.http.get<ScheduleLineModel[]>(
+      this.ServiceUrl + 'Admin/GetLinesSchedule/' + type
+    ).pipe(catchError(this.handleError<ScheduleLineModel[]>("ScheduleLineModel")));
+  }
+
+  getDeparturesLine(id: number): Observable<DepartureModel[]>{
+    return this.http.get<DepartureModel[]>(
+      this.ServiceUrl + 'Admin/GetDeparturesLine/' + id
+    ).pipe(catchError(this.handleError<DepartureModel[]>("DepartureModel")));
   }
 
   addDocumentation(formData: FormData){
@@ -180,6 +216,22 @@ export class ConnectionService {
       formData,
       httpOprions
     )
+  }
+
+  UpdatePricelist(data: PricelistModel) : Observable<any>{
+    return this.http.post(
+      this.ServiceUrl+ "Admin/UpdatePricelist",
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<any>("Error")));
+  }
+
+  updateTimetable(data: NewDepartures): Observable<any>{
+    return this.http.post<any>(
+      this.ServiceUrl + "Admin/UpdateTimetable",
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<any>("Error")));
   }
 
   addLine(line: LineType): Observable<LineType>{

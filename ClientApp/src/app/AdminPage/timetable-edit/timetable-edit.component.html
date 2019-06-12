@@ -1,5 +1,38 @@
-<form [formGroup]="TimetableAddForm" (ngSubmit)="addTimetable()">
-  <input type="date" formControlName="Day" required>
-  <input type="time" fromControlName="Departures" required>
-  <button type="submit">Add timetable</button>
-</form>
+<div>
+    <ng-multiselect-dropdown
+    [placeholder]="'Selecte Day'"
+    [data]="days"
+    [settings]="dropdownSettings1"
+    (onSelect)="onItemSelect($event)"
+  >
+  </ng-multiselect-dropdown>
+
+  <ng-multiselect-dropdown
+    [placeholder]="'Selecte Network Line'"
+    [data]="nlines"
+    [settings]="dropdownSettings2"
+    (onSelect)="onSelectLine($event)"
+  >
+  </ng-multiselect-dropdown>
+
+  <div *ngIf="selectedLine">
+    <label>Time: </label>
+    <li *ngFor="let d of departures">
+      {{d.Time}}
+      <button type="button" (click)="DeleteExistingDeparture(d.Id)">Delete</button>
+    </li>
+    <form [formGroup]="DepartureForm" (ngSubmit)="saveChanges()">
+      <div formArrayName="time">
+        <li *ngFor="let t of time.controls; let i=index">
+          <label>Time: 
+            <input type="time" [formControlName]="i">
+            <button type="button" (click)="DeleteDeparture(i)">Delete</button>
+          </label>
+        </li>
+        <button type="button" (click)="addTime()">Add time</button>
+      </div>
+    <button type="submit">Save changes</button>
+  </form>
+  </div>
+
+</div>
