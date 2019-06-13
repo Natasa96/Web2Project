@@ -588,40 +588,44 @@ namespace WebApp.Controllers
         {
             try
             {
-                Pricelist plist = UnitOfWork.Pricelist.Find(x => x.Active == true).First();
-                plist.Active = false;
-                plist.EndTime = DateTime.Today;
-                UnitOfWork.Pricelist.Update(plist);
-                Pricelist newplist = new Pricelist();
-                newplist.Active = true;
-                newplist.ActivePrices = plist.ActivePrices;
-                var tPrice = UnitOfWork.TicketPrice.GetAll().ToList();
-                for(int i =0; i < 4; i++)
+                Pricelist OldPricelist = UnitOfWork.Pricelist.Find(x => x.Active == true).First();
+                Pricelist newPricelist = new Pricelist();
+                newPricelist.ActivePrices = OldPricelist.ActivePrices;
+                OldPricelist.Active = false;
+                OldPricelist.EndTime = DateTime.Today;
+                newPricelist.StartTime = DateTime.Today;
+                newPricelist.Active = true;
+                int cnt = newPricelist.ActivePrices.Count;
+                for(int i =0; i <cnt; i++)
                 {
-                    tPrice[i].Pricelist = newplist;
-                    if(tPrice[i].Type == TicketType.Dnevna)
+                    if(newPricelist.ActivePrices.ToList()[i].Type == TicketType.Vremenska)
                     {
-                        tPrice[i].Price = model.TicketPrice["Dnevna"];
+                        newPricelist.ActivePrices.ToList()[i].Price = model.TicketPrice["Vremenska"];
                     }
-                    else if(tPrice[i].Type == TicketType.Godisnja)
+                    else if(newPricelist.ActivePrices.ToList()[i].Type == TicketType.Dnevna)
                     {
-                        tPrice[i].Price = model.TicketPrice["Godisnja"];
+                        newPricelist.ActivePrices.ToList()[i].Price = model.TicketPrice["Dnevna"];
                     }
-                    else if(tPrice[i].Type == TicketType.Mesecna)
+                    else if (newPricelist.ActivePrices.ToList()[i].Type == TicketType.Mesecna)
                     {
-                        tPrice[i].Price = model.TicketPrice["Mesecna"];
+                        newPricelist.ActivePrices.ToList()[i].Price = model.TicketPrice["Mesecna"];
                     }
                     else
                     {
-                        tPrice[i].Price = model.TicketPrice["Vremenska"];
+                        newPricelist.ActivePrices.ToList()[i].Price = model.TicketPrice["Godisnja"];
                     }
+                    newPricelist.ActivePrices.ToList()[i].Pricelist = newPricelist;
                 }
+                UnitOfWork.Pricelist.Update(OldPricelist);
+                UnitOfWork.Pricelist.Add(newPricelist);
                 UnitOfWork.Complete();
-                newplist.EndTime = null;
-                newplist.StartTime = DateTime.Today;
-                foreach (var node in UnitOfWork.TicketPrice.GetAll())
-                    newplist.ActivePrices.Add(node);
-                UnitOfWork.Pricelist.Add(newplist);
+
+                var tickets = UnitOfWork.TicketPrice.GetAll();
+                for(int i = 0; i < 4; i++)
+                {
+                    tickets.ToList()[i].Pricelist = UnitOfWork.Pricelist.Find(x => x.Active == true).First();
+                    UnitOfWork.TicketPrice.Update(tickets.ToList()[i]);
+                }
                 UnitOfWork.Complete();
                 return Ok($"Pricelist successfully updated.");
             }

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MarkerInfo } from 'src/app/map/Model/markerInfoModel';
+import { GeoLocation } from 'src/app/map/Model/geolocation';
+import { MapComponent } from 'src/app/map/map.component';
 
 @Component({
   selector: 'app-home-page',
@@ -8,7 +10,20 @@ import { MarkerInfo } from 'src/app/map/Model/markerInfoModel';
 })
 export class HomePageComponent implements OnInit {
   markerInfo: MarkerInfo;
+  location: GeoLocation;
+  stations: Array<Geolocation>;
   constructor() { }
+
+  getStationLocation(item: any){
+    this.stations = item;
+    console.log(this.stations);
+  }
+
+  getLocation(coords: GeoLocation){
+    console.log("Home: lat"+ coords.latitude + " lng: " + coords.latitude);
+    this.location = coords;
+  }
+  @ViewChild(MapComponent) child: MapComponent;
 
   ngOnInit() {
   }

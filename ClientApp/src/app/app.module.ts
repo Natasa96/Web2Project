@@ -36,6 +36,10 @@ import { UserValidateInfoComponent } from './ControllerPage/user-validate-info/u
 import { CheckTicketInfoComponent } from './ControllerPage/check-ticket-info/check-ticket-info.component';
 import { StationEditInfoComponent } from './AdminPage/station-edit-info/station-edit-info.component';
 import { TimetableNetworklinesComponent } from './AdminPage/timetable-networklines/timetable-networklines.component';
+import { HomePriceListComponent } from './HomePage/home-price-list/home-price-list.component';
+import { HomeRideScheduleComponent } from './HomePage/home-ride-schedule/home-ride-schedule.component';
+import { TimerComponent } from './timer/timer.component';
+import { NotificationService } from './notification.service';
 
 
 @NgModule({
@@ -65,7 +69,10 @@ import { TimetableNetworklinesComponent } from './AdminPage/timetable-networklin
     UserValidateInfoComponent,
     CheckTicketInfoComponent,
     StationEditInfoComponent,
-    TimetableNetworklinesComponent
+    TimetableNetworklinesComponent,
+    HomePriceListComponent,
+    HomeRideScheduleComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +89,8 @@ import { TimetableNetworklinesComponent } from './AdminPage/timetable-networklin
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
-    }
+    },
+    NotificationService
   ],
   bootstrap: [AppComponent]
 })

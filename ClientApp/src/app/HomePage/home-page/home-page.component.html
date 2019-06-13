@@ -5,10 +5,14 @@
         <li><a href="\Register">Register</a></li>
         <li><a href="\Login">Login</a></li>
         <li><a href="\About">About</a></li>
+        <li><a href="\TicketPrice">Ticket Price</a></li>
       </ul>
   </div>
+  <div class="container">
+    <app-timer (childEvent)=getLocation($event) (stations)="getStationLocation($event)"></app-timer>
+  </div>
   <div style="width: 50%; margin: 0 auto">
-    <app-map>
+    <app-map [busLocation]="location" [stationsCoord]="stations">
       
     </app-map>
   </div>

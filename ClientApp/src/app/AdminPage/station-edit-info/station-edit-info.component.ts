@@ -42,7 +42,9 @@ export class StationEditInfoComponent implements OnInit {
       allowSearchFilter: true,
     };
   }
-  @ViewChild('app-map') map: MapComponent;
+
+  stationLocation: any;
+
   populateForm(selectedStation: EditStationsModel){
     this.EditStationForm.get("Name").patchValue(selectedStation.Name);
     this.EditStationForm.get("Address").patchValue(selectedStation.Address);
@@ -52,7 +54,8 @@ export class StationEditInfoComponent implements OnInit {
     this.dropdownItems = [
       {Id: selectedStation.Id}
     ];
-    this.map.initMarker(this.selectedStation.Latitude,this.selectedStation.Longitude);
+    this.stationLocation = new GeoLocation(selectedStation.Latitude, selectedStation.Longitude);
+    //this.map.initMarker(this.selectedStation.Latitude,this.selectedStation.Longitude);
   }
   getCoordsFromMap(coords: GeoLocation){
     this.EditStationForm.get('Latitude').patchValue(coords.latitude);
