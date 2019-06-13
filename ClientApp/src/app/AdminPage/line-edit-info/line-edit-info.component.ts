@@ -3,6 +3,8 @@ import { NetworkLineModel } from 'src/app/NetworkLineModel';
 import { ConnectionService } from 'src/app/connection.service';
 import { FormBuilder, FormArray } from '@angular/forms';
 import { EditLineInfoModel } from '../EditLineInfoModel';
+import { timeInterval } from 'rxjs/operators';
+import { DepartureModel } from '../DepartureModel';
 
 @Component({
   selector: 'app-line-edit-info',
@@ -11,7 +13,8 @@ import { EditLineInfoModel } from '../EditLineInfoModel';
 })
 export class LineEditInfoComponent implements OnInit {
 
-  dropdownSettings
+  dropdownSettings;
+  d: any;
 
   @Input() selectedLine: EditLineInfoModel;
 
@@ -77,9 +80,12 @@ export class LineEditInfoComponent implements OnInit {
     lineData.Departures = this.EditLineForm.controls["Departures"].value;
     lineData.ScheduleDays = this.EditLineForm.controls["ScheduleDays"].value;
 
-    this.selectedLine.Departures.map(time => {
+    this.d = this.selectedLine.Departures.filter(time => time.Time != this.d);
+    lineData.Departures.push(this.d);
+
+/*    this.selectedLine.Departures.map(time => {
       lineData.Departures.push(time.Time);
-    });
+    });*/
 
     console.log(lineData);
     this.Service.updateLine(lineData).subscribe((result) => console.log(result));

@@ -5,6 +5,8 @@ import { ConnectionService } from 'src/app/connection.service';
 import { StationEditInfoComponent } from '../station-edit-info/station-edit-info.component';
 import { GeoLocation } from 'src/app/map/Model/geolocation';
 import { MapComponent } from 'src/app/map/map.component';
+import { MarkerInfo } from 'src/app/map/Model/markerInfoModel';
+import { Polyline } from 'src/app/map/Model/Polyline';
 
 @Component({
   selector: 'app-station-edit',
@@ -42,15 +44,17 @@ export class StationEditComponent implements OnInit {
       this.selectedStation = result;
       console.log(result);
       this.child.populateForm(this.selectedStation);
-      
+      //this.stationMap.placeExistingMarker(this.selectedStation.Latitude, this.selectedStation.Longitude)
     })
-  }
+ }
 
   onItemSelect(item: any){
     console.log(item.Id);
     this.getFullInfo(item.Id);
+
   }
 
   @ViewChild(StationEditInfoComponent) child: StationEditInfoComponent;
+  @ViewChild(MapComponent) stationMap: MapComponent;
   
 }

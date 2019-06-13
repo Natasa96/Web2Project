@@ -17,7 +17,7 @@
             </option>
             </select>
       </div>
-      <app-map (childEvent)="getCoordsFromMap($event)"></app-map>
+      <app-map (childEvent)="getCoordsFromMap($event)" (mapCoords)="placeMarker($event)"></app-map>
     </div>
   <button type="submit" class="btn btn-primary btn-block btn-large">Update station</button>
   </form>

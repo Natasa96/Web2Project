@@ -183,6 +183,7 @@ namespace WebApp.Controllers
 
             if (command == 0)
                 networkLine = new NetworkLine();
+
             else
             {
                 networkLine = UnitOfWork.NetworkLines.Get(model.Id);
@@ -212,7 +213,8 @@ namespace WebApp.Controllers
                 UnitOfWork.Complete();
             }
 
-            if (UnitOfWork.NetworkLines.GetAll().ToList().Exists(x => x.LineNumber == model.LineNumber))
+            if (UnitOfWork.NetworkLines.GetAll().ToList().Exists(x => x.LineNumber == model.LineNumber) 
+                && networkLine.LineNumber != model.LineNumber)
                 return null;
 
             networkLine.LineNumber = model.LineNumber;
@@ -235,6 +237,7 @@ namespace WebApp.Controllers
                         break;
                     }
             }
+
 
             if (model.Departures == null)
                 model.Departures = new List<DateTime>();

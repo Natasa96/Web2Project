@@ -21,7 +21,13 @@ export class MapComponent implements OnInit {
   ngOnInit() {
     this.markerInfo = new MarkerInfo(new GeoLocation(45.242268, 19.842954), "assets/images/busicon.png", "", "", "");
     this.polyline = new Polyline([], 'blue', { url:"assets/images/busicon.png", scaledSize: {width: 50, height: 50}});
-  }
+   }
+
+  /*placeExistingMarker(coords: GeoLocation){ 
+    this.polyline.addLocation(new GeoLocation(coords.latitude, coords.longitude));
+    this.markerInfo.location = new GeoLocation(coords.latitude, coords.longitude);
+    this.childEvent.emit(this.markerInfo.location);
+  }*/
 
   placeMarker($event){
     this.polyline.addLocation(new GeoLocation($event.coords.lat, $event.coords.lng))
@@ -29,6 +35,7 @@ export class MapComponent implements OnInit {
     this.childEvent.emit(this.markerInfo.location);
     console.log(this.markerInfo);
   }
+
   initMarker(lat: number, lng: number){
     this.polyline.addLocation(new GeoLocation(lat, lng))
     this.markerInfo.location = new GeoLocation(lat,lng);
