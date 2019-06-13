@@ -54,7 +54,7 @@ body {
 }
 /*=== 2. Anchor Link ===*/
 a {
-  color: #aaaaaa;
+  color: #51c1dd;
   transition: all ease-in-out 200ms;
 }
 a:hover {

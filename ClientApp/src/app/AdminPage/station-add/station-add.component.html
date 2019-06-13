@@ -1,17 +1,22 @@
-<div class="col-md-8">
-<form [formGroup]="StationAddForm" (ngSubmit)="addStation()">
-  
-  <input type="text" formControlName="Name" placeholder="Station Name" required>
-  
-  <input type="text" formControlName="Address" placeholder="Address">
-  
-  <!--<select multiple ng-model="selectedType" class="stationLines" formControlName="NLine">
-    <option *ngFor="let line of stationLines"
-    [value]="line.LineNumber">
-      {{line.LineNumber}}
-  </option>
-  </select>-->
 
+<form [formGroup]="StationAddForm" (ngSubmit)="addStation()"
+style="margin-left: 50px; font-size: large;"><br>
+
+<div class="row">
+  <div class="column">
+
+<div class="row" style="align-items: center">
+  <label>Insert station number:&nbsp;&nbsp;</label>
+  <input type="text" formControlName="Name" placeholder="Station Name" required>
+  </div><br>
+
+  <div class="row" style="align-items: center">
+    <label>Insert address:&nbsp;&nbsp;</label>
+    <input type="text" formControlName="Address" placeholder="Address">
+  </div><br>
+
+<div class="row" style="align-items: center">
+  <label>Choose lines:&nbsp;&nbsp;</label>
   <ng-multiselect-dropdown
   [placeholder]="'Select LineNumbers'"
   formControlName="NLine"
@@ -21,9 +26,14 @@
   (onSelectAll)="onSelectAll($event)"
 >
 </ng-multiselect-dropdown>
-  <div>
-    <app-map (childEvent)="getCoordsFromMap($event)"></app-map>
-  </div>
-  <button type="submit">Add station</button>
-</form>
 </div>
+</div>
+<div class="column" style="width: 150px"></div>
+
+  <div class="column">
+    <app-map (childEvent)="getCoordsFromMap($event)"></app-map>
+  </div><br>
+</div>
+
+<button style="width: 600px;" type="submit">Add station</button>
+</form>

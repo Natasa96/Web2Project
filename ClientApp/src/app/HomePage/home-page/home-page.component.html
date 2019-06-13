@@ -1,5 +1,5 @@
 <body>
-  <div class="navbar nav nav-bar top">
+  <div>
     <ul>
         <li><a href="\Home">Home</a></li>
         <li><a href="\Register">Register</a></li>
@@ -8,12 +8,21 @@
         <li><a href="\TicketPrice">Ticket Price</a></li>
       </ul>
   </div>
-  <div class="container">
-    <app-timer (childEvent)=getLocation($event) (stations)="getStationLocation($event)"></app-timer>
-  </div>
-  <div style="width: 50%; margin: 0 auto">
-    <app-map [busLocation]="location" [stationsCoord]="stations">
+ <!-- <div class="container"> -->
+         <table>
+        <tr style="color: white">
+          <td style="width: 100%;">
+            <app-timer  (childEvent)=getLocation($event) (stations)="getStationLocation($event)"></app-timer>
+          </td>
+
+   <!--    </div> -->
+       <td>
+      <!--     <div style="width: 50%"> -->
+          <app-map [busLocation]="location" [stationsCoord]="stations">
       
-    </app-map>
-  </div>
+          </app-map>
+     <!--      </div> -->
+      </td>
+    </tr>
+      </table>
 </body>

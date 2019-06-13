@@ -15,12 +15,20 @@
 
   <div *ngIf="Pricelist">
     <div class="col-md-5">
-        <div class="row">
-            <ul>
-                <li *ngFor="let price of Pricelist.TicketPrice | keyvalue">
-                    {{price.key}}  --> {{price.value}}rsd
-                </li>
-            </ul>
+        <div class="row" style="color: white">
+          <table style="border-color:antiquewhite" border="3px;">
+            <td colspan="2" style="font-style: italic; font-size:x-large; text-align: center">
+              Cenovnik
+            </td>
+                <tr *ngFor="let price of Pricelist.TicketPrice | keyvalue">
+                  <td style="width: 150px; text-align: center; font-size: medium">
+                    {{price.key}}
+                  </td> 
+                  <td style="width: 150px; text-align: center; font-size: medium">
+                    {{price.value}}rsd
+                  </td>
+                </tr>
+          </table>
         </div>
       </div>
   </div>

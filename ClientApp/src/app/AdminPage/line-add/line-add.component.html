@@ -1,30 +1,43 @@
-<form [formGroup]="LineAddForm" (ngSubmit)="addLine()">
-  
-  <input type="number" formControlName="LineNumber" placeholder="LineNumber">
-  
+<form [formGroup]="LineAddForm" (ngSubmit)="addLine()" 
+  style="margin-left: 50px; font-size: large;"><br>
+
+  <div class="row" style="align-items: center">
+  <label>Line number: &nbsp;&nbsp;</label>
+  <input style="align-self: center" type="number" formControlName="LineNumber" placeholder="LineNumber"><br>
+  </div>
+
+  <div class="row" style="align-items: center">
+  <label>Choose line type: &nbsp;&nbsp;</label>
   <select ng-model="selectedType" class="lineTypes" formControlName="Type">
     <option *ngFor="let type of lineTypes"
       [value]="type">
         {{type}}
     </option>
-  </select>
+  </select><br>
+  </div>
 
-  <select multiple ng-model="selectedType" class="nlStations" formControlName="Stations">
+  <div class="row" style="align-items: center">
+  <label>Choose stations: &nbsp;&nbsp;</label>
+  <select style="align-content:center" multiple ng-model="selectedType" class="nlStations" formControlName="Stations">
     <option *ngFor="let station of nlStations"
     [value]="station.Name">
       {{station.Name}}
   </option>
-  </select>
+  </select><br>
+  </div>
 
-  <select multiple ng-model="selectedType" class="schedule" formControlName="ScheduleDays">
+  <div class="row" style="align-items: center">
+  <label>Insert schedule: &nbsp;&nbsp;</label>
+  <select style="align-items: center;" multiple ng-model="selectedType" class="schedule" formControlName="ScheduleDays">
     <option *ngFor="let s of schedule"
     [value]="s">
       {{s}}
   </option>
-  </select>
+  </select><br></div>
 
-  <div formArrayName="Departures">
-    <h4>Departures</h4>
+  <div class="row" style="align-items: center">
+  <label>Insert departures: &nbsp;&nbsp;</label>
+  <div formArrayName="Departures"><br>
     <button type="button" (click)="addTime()">Add time</button>
     <div *ngFor="let t of Departures.controls; let i=index">
       <label>Time: 
@@ -32,7 +45,8 @@
       </label>
     </div>
   </div>
+  </div><br><br>
 
-  <button type="submit">Add Line</button>
+  <button style="width: 250px" type="submit">Add Line</button>
 
 </form>

@@ -1,16 +1,19 @@
 <div>
-  <h2>Please provide us with your documentation</h2>
-  <form [formGroup]= "DocumentForm" (ngSubmit)="addDocumentation()">
-      <label>Select type: </label>
-      <select ng-model="selectedType" formControlName="Type"  class="passangerTypes">
+  <h3 style="text-align: center">Please provide us with your documentation</h3>
+  <br><br>
+  <form [formGroup]= "DocumentForm" (ngSubmit)="addDocumentation()" style="text-align:left; margin-left: 15px">
+      <label>Select type: &nbsp;&nbsp;</label>
+        <select ng-model="selectedType" formControlName="Type"  class="passangerTypes">
           <option *ngFor="let type of passangerTypes" 
             [value]="type">
           {{type}}
         </option>
         </select>
-        <label>Choose document</label>
+        <br>
+        <label>Choose document &nbsp;&nbsp;</label>
         <input type="file" name="Document" (change)="processFile($event)">
-    <input type="submit"/>
+        <br>
+    <input type="submit" style="width: 400px"/>
   </form>
-  <p>... or you can skip it: <a href="/Passenger">Click here!</a></p>
+  <p style="text-align:left; margin-left: 15px">... or you can skip it: <a href="/Passenger">Click here!</a></p>
 </div>

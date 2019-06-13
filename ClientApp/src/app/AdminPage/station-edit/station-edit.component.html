@@ -1,11 +1,13 @@
-<div>
-    <label>Stations: 
+<br>
+<div class="row" style="align-items: center; margin-left: 50px; font-size: large;"> 
+
+    <label>Stations: &nbsp;&nbsp;</label>
         <ng-multiselect-dropdown
         [placeholder]="'Select Station'"
         [data]="stations"
         [settings]="dropdownSettings"
         (onSelect)="onItemSelect($event)"
       >
-      </ng-multiselect-dropdown></label>
+      </ng-multiselect-dropdown>
 </div>
 <app-station-edit-info [selectedStation]="selectedStation"></app-station-edit-info>

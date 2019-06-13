@@ -1,18 +1,25 @@
-<form [formGroup]="TimetableAddForm" (ngSubmit)="addTimetable()">
+<form [formGroup]="TimetableAddForm" (ngSubmit)="addTimetable()"
+  style="margin-left: 50px; font-size: large;"><br>
 
+  <div class="row" style="align-items: center">
+  <label>Choose day:  &nbsp;&nbsp;</label>
   <select ng-model="selectedType" class="days" formControlName="Day" class="row">
     <option *ngFor="let d of days"
     [value]="d">
       {{d}}
   </option>
   </select>
+  </div><br>
 
-  <select multiple ng-model="selectedType" class="lines" formControlName="Lines" class="row">
+  <div class="row" style="align-items: center">
+    <label>Select line type:  &nbsp;&nbsp;</label>
+    <select multiple ng-model="selectedType" class="lines" formControlName="Lines" class="row">
     <option *ngFor="let l of lines"
     [value]="l.LineNumber">
       {{l.LineNumber}}
   </option>
   </select>
+  </div><br>
 
-  <button type="submit">Add timetable</button>
+  <button style="width: 250px" type="submit">Add timetable</button>
 </form>

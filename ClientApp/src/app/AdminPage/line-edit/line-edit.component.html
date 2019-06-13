@@ -1,12 +1,13 @@
-<div class="col-md-5">
-    <label>Lines: 
+<br><br>
+<div class="row" 
+  style="margin-left: 50px; font-size: large;">
+      <label>Lines: &nbsp;&nbsp;</label>
       <ng-multiselect-dropdown
       [placeholder]="'Select Line'"
       [data]="lines"
       [settings]="dropdownSettings"
       (onSelect)="onItemSelect($event)"
     >
-    </ng-multiselect-dropdown></label>
-</div>
-
+    </ng-multiselect-dropdown>
+  </div>
 <app-line-edit-info [selectedLine]="FullLineInfo"></app-line-edit-info>

@@ -35,7 +35,6 @@ import { CheckTicketComponent } from './ControllerPage/check-ticket/check-ticket
 import { UserValidateInfoComponent } from './ControllerPage/user-validate-info/user-validate-info.component';
 import { CheckTicketInfoComponent } from './ControllerPage/check-ticket-info/check-ticket-info.component';
 import { StationEditInfoComponent } from './AdminPage/station-edit-info/station-edit-info.component';
-import { TimetableNetworklinesComponent } from './AdminPage/timetable-networklines/timetable-networklines.component';
 import { HomePriceListComponent } from './HomePage/home-price-list/home-price-list.component';
 import { HomeRideScheduleComponent } from './HomePage/home-ride-schedule/home-ride-schedule.component';
 import { TimerComponent } from './timer/timer.component';
@@ -69,7 +68,6 @@ import { NotificationService } from './notification.service';
     UserValidateInfoComponent,
     CheckTicketInfoComponent,
     StationEditInfoComponent,
-    TimetableNetworklinesComponent,
     HomePriceListComponent,
     HomeRideScheduleComponent,
     TimerComponent
