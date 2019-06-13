@@ -48,10 +48,7 @@ export class StationEditInfoComponent implements OnInit {
     };
   }
 
-  @ViewChild('app-map') map: MapComponent;
-  @Output() mapCoords = new EventEmitter<GeoLocation>();
-  @ViewChild(MapComponent) stationMap: MapComponent;
-
+  stationLocation: any;
 
   populateForm(selectedStation: EditStationsModel){
     this.EditStationForm.get("Name").patchValue(selectedStation.Name);
@@ -62,14 +59,8 @@ export class StationEditInfoComponent implements OnInit {
     this.dropdownItems = [
       {Id: selectedStation.Id}
     ];
-    //this.placeMarker(new GeoLocation(selectedStation.Latitude, selectedStation.Longitude));
+    this.stationLocation = new GeoLocation(selectedStation.Latitude, selectedStation.Longitude);
     //this.map.initMarker(this.selectedStation.Latitude,this.selectedStation.Longitude);
-  }
-
-  placeMarker(coords: GeoLocation){
-    this.mapCoords.next(coords);
-    //this.mapCoords.emit(coords);
-    console.log(coords);
   }
 
   getCoordsFromMap(coords: GeoLocation){

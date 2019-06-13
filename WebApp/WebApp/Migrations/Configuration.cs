@@ -110,6 +110,8 @@ namespace WebApp.Migrations
                 foreach (var node in Pricelist.ActivePrices)
                     node.Pricelist = Pricelist;
                 context.PricelistDb.Add(Pricelist);
+                foreach (var node in Pricelist.ActivePrices)
+                    context.TicketPriceDb.Add(node);
                 context.SaveChanges();
             }
         }

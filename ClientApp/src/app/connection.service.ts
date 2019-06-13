@@ -48,6 +48,26 @@ export class ConnectionService {
 
   constructor(private http: HttpClient) { }
 
+  getStationCoords(): Observable<any>{
+    return this.http.get<any>(
+      this.ServiceUrl+"Enums/GetStationCoords"
+    );
+  }
+
+  getAnonPricelist(): Observable<PricelistModel>{
+    return this.http.get<PricelistModel>(
+      this.ServiceUrl+ "Enums/GetPricelist"
+    ).pipe(catchError(this.handleError<PricelistModel>("error")));
+  }
+
+  setNetworkLine(data: ScheduleLineModel): Observable<any>{
+    return this.http.post<any>(
+      this.ServiceUrl+'Sim/SetNetworkLine',
+      data,
+      httpOprions
+    ).pipe(catchError(this.handleError<any>("Pipe")));
+  }
+
   updateStation(data: EditStationsModel): Observable<any>{
     return this.http.post<any>(
       this.ServiceUrl+"Admin/UpdateStation",
@@ -195,6 +215,18 @@ export class ConnectionService {
     return this.http.get<SchaduleType[]>(
       this.ServiceUrl + 'Enums/GetSchedule'
     ).pipe(catchError(this.handleError<SchaduleType[]>("SchaduleType")));
+  }
+
+  getAnonLinesSChedule(type: string): Observable<ScheduleLineModel[]>{
+    return this.http.get<ScheduleLineModel[]>(
+      this.ServiceUrl + 'Enums/GetLinesSchedule/' + type
+    ).pipe(catchError(this.handleError<ScheduleLineModel[]>("ScheduleLineModel")));
+  }
+
+  geAnontDeparturesLine(id: number): Observable<DepartureModel[]>{
+    return this.http.get<DepartureModel[]>(
+      this.ServiceUrl + 'Enums/GetDeparturesLine/' + id
+    ).pipe(catchError(this.handleError<DepartureModel[]>("DepartureModel")));
   }
 
   getLinesSchedule(type: string): Observable<ScheduleLineModel[]>{

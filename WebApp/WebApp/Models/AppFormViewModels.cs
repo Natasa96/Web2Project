@@ -8,6 +8,11 @@ using WebApp.Models.TrafficSystem;
 
 namespace WebApp.Models
 {
+    public class Coords
+    {
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+    }
     public class DeparturesViewModel
     {
         public int Id { get; set; }

@@ -13,7 +13,6 @@ namespace WebApp.Models.TicketService
         private DateTime? startTime;
         private DateTime? endTime;
         private bool active;
-        private List<TicketPrice> activePrices;
 
         public Pricelist()
         {
@@ -24,7 +23,7 @@ namespace WebApp.Models.TicketService
         public DateTime? StartTime { get => startTime; set => startTime = value; }
         public DateTime? EndTime { get => endTime; set => endTime = value; }
         public bool Active { get => active; set => active = value; }
-        public List<TicketPrice> ActivePrices { get => activePrices; set => activePrices = value; }
+        public virtual ICollection<TicketPrice> ActivePrices { get; set ; }
         public int Id { get => id; set => id = value; }
 
         [Timestamp]

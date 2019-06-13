@@ -1,0 +1,17 @@
+<div class="col-md-5">
+  <ng-multiselect-dropdown
+  [placeholder]="'Selecte Day'"
+  [data]="days"
+  [settings]="dropdownSettings1"
+  (onSelect)="onItemSelect($event)"
+  >
+  </ng-multiselect-dropdown>
+
+  <ng-multiselect-dropdown
+  [placeholder]="'Selecte Network Line'"
+  [data]="nlines"
+  [settings]="dropdownSettings2"
+  (onSelect)="onSelectLine($event)"
+  >
+  </ng-multiselect-dropdown>
+</div>
