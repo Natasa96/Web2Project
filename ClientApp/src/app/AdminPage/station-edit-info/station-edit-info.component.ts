@@ -20,6 +20,8 @@ export class StationEditInfoComponent implements OnInit {
   @Input() selectedStation: EditStationsModel
   dropdownSettings;
   dropdownItems: any;
+  selectedItems:number[] = [];
+  lines: Array<any> = [];
 
   markerInfo: MarkerInfo;
   public polyline: Polyline;
@@ -31,7 +33,7 @@ export class StationEditInfoComponent implements OnInit {
     Address: [''],
     Longitude: [''],
     Latitude: [''],
-    NLine: ['']
+    NLine: []
   })
 
   constructor(private fb: FormBuilder, private Service: ConnectionService) { }  
@@ -39,12 +41,9 @@ export class StationEditInfoComponent implements OnInit {
   ngOnInit() {
     this.dropdownSettings = {
       singleSelection: false,
-      itemsShowLimit: 1,
-      idField: 'Id',
-      textField: 'Id',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      allowSearchFilter: true,
+      itemsShowLimit: 5,
+      idField: 'item_id',
+      textField: 'item_text'
     };
   }
 
@@ -56,9 +55,13 @@ export class StationEditInfoComponent implements OnInit {
     this.EditStationForm.get("Longitude").patchValue(selectedStation.Longitude);
     this.EditStationForm.get("Latitude").patchValue(selectedStation.Latitude);
     this.EditStationForm.get("NLine").patchValue(selectedStation.NLine);
-    this.dropdownItems = [
-      {Id: selectedStation.Id}
-    ];
+    selectedStation.NLine.forEach(element => {
+      this.lines = [...this.lines,
+      {item_id: element, item_text: element}];
+    });
+    this.selectedItems = selectedStation.SelectedLines;
+    
+    console.log('lines?? :', this.lines);
     this.stationLocation = new GeoLocation(selectedStation.Latitude, selectedStation.Longitude);
     //this.map.initMarker(this.selectedStation.Latitude,this.selectedStation.Longitude);
   }
@@ -68,13 +71,24 @@ export class StationEditInfoComponent implements OnInit {
     this.EditStationForm.get('Longitude').patchValue(coords.longitude);
   }
 
-  ItemSelect(item: any){
-    //this.dropdownItems.push(item);
-    console.log(item);
+  onItemSelect(item: any){
+    this.selectedItems.push(item);
+    console.log(this.selectedItems);
   }
-  SelectAll(items: any) {
-    //this.dropdownItems.push(items);
-    console.log(items);
+
+  onItemDeSelect(item: any){
+    this.selectedItems.filter(el => el !== item);
+    console.log(this.selectedItems);
+  }
+
+  onItemSelectAll(items: any) {
+    this.selectedItems = items;
+    console.log(this.selectedItems);
+  }
+
+  onItemDeSelectAll(items: any){
+    this.selectedItems = [];
+    console.log(this.selectedItems);
   }
 
   updateStation(){
@@ -84,7 +98,10 @@ export class StationEditInfoComponent implements OnInit {
     stationData.Name = this.EditStationForm.get('Name').value;
     stationData.Latitude = this.EditStationForm.get('Latitude').value;
     stationData.Longitude = this.EditStationForm.get('Longitude').value;
-    stationData.NLine = this.EditStationForm.get('NLine').value;
+    this.selectedItems.map(item => {
+      stationData.NLine.push(item);
+    });
+    console.log(stationData);
     this.Service.updateStation(stationData).subscribe((res) => {
       console.log(res);
     });

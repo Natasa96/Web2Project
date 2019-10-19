@@ -25,7 +25,6 @@ export class TimetableEditComponent implements OnInit {
   DepartureForm = this.fb.group({
     id: [''],
     time: this.fb.array([
-      this.fb.control('')
     ])
   }) 
 

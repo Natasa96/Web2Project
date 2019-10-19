@@ -4,8 +4,8 @@ import { StationModel } from "./StationModel";
 export class NetworkLineModel{
     Id: number;
     LineNumber: number;
-    Stations: [];
+    Stations: any[] = [];
     Type: string;
-    Departures: string[];
-    ScheduleDays: string[];
+    Departures: string[] = [];
+    ScheduleDays: string[] = [];
 }

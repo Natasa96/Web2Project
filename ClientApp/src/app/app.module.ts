@@ -39,6 +39,7 @@ import { HomePriceListComponent } from './HomePage/home-price-list/home-price-li
 import { HomeRideScheduleComponent } from './HomePage/home-ride-schedule/home-ride-schedule.component';
 import { TimerComponent } from './timer/timer.component';
 import { NotificationService } from './notification.service';
+import { LogoutComponent } from './HomePage/logout/logout.component';
 
 
 @NgModule({
@@ -70,7 +71,8 @@ import { NotificationService } from './notification.service';
     StationEditInfoComponent,
     HomePriceListComponent,
     HomeRideScheduleComponent,
-    TimerComponent
+    TimerComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

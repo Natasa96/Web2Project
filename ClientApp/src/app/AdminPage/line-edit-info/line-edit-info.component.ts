@@ -15,19 +15,18 @@ import { Router } from '@angular/router';
 export class LineEditInfoComponent implements OnInit {
 
   dropdownSettings;
+  dropdownSettings2;
+  dropdownSettings3;
+  selectedStationItem: [];
+  selectedType: string;
   d: string[];
 
   @Input() selectedLine: EditLineInfoModel;
 
 
   EditLineForm = this.fb.group({
-    LineNumber: [''],
-    Stations: [''],
-    Type: [''],
     Departures: this.fb.array([
-      this.fb.control('00:00:AM')
-    ]),
-    ScheduleDays: ['']
+    ])
   });
 
   constructor(private Service: ConnectionService, private fb: FormBuilder, private router: Router) { }
@@ -38,7 +37,26 @@ export class LineEditInfoComponent implements OnInit {
       idField: 'Type',
       textField: 'Type',
       itemsShowLimit: 1,
-      allowSearchFilter: true,
+      allowSearchFilter: false,
+      selectedItems: "Gradska"
+    };
+    this.dropdownSettings2 = {
+      singleSelection: false,
+      idField: 'Id',
+      textField: 'Name',
+      itemsShowLimit: 3,
+      allowSearchFilter: false,
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+    };
+    this.dropdownSettings3 = {
+      singleSelection: false,
+      idField: 'Id',
+      textField: 'Name',
+      itemsShowLimit: 3,
+      allowSearchFilter: false,
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
     };
   }
 
@@ -48,52 +66,40 @@ export class LineEditInfoComponent implements OnInit {
   }
 
   get Departures(){
-       return this.EditLineForm.get('Departures') as FormArray;
- }
+    return this.EditLineForm.get('Departures') as FormArray;
+  }
 
- DeleteDeparture(id: number){
-   const index = this.selectedLine.Departures.indexOf(this.selectedLine.Departures.find(x => x.Id == id), 0);
-    if(index > -1){
-      this.selectedLine.Departures.splice(index, 1);
-    }
- }
+  DeleteDeparture(id: number){
+    this.Departures.removeAt(id);
+
+    console.log(this.EditLineForm.get('Departures').value);
+  }
+  
+  DeleteExistingDeparture(id:number){
+    const index = this.selectedLine.Departures.indexOf(this.selectedLine.Departures.find(x => x.Id == id), 0);
+      if(index > -1){
+        this.selectedLine.Departures.splice(index, 1);
+      }
+  }
 
   //Dodaj jos jedan input za departure time
   addTime(){
     this.Departures.push(this.fb.control(''));
   }
 
-  populateForm(selectedLine: EditLineInfoModel){
-    this.EditLineForm.get("LineNumber").patchValue(selectedLine.LineNumber);
-
-    for(let i = 0; i < selectedLine.SelectedStations.length; i++){
-      this.EditLineForm.get("Stations").patchValue(selectedLine.SelectedStations[i].Name);
-    }
-    //this.EditLineForm.get("Stations").patchValue(selectedLine.SelectedStations);
-    this.EditLineForm.get("Type").patchValue(selectedLine.SelectedType);
-    this.EditLineForm.get("Departures").patchValue(selectedLine.Departures);
-    this.EditLineForm.get("ScheduleDays").patchValue(selectedLine.SelectedSchedule);
-  }
-
   updateLine(){
     let lineData = new NetworkLineModel();
 
     lineData.Id = this.selectedLine.Id;
-    lineData.LineNumber = this.EditLineForm.controls["LineNumber"].value;
-    lineData.Stations = this.EditLineForm.controls["Stations"].value;
-    lineData.Type = this.EditLineForm.controls["Type"].value[0];
-    lineData.ScheduleDays = this.EditLineForm.controls["ScheduleDays"].value;
-
-    if(this.EditLineForm.controls["Departures"].get("Time") != undefined)
-      lineData.Departures = this.EditLineForm.controls["Departures"].value;
-    else
-      lineData.Departures = new Array<string>();
-
-    this.selectedLine.Departures.map(x => {
-      lineData.Departures.push(x.Time);
+    lineData.LineNumber = this.selectedLine.LineNumber
+    lineData.Stations = this.selectedLine.SelectedStations
+    lineData.Type = this.selectedLine.SelectedType
+    lineData.ScheduleDays = this.selectedLine.SelectedSchedule
+    lineData.Departures = [...this.Departures.value]
+    this.selectedLine.Departures.map(item =>{
+      lineData.Departures = [...lineData.Departures, item.Time];
     });
-
-    console.log(lineData);
+    console.log(lineData.Departures);
     this.Service.updateLine(lineData).subscribe((result) => {
       console.log(result)
       this.router.navigate(['/Admin/LineEdit']);

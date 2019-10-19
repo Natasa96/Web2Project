@@ -1,65 +1,63 @@
-<div *ngIf="selectedLine">
+<div *ngIf="selectedLine" class="row" style="margin-left: 50px;">
 
-   <form [formGroup]="EditLineForm" (ngSubmit)="updateLine()"
-    style="margin-left: 50px; font-size: large;"><br>
-  
-    <div class="row" style="align-items: center">
-      <label>Line number: &nbsp;&nbsp;</label>
-      <input type="number" formControlName="LineNumber" placeholder="LineNumber" [value]="selectedLine.LineNumber">
-    </div><br>
+  <div style="margin-top: 10px">
+    <label for="lnumber">Line number</label>
+    <input name="lnumber" type="number" placeholder="Line Number" [value]="selectedLine.LineNumber">
+  </div>
+  <div>
+    <label>Select line type:</label>
+    <ng-multiselect-dropdown
+      [placeholder]="'Selecte Line'"
+      [data]="selectedLine.AllTypes"
+      [settings]="dropdownSettings"
+      (onSelect)="onItemSelect($event)"
+      ([ngModel])="selectedLine.SelectedType"
+    >
+    </ng-multiselect-dropdown>
+  </div>
+  <div>
+    <label>Select stations:</label>
+    <ng-multiselect-dropdown
+    [placeholder]="'Selecte Line'"
+    [data]="selectedLine.AllStations"
+    [settings]="dropdownSettings2"
+    (onSelect)="onItemSelect($event)"
+    ([ngModel])="selectedLine.SelectedStations"
+  >
+  </ng-multiselect-dropdown>
+  </div>
+  <div>
+    <label>Select Line type:</label>
+    <ng-multiselect-dropdown
+    [placeholder]="'Selecte Line'"
+    [data]="selectedLine.AllSchedule"
+    [settings]="dropdownSettings3"
+    (onSelect)="onItemSelect($event)"
+    ([ngModel])="selectedLine.SelectedSchedule"
+  >
+  </ng-multiselect-dropdown>
+  </div>
 
-    <div class="row" style="align-items: center">
-        <label>Select line type: &nbsp;&nbsp;</label>
-        
-        <ng-multiselect-dropdown
-        [placeholder]="'Selecte Line'"
-        [data]="selectedLine.AllTypes"
-        [settings]="dropdownSettings"
-        (onSelect)="onItemSelect($event)"
-        formControlName="Type"
-      >
-      </ng-multiselect-dropdown>
-    </div><br>
-
-    <div class="row" style="align-items: center">
-        <label>Choose stations: &nbsp;&nbsp;</label>
-        <select multiple ng-model="selectedType" class="selectedLine.AllStations" formControlName="Stations">
-          <option *ngFor="let station of selectedLine.AllStations"
-          [value]="station.Name">
-            {{station.Name}}
-        </option>
-        </select>
-      </div><br>
-
-      <div class="row" style="align-items: center">
-          <label>Choose line type: &nbsp;&nbsp;</label>
-        <select multiple ng-model="selectedType" class="selectedLine.AllSchedule" formControlName="ScheduleDays">
-          <option *ngFor="let s of selectedLine.AllSchedule"
-          [value]="s">
-            {{s}}
-        </option>
-        </select>
-      </div><br>
-
-      <div class="row" style="align-items: center">
-          <label>Insert departures: &nbsp;&nbsp;</label>
-        <div formArrayName="Departures">
-          <button type="button" (click)="addTime()">Add time</button><br>
-          <div *ngFor="let t of selectedLine.Departures">
-              <label>Time: 
-                <input type="text" [value]="t.Time" readonly>
-                <button type="button" (click)="DeleteDeparture(t.Id)">Delete</button>
-              </label>
-            </div>
-          <div *ngFor="let t of Departures.controls; let i=index">
-            <label>Time: 
-              <input type="time" [formControlName]="i">
-            </label>
-          </div>
+  <form [formGroup]="EditLineForm" (ngSubmit)="updateLine()">
+    <div class="row">
+      <label>Insert departures: &nbsp;&nbsp;</label>
+    <div formArrayName="Departures">
+      <button type="button" (click)="addTime()">Add time</button><br>
+      <div *ngFor="let t of selectedLine.Departures">
+          <label>Time: 
+            <input type="text" [value]="t.Time" readonly>
+            <button type="button" (click)="DeleteExistingDeparture(t.Id)">Delete</button>
+          </label>
         </div>
-        </div><br>
-      
-        <button style="width: 250px" type="submit">Add Line</button>
-      
-      </form>
+      <div *ngFor="let t of Departures.controls; let i=index">
+        <label>Time: 
+          <input type="time" [formControlName]="i">         
+          <button type="button" (click)="DeleteDeparture(i)">Delete</button>
+        </label>
+      </div>
+    </div>
+    </div><br>
+
+    <button style="width: 250px" type="submit">Add Line</button>
+  </form>
 </div>

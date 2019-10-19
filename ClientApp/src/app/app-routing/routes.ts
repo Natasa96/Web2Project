@@ -25,11 +25,13 @@ import { ControllerAuthGuard } from '../auth/controller.auth.guard';
 import { ValidateUserComponent } from '../ControllerPage/validate-user/validate-user.component';
 import { CheckTicketComponent } from '../ControllerPage/check-ticket/check-ticket.component';
 import { HomePriceListComponent } from '../HomePage/home-price-list/home-price-list.component';
+import { LogoutComponent } from '../HomePage/logout/logout.component';
 export const routes: Routes = [
   {path: '', redirectTo: '/Home', pathMatch: 'full'},
   {path: 'Home', component: HomePageComponent},
   {path: 'Register', component: RegisterComponent},
   {path: 'Login', component: LoginComponent},
+  {path: 'Logout', component: LogoutComponent},
   {path: 'About', component: AboutComponent},
   {path: 'TicketPrice', component:HomePriceListComponent},
   

@@ -43,7 +43,6 @@ export class LineEditComponent implements OnInit {
     this.Service.getFullInfo(id).subscribe((res)=>{
       this.FullLineInfo = res;
       console.log(res);
-      this.child.populateForm(this.FullLineInfo);
     });
   }
 

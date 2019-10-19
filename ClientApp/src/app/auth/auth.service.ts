@@ -54,6 +54,9 @@ export class AuthService {
   logout(): void {
     this.isLoggedIn = false;
     localStorage.removeItem('jwt');
+    localStorage.removeItem('role');
+    let result = this.http.post<any>("http://localhost:52295/api/Account/Logout",{});
+    this.router.navigate(['/Home']);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

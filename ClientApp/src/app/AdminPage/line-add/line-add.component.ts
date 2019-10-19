@@ -18,16 +18,41 @@ export class LineAddComponent implements OnInit {
     LineNumber: ['', Validators.required],
     Stations: [''],
     Type: ['', Validators.required],
-    Departures: this.fb.array([
-      this.fb.control('')
-    ]),
+    Departures: this.fb.array([]),
     ScheduleDays: ['']
   });
+  dropdownSettings;
+  dropdownSettings2;
+  dropdownSettings3;
 
 
   constructor(private fb: FormBuilder, private Service: ConnectionService) {}
 
   ngOnInit() {
+    this.dropdownSettings = {
+      singleSelection: true,
+      idField: 'LineNumber',
+      textField: 'Type',
+      itemsShowLimit: 1,
+      allowSearchFilter: false
+    };
+    this.dropdownSettings2 = {
+      singleSelection: false,
+      idField: 'Id',
+      textField: 'Name',
+      itemsShowLimit: 3,     
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      allowSearchFilter: false
+    };
+    this.dropdownSettings3 = {
+      singleSelection: false,
+      idField: 'Type',
+      textField: 'Type',
+      itemsShowLimit: 3,
+      allowSearchFilter: false
+    };
+
     this.getLineTypes();
     this.getStations();
     this.getScheduleTypes();
@@ -36,6 +61,11 @@ export class LineAddComponent implements OnInit {
   lineTypes = [];
   nlStations: StationModel[];
   schedule: SchaduleType[];
+  selectedNumber: number;
+  selectedType: any;
+  selectedStations: any[] = [];
+  selectedSchedule: string[] = [];
+
 
   //Zapamti departure time iz prethodnog inputa
   get Departures(){
@@ -60,6 +90,44 @@ export class LineAddComponent implements OnInit {
       console.log(result);
     });
   }
+  onTypeSelect(item: any){
+    this.selectedType = item;
+  }
+  
+  onStationSelect(item: any){
+    this.selectedStations.push(item);
+  }
+
+  onStationAllSelect(items: any){
+    this.selectedStations = items;
+  }
+  onStationAllDeSelect(){
+    this.selectedStations = [];
+  }
+  onStationDeSelect(item:any){
+    const index = this.selectedStations.indexOf(this.selectedStations.find(x=> x.Id ===item.Id),0);
+    this.selectedStations.splice(index,1);
+    console.log(this.selectedStations);
+    console.log(item);
+    console.log(index);
+  }
+
+  onScheduleSelect(item: any){
+    this.selectedSchedule.push(item);
+  }
+  onScheduleDeSelect(item: any){
+    this.selectedSchedule.splice(item,1);
+  }
+  onScheduleAllSelect(items: any){
+    this.selectedSchedule = items;
+  }
+  onScheduleAllDeSelect(){
+    this.selectedSchedule = [];
+  }
+
+  deleteDeparture(id: number){
+    this.Departures.removeAt(id);
+  }
 
   // Radni dan / vikend / praznik 
   getScheduleTypes() {
@@ -69,16 +137,14 @@ export class LineAddComponent implements OnInit {
       console.log(result);
     });
   }
-
-  addLine(){
+  addNewLine(){
     let lineData = new NetworkLineModel();
-    lineData.LineNumber = this.LineAddForm.controls["LineNumber"].value;
-    lineData.Stations = this.LineAddForm.controls["Stations"].value;
-    lineData.Type = this.LineAddForm.controls["Type"].value;
-    lineData.Departures = this.LineAddForm.controls["Departures"].value;
-    lineData.ScheduleDays = this.LineAddForm.controls["ScheduleDays"].value;
-
-    console.log(lineData);
+    lineData.Departures = this.Departures.value;
+    lineData.LineNumber = this.selectedNumber;
+    lineData.ScheduleDays = this.selectedSchedule;
+    lineData.Stations = this.selectedStations.map(item=> item.Name);  
+    lineData.Type = this.selectedType;
     this.Service.addLine(lineData).subscribe((result) => console.log(result));
+    console.log(lineData);
   }
 }

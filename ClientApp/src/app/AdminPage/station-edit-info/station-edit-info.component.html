@@ -19,12 +19,22 @@
 
       <div class="row" style="align-items: center">
           <label>Select lines: &nbsp;&nbsp;</label>
-          <select style="width: 50px;" multiple ng-model="selectedType" class="selectedStation.NLine" formControlName="NLine">
+          <!-- <select style="width: 50px;" multiple ng-model="selectedType" class="selectedStation.NLine" formControlName="NLine">
               <option *ngFor="let line of selectedStation.NLine"
               [value]="line">
                 {{line}}
             </option>
-            </select>
+            </select> -->
+            <ng-multiselect-dropdown
+            [placeholder]="'Select Lines'"
+            [data]="lines"
+            [settings]="dropdownSettings"
+            (onSelect)="onItemSelect($event)"
+            (onSelectAll)="onItemSelectAll($event)"
+            (onDeSelect)="onItemDeSelect($event)"
+            (onDeSelectAll)="onItemDeSelectAll($event)"
+          >
+          </ng-multiselect-dropdown>
       </div></div>
       
       <div class="column" style="width: 150px"></div>

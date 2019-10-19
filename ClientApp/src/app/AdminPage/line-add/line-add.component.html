@@ -1,52 +1,59 @@
-<form [formGroup]="LineAddForm" (ngSubmit)="addLine()" 
-  style="margin-left: 50px; font-size: large;"><br>
-
-  <div class="row" style="align-items: center">
-  <label>Line number: &nbsp;&nbsp;</label>
-  <input style="align-self: center" type="number" formControlName="LineNumber" placeholder="LineNumber"><br>
+<div>
+  <div>
+    <label for="lNumber">Line Number</label>
+    <input id="lNumber" name="lNumber" [value]="selectedNumber" (input)="selectedNumber = $event.target.value" ([ngModel])="selectedNumber" type="number" placeholder="Line Number"><br>
   </div>
-
-  <div class="row" style="align-items: center">
-  <label>Choose line type: &nbsp;&nbsp;</label>
-  <select ng-model="selectedType" class="lineTypes" formControlName="Type">
-    <option *ngFor="let type of lineTypes"
-      [value]="type">
-        {{type}}
-    </option>
-  </select><br>
+  <div>
+    <label>Select line type:</label>
+    <ng-multiselect-dropdown
+    [placeholder]="'Selecte Line'"
+    [data]="lineTypes"
+    [settings]="dropdownSettings"
+    (onSelect)="onTypeSelect($event)"
+    ([ngModel])="selectedType"
+  >
+  </ng-multiselect-dropdown>
   </div>
-
-  <div class="row" style="align-items: center">
-  <label>Choose stations: &nbsp;&nbsp;</label>
-  <select style="align-content:center" multiple ng-model="selectedType" class="nlStations" formControlName="Stations">
-    <option *ngFor="let station of nlStations"
-    [value]="station.Name">
-      {{station.Name}}
-  </option>
-  </select><br>
+  <div>
+    <label>Select stations:</label>
+    <ng-multiselect-dropdown
+    [placeholder]="'Select Stations'"
+    [data]="nlStations"
+    [settings]="dropdownSettings2"
+    (onSelect)="onStationSelect($event)"
+    (onSelectAll)="onStationAllSelect($event)"
+    (onDeSelectAll)="onStationAllDeSelect()"
+    (onDeSelect)="onStationDeSelect($event)"
+    ([ngModel])="selectedStations"
+  >
+  </ng-multiselect-dropdown>
   </div>
-
-  <div class="row" style="align-items: center">
-  <label>Insert schedule: &nbsp;&nbsp;</label>
-  <select style="align-items: center;" multiple ng-model="selectedType" class="schedule" formControlName="ScheduleDays">
-    <option *ngFor="let s of schedule"
-    [value]="s">
-      {{s}}
-  </option>
-  </select><br></div>
-
-  <div class="row" style="align-items: center">
-  <label>Insert departures: &nbsp;&nbsp;</label>
-  <div formArrayName="Departures"><br>
-    <button type="button" (click)="addTime()">Add time</button>
-    <div *ngFor="let t of Departures.controls; let i=index">
-      <label>Time: 
-        <input type="time" [formControlName]="i">
-      </label>
-    </div>
+  <div>
+    <label>Select schedule:</label>
+    <ng-multiselect-dropdown
+    [placeholder]="'Select schedule'"
+    [data]="schedule"
+    [settings]="dropdownSettings3"
+    (onSelect)="onScheduleSelect($event)"
+    (onSelectAll)="onScheduleAllSelect($event)"
+    (onDeSelectAll)="onScheduleAllDeSelect()"
+    (onDeSelect)="onScheduleDeSelect($event)"
+    ([ngModel])="selectedSchedule"
+  >
+  </ng-multiselect-dropdown>
   </div>
-  </div><br><br>
-
-  <button style="width: 250px" type="submit">Add Line</button>
-
-</form>
+  <form [formGroup]="LineAddForm">
+    <div>
+      <div formArrayName="Departures"><br>
+        <button type="button" (click)="addTime()">Add Departure</button>
+        <div *ngFor="let t of Departures.controls; let i=index">
+          <label>Time: 
+            <input type="time" [formControlName]="i">
+          </label>
+          <button (click)="deleteDeparture(i)">Delete</button>
+        </div>
+      </div>
+      </div><br><br>
+  </form>
+  <button (click)="addNewLine()">Add Line</button>
+</div>

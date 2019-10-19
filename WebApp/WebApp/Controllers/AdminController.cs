@@ -144,7 +144,7 @@ namespace WebApp.Controllers
         [Route("UpdateLine")]
         [HttpPost]
         public IHttpActionResult UpdateLine(NetworkLineViewModel model)
-        {
+        {//model is null fix it
             try
             {
                 NetworkLine line = AdaptNetworkLine(model, 1);
@@ -423,7 +423,7 @@ namespace WebApp.Controllers
             int cnt = s.NLine.Count;
             for(int i = 0; i < cnt; i++)
             {
-                var line = s.NLine.ToList()[i];
+                var line = s.NLine.ToList()[0];
                 line.Stations.Remove(s);
                 s.NLine.Remove(line);
             }
