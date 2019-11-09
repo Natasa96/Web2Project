@@ -26,7 +26,6 @@ namespace WebApp.Hubs
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<SimulationHub>();
 
         private static Timer timer = new Timer();
-        private IUnitOfWork UnitOfWork;
         private static int index = 0;
         private static double Lat {get;set;}
         private static double Lng { get; set; }
@@ -84,6 +83,7 @@ namespace WebApp.Hubs
         public void StopTimeServerUpdates()
         {
             timer.Stop();
+            this.Groups.Remove(this.Context.ConnectionId, "Admins");
         }
 
         public void NotifyAdmins(int clickCount)

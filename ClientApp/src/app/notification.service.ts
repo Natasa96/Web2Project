@@ -61,6 +61,8 @@ export class NotificationService {
 
         this.proxy.on('getBusLocation', (data: string) => {  
             //console.log('received location: ' + data);  
+            //observer.next(data);
+            this.notificationReceived.emit(data);
             observer.next(data);
         });  
     });      

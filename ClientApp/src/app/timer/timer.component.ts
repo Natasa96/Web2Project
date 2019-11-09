@@ -48,10 +48,7 @@ export class TimerComponent implements OnInit {
       allowSearchFilter: true,
     };
     this.checkConnection();
-    this.subscribeForNotifications();
-    this.subscribeForTime();
     this.getSchedule();
-    this.notifService.registerForClickEvents();
   }
 
   getSchedule(){
@@ -89,7 +86,13 @@ export class TimerComponent implements OnInit {
   private checkConnection(){
     this.notifService.startConnection().subscribe(e => {this.isConnected = e; 
         if (e) {
-          this.notifService.StartTimer()
+          this.subscribeForNotifications();
+          this.subscribeForTime();
+          this.startTimer();
+          console.log("Reconnected");
+        }
+        else{
+          console.log("Connection established");
         }
     });
   }
@@ -123,7 +126,7 @@ export class TimerComponent implements OnInit {
     data.Id = item.Id;
     data.LineNumber =item.LineNumber;
     this.connection.setNetworkLine(data).subscribe((res) => {
-      this.notifService.StartTimer();
+      this.startTimer();
       this.stations.emit(res);
     })
   }
