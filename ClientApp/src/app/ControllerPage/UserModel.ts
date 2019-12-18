@@ -4,4 +4,5 @@ export class UserModel{
     Document: string;
     Firstname: string;
     Lastname: string;
+    Validation: string;
 }

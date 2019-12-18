@@ -3,9 +3,14 @@
     <div class="col-md-5">
       <form [formGroup]="ticketForm" (ngSubmit)="CheckTicket()">
         <label>Ticket ID: <input type="number" formControlName="TicketID" placeholder="Id"></label>
-        <button type="submit" class="btn btn-block btn-primary">Check ticket</button>
+        <button type="submit" class="btn btn-block btn-primary" style="width: 150px;">Check ticket</button>
       </form>
     </div>
-    <app-check-ticket-info [ticket]="selectedTicket"></app-check-ticket-info>
+    <div *ngIf="selectedTicket != undefined">
+        <app-check-ticket-info [ticket]="selectedTicket"></app-check-ticket-info>
+    </div>
+    <div *ngIf="selectedTicket == undefined">
+      <label>No document data.</label>
+    </div>
   </div>
 </body>

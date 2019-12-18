@@ -40,7 +40,7 @@ export class AuthService {
         switch(role){
           case 'Admin': {this.router.navigate(['/Admin']); break;}
           case 'AppUser': {this.router.navigate(['/Passenger']); break;}
-          case 'Controllor':  {this.router.navigate(['/Home']); break} // change once added
+          case 'Controller':  {this.router.navigate(['/Controller']); break} // change once added
           default : {this.router.navigate(['/Home']);break;}
         }
 

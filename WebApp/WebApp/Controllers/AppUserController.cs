@@ -65,6 +65,18 @@ namespace WebApp.Controllers
                 if (UnitOfWork.Passengers.BuyTicket(user.Id, model))
                 {
                     UnitOfWork.Complete();
+                    UnitOfWork.Paypal.Add(new PaypalCredentials()
+                    {
+                        Address = model.Address,
+                        Id = model.Id,
+                        CreateTime = model.CreateTime,
+                        FullName = model.FullName,
+                        PurchaseUnit = model.PurchaseUnit,
+                        Status = model.Status,
+                        Ticket = UnitOfWork.Tickets.GetAll().LastOrDefault(),
+                        UpdateTime = model.UpdateTime
+                    });
+                    UnitOfWork.Complete();
                     return Ok("Ticket purchased!");
                 }
                 else
@@ -224,7 +236,7 @@ namespace WebApp.Controllers
                 Address = p.Address,
                 Email = p.Email,
                 Birthdate = p.Birthdate.Value.Date,
-                Document = "http://localhost:52295/Content/"+ Path.GetFileName(p.Document),
+                Document = (p.Document != null) ?"http://localhost:52295/Content/"+ Path.GetFileName(p.Document) : null,
                 Validation = p.Validation,
                 Type = p.Type.ToString(),
                 Types = Enum.GetNames(typeof(PassengerType)).ToList()

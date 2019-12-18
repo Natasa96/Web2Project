@@ -22,12 +22,12 @@
     [data]="selectedLine.AllStations"
     [settings]="dropdownSettings2"
     (onSelect)="onItemSelect($event)"
-    ([ngModel])="selectedLine.SelectedStations"
+    ([ngModel])="selectedLine.SelectedStations.Name"
   >
   </ng-multiselect-dropdown>
   </div>
   <div>
-    <label>Select Line type:</label>
+    <label>Select Line schedule:</label>
     <ng-multiselect-dropdown
     [placeholder]="'Selecte Line'"
     [data]="selectedLine.AllSchedule"

@@ -17,6 +17,8 @@ const httpdataOption ={
 })
 export class MyProfileComponent implements OnInit {
 
+  Feedback:string;
+
   MyProfileForm = this.fb.group({
     Username: ['', Validators.required],
     Email: ['', Validators.required],
@@ -74,26 +76,26 @@ export class MyProfileComponent implements OnInit {
   }
 
   onSubmit(){
-    this.MyProfileForm.get('Document').setValue(this.selectedFile);
+    if(this.selectedFile === null || this.selectedFile === undefined){
+      this.Feedback= "Please select a document";
+    }else{
+      this.MyProfileForm.get('Document').setValue(this.selectedFile);
     this.connectionService.updateProfile(this.MyProfileForm.value).subscribe((res)=>
     {
       console.log(res)
+      this.Feedback = res;
     });
+    }
   }
   ChangePassword(){
     this.connectionService.changePassword(this.ChangePasswordForm.value).subscribe((res)=>{
       console.log(res);
+      this.Feedback = res;
     });
   }
 
   onChange(type){
     this.MyProfileForm.get('Type').setValue(type);
-  }
-
-  changePassword(){
-    this.connectionService.changePassword(this.ChangePasswordForm.value).subscribe((result)=>{
-      console.log("Password changed");
-    });
   }
 
 }

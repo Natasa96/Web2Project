@@ -20,7 +20,6 @@ namespace WebApp.Models.TrafficSystem
             Stations = new List<Station>();
             Departures = new List<Departures>();
             ScheduleDays = new List<Schedule>();
-            //TimeOfGoing = new Timetable();
         }
 
         public int Id { get => id; set => id = value; }

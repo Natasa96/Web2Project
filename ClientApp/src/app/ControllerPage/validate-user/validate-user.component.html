@@ -1,14 +1,17 @@
 <body>
-  <div>
+  <div *ngIf="users != null">
+    <div style="width: 50%; height: 100%;position: absolute;padding-top:20px; left: 0;">
       <ul class="users">
-          <li *ngFor="let user of users"
-            [class.selected]="user === selectedUser"
-            (click)="onSelect(user)">
-            <span class="badge">{{user.Id}}</span> {{user.Firstname}} {{user.Lastname}}
-          </li>
-        </ul>
+        <li *ngFor="let user of users" [class.selected]="user === selectedUser" (click)="onSelect(user)">
+          {{user.Firstname}} {{user.Lastname}}
+        </li>
+      </ul>
+    </div>
+    <div style="width: 50%; height: 100%;position: absolute;padding-top:20px; right: 0;">
+      <app-user-validate-info [user]="selectedUser"></app-user-validate-info>
+    </div>
   </div>
-  <div>
-    <app-user-validate-info [user]="selectedUser"></app-user-validate-info>
+  <div *ngIf="users == null">
+      <Label>Loading. . .</Label>
   </div>
 </body>

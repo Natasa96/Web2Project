@@ -20,6 +20,7 @@ namespace WebApp.Persistence.UnitOfWork
         IDepartureRepository Departures { get; set; }
         IScheduleRepository Schedules { get; set; }
 
+        IPaypalRepository Paypal { get; set; }
         int Complete();
     }
 }

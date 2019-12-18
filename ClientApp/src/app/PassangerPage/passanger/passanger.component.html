@@ -1,10 +1,29 @@
-<td style="width: 150px; font-size:medium; text-align:center; background-color: rgb(110, 157, 165)">
-<a  style="color: white" href="Passenger/MyProfile">My profile</a>
-</td>
-<td style="width: 150px; font-size:medium; text-align:center; background-color: rgb(110, 157, 165)">
-<a style="color: white" href="Passenger/BuyTicket">Buy Ticket</a>
-</td>
-<td style="width: 150px; font-size:medium; text-align:center; background-color: rgb(110, 157, 165)">
-<a style="color: white" href="Logout">Logout</a>
-</td>
-<router-outlet></router-outlet>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!-- All the files that are required -->
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+</head>
+<div>
+    <ul>
+        <li>
+            <a  href="Passenger/MyProfile">My profile</a>
+        </li>
+        <li>
+            <a  href="Passenger/BuyTicket">Buy Ticket</a>
+        </li>
+        <li style="align-self: right;">
+            <a  href="Logout">Logout</a>
+        </li>
+    </ul>
+</div>
+<body>
+    <router-outlet></router-outlet>
+</body>

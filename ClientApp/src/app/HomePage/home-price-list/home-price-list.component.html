@@ -1,8 +1,6 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<body>
-  <div class="navbar nav nav-bar top">
-    <div class="container col-md-5">
+    <div>
       <ul>
         <li><a href="\Home">Home</a></li>
         <li><a href="\Register">Register</a></li>
@@ -11,11 +9,9 @@
         <li><a href="\TicketPrice">Ticket Price</a></li>
       </ul>
     </div>
-  </div>
-
-  <div *ngIf="Pricelist">
-    <div class="col-md-5">
-        <div class="row" style="color: white">
+  <body>
+  <div *ngIf="Pricelist" style="vertical-align: middle; margin-left: 450px; margin-top: 50px;">
+    <div class="col-md-5" style="color: white">
           <table style="border-color:antiquewhite" border="3px;">
             <td colspan="2" style="font-style: italic; font-size:x-large; text-align: center">
               Cenovnik
@@ -29,7 +25,6 @@
                   </td>
                 </tr>
           </table>
-        </div>
       </div>
   </div>
 </body>

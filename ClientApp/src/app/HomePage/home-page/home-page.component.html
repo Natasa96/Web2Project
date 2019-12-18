@@ -1,28 +1,29 @@
-<body>
-  <div>
-    <ul>
-        <li><a href="\Home">Home</a></li>
-        <li><a href="\Register">Register</a></li>
-        <li><a href="\Login">Login</a></li>
-        <li><a href="\About">About</a></li>
-        <li><a href="\TicketPrice">Ticket Price</a></li>
-      </ul>
-  </div>
- <!-- <div class="container"> -->
-         <table>
-        <tr style="color: white">
-          <td style="width: 100%;">
-            <app-timer  (childEvent)=getLocation($event) (stations)="getStationLocation($event)"></app-timer>
-          </td>
+<div>
+  <ul>
+    <li><a href="\Home">Home</a></li>
+    <li><a href="\Register">Register</a></li>
+    <li><a href="\Login">Login</a></li>
+    <li><a href="\About">About</a></li>
+    <li><a href="\TicketPrice">Ticket Price</a></li>
+  </ul>
+</div>
+<!-- <div class="container"> -->
 
-   <!--    </div> -->
-       <td>
-      <!--     <div style="width: 50%"> -->
-          <app-map [busLocation]="location" [stationsCoord]="stations">
-      
-          </app-map>
-     <!--      </div> -->
+<body>
+  <table>
+    <tr style="color: white">
+      <td style="width: 100%;">
+        <app-timer (childEvent)=getLocation($event) (stations)="getStationLocation($event)"></app-timer>
+      </td>
+
+      <!--    </div> -->
+      <td>
+        <!--     <div style="width: 50%"> -->
+        <app-map [busLocation]="location" [stationsCoord]="stations">
+
+        </app-map>
+        <!--      </div> -->
       </td>
     </tr>
-      </table>
+  </table>
 </body>

@@ -13,6 +13,7 @@ export class UserValidateInfoComponent implements OnInit {
   
   constructor(private connectionService: ConnectionService) { }
 
+  Feedback:string;
   ngOnInit() {
   }
 
@@ -22,6 +23,8 @@ export class UserValidateInfoComponent implements OnInit {
     data.option = "Denied";
     this.connectionService.validateUser(data).subscribe((res)=>{
       console.log(res);
+      this.Feedback=res;
+      this.user.Validation = "Invalid";
     });
   }
   ApproveClick(){
@@ -30,6 +33,8 @@ export class UserValidateInfoComponent implements OnInit {
     data.option = "Accepted";
     this.connectionService.validateUser(data).subscribe((res)=>{
       console.log(res);
+      this.Feedback = res;
+      this.user.Validation = "Valid";
     });
   }
 

@@ -5,89 +5,86 @@
 </head>
 
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-10">
-            <div class="well well-sm">
-                <div class="row">
-                    <div class="col-sm-10 col-md-5 col-sm-6">
-                      <div class="image-upload">
-                        <label for="file-input">
-                          <img [src]="imageSrc || 'http://placehold.it/380x500'" alt="document" style="width: 380px; height: 500px"/>
-                        </label>
-                        <input id="file-input" type="file" (change)="newImage($event)"/>
-                      </div>
-                      <h4>Change password</h4>
-                      <div>
-                        <form (ngSubmit)="ChangePassword()" [formGroup]="ChangePasswordForm">
-                          <label>Old password: <input type="password" formControlName="OldPassword" required></label>
-                          <label>New password: <input type="password" formControlName="NewPassword" required></label>
-                          <label>Confirm password: <input type="password" formControlName="ConfirmPassword" required></label>
-                          <button type="submit" class="btn btn-primary btn-block">Change password</button>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="col-sm-6 col-md-8">
-                        <h4>Information</h4>
-                        <form [formGroup]="MyProfileForm" (ngSubmit)="onSubmit()" class="user">
-                          <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                              </div>
-                              <input formControlName="Firstname" class="form-control" placeholder="Firstname" type="text" required>
-                              <input formControlName="Lastname" class="form-control" placeholder="Lastname" type="text" required>
-                            </div> 
-                            <div class="form-group input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
-                              </div>
-                              <input formControlName="Email" class="form-control" placeholder="Email address" type="email" required>
-                            </div> 
-                            <div class="form-group input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                              </div>
-                                <label>Username</label>
-                                <input formControlName="Username" class="form-control" placeholder="Username" type="text" required>
-                            </div>
-                            <div class="form-group input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-building"></i> </span>
-                              </div>
-                              <input formControlName="Address" class="form-control" placeholder="Address" type="text" required>
-                            </div>
-                            <div class="form-group input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
-                              </div>
-                              <label>Birthdate: </label>
-                              <label> {{user.Birthdate}}</label>
-                            </div>
-                            <div class="form-group input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-user-circle-o"></i> </span>
-                              </div>
-                              <label>Type</label>
-                              <select  (change)="onChange($event.target.value)" formControlName="Type" class="typeList">
-                                <option *ngFor="let type of typeList"  [value]="type"> {{type}} </option>
-                              </select>
-                            </div>
-                            <div class="form-group input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="	fa fa-handshake-o"></i> </span>
-                              </div>
-                              <label>Validated: </label>
-                              <input formControlName="Validation" class="form-control" type="text" readonly>
-                            </div> 
-                            <div class="form-group">
-                              <button type="submit" class="btn btn-primary btn-block"> Save changes  </button>
-                            </div>
-                          </form>
-                    </div>                                                                  
-                    </div>
-                </div>
+  <div style="width: 50%; height: 100%;position: absolute;padding-top:20px; left: 0;">
+    <div class="">
+         <div class="col-sm-10 col-md-5 col-sm-6">
+            <div class="image-upload">
+              <label for="file-input">
+                <img [src]="imageSrc || 'http://placehold.it/380x500'" alt="document" style="width: 380px; height: 500px"/>
+              </label>
+              <input id="file-input" type="file" (change)="newImage($event)"/>
             </div>
-      </div>
-</div>
+            <h4>Change password</h4>
+            <div>
+              <form (ngSubmit)="ChangePassword()" [formGroup]="ChangePasswordForm">
+                <label>Old password: <input type="password" formControlName="OldPassword" required></label>
+                <label>New password: <input type="password" formControlName="NewPassword" required></label>
+                <label>Confirm password: <input type="password" formControlName="ConfirmPassword" required></label>
+                <button type="submit" class="btn btn-primary btn-block">Change password</button>
+              </form>
+            </div>
+        </div>  
+    </div>
+  </div>
+  <div style="width: 50%; height: 100%;position: absolute;padding-top:20px; right: 0; ">
+    <div class="">
+          <h4>Information</h4>
+            <form [formGroup]="MyProfileForm" (ngSubmit)="onSubmit()" class="user" style="width: auto;"> 
+            <div class="form-group input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+              </div>
+                <input formControlName="Firstname" class="form-control" placeholder="Firstname" type="text" required>
+                <input formControlName="Lastname" class="form-control" placeholder="Lastname" type="text" required>
+            </div> 
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                </div>
+                <input formControlName="Email" class="form-control" placeholder="Email address" type="email" required>
+              </div> 
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                </div>
+                  <label>Username</label>
+                  <input formControlName="Username" class="form-control" placeholder="Username" type="text" required>
+              </div>
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                </div>
+                <input formControlName="Address" class="form-control" placeholder="Address" type="text" required>
+              </div>
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+                </div>
+                <label>Birthdate: </label>
+                <label> {{user.Birthdate}}</label>
+              </div>
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="fa fa-user-circle-o"></i> </span>
+                </div>
+                <label>Type</label>
+                <select  (change)="onChange($event.target.value)" formControlName="Type" class="typeList">
+                  <option *ngFor="let type of typeList"  [value]="type"> {{type}} </option>
+                </select>
+              </div>
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> <i class="	fa fa-handshake-o"></i> </span>
+                </div>
+                <label>Validated: </label>
+                <input formControlName="Validation" class="form-control" type="text" readonly>
+              </div> 
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block"> Save changes  </button>
+              </div>
+              <label>{{Feedback}}</label>
+          </form> 
+    </div>
+  </div>
 </body>
 

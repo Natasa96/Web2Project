@@ -38,6 +38,9 @@ namespace WebApp.Persistence.UnitOfWork
         [Dependency]
         public ITicketPriceRepository TicketPrice { get; set; }
 
+        [Dependency]
+        public IPaypalRepository Paypal { get; set; }
+
         public DemoUnitOfWork(DbContext context)
         {
             _context = context;

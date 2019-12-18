@@ -46,14 +46,14 @@ namespace WebApp.Hubs
         public void GetBusLocation()
         {
             lock (locker)
-            { 
+            {
                 //Svim klijentima se salje setRealTime poruka
-                if(Stations != null)
+                if (Stations != null)
                 {
                     Coords coord = new Coords();
                     coord.longitude = Lng;
                     coord.latitude = Lat;
-                    Clients.All.getBusLocation(coord);
+                    Clients.Client(this.Context.ConnectionId).getBusLocation(coord);
                     index++;
                     if (index < Stations.Count)
                     {
@@ -63,6 +63,8 @@ namespace WebApp.Hubs
                     else
                     {
                         index = 0;
+                        Lat = Stations[index].Latitude;
+                        Lng = Stations[index].Longitude;
                     }
                 }
             }
@@ -93,21 +95,14 @@ namespace WebApp.Hubs
 
         public override Task OnConnected()
         {
-            if (Context.User.IsInRole("Admin"))
-            {
-                Groups.Add(Context.ConnectionId, "Admins");
-            }
-
+            Groups.Add(Context.ConnectionId, "Admins");
             return base.OnConnected();
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            if (Context.User.IsInRole("Admin"))
-            {
-                Groups.Remove(Context.ConnectionId, "Admins");
-            }
-
+            Groups.Remove(Context.ConnectionId, "Admins");
+            Stations = null;
             return base.OnDisconnected(stopCalled);
         }
     }

@@ -82,6 +82,7 @@ namespace WebApp.Controllers
                         File.Delete(P.Document);
                     P.Document = null;
                     P.Type = Models.Enums.PassengerType.Regular;
+                    P.Validation = false;
                     UnitOfWork.Passengers.Update(P);
                     UnitOfWork.Complete();
                     return Ok("Document denied.");        
@@ -169,7 +170,7 @@ namespace WebApp.Controllers
             }
             catch(Exception ex)
             {
-                return InternalServerError(ex);
+                return BadRequest();
             }
         }
 
@@ -184,7 +185,8 @@ namespace WebApp.Controllers
                     Firstname = node.Firstname,
                     Lastname = node.Lastname,
                     Type = node.Type.ToString(),
-                    Document = "http://localhost:52295/Content/" + Path.GetFileName(node.Document)
+                    Validation = node.Validation ? "Valid" : "Invalid",
+                    Document = (node.Document!="Error" || node.Document == null) ? "http://localhost:52295/Content/" + Path.GetFileName(node.Document) : null
                 });
             }
             return model;

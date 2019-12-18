@@ -48,6 +48,7 @@ export class TimerComponent implements OnInit {
       allowSearchFilter: true,
     };
     this.checkConnection();
+    this.subscribeForNotifications();
     this.getSchedule();
   }
 
@@ -84,41 +85,24 @@ export class TimerComponent implements OnInit {
   }
 
   private checkConnection(){
-    this.notifService.startConnection().subscribe(e => {this.isConnected = e; 
-        if (e) {
-          this.subscribeForNotifications();
-          this.subscribeForTime();
-          this.startTimer();
-          console.log("Reconnected");
-        }
-        else{
-          console.log("Connection established");
-        }
-    });
+    this.notifService.startConnection().subscribe(e => 
+    {
+      if(e){
+        this.notifService.StartTimer();
+        this.isConnected = e;
+    }});
   }
 
   private subscribeForNotifications () {
-    this.notifService.notificationReceived.subscribe(e => this.onNotification(e));
+    this.notifService.registerForBusSimulation().subscribe(e => this.onNotification(e));
   }
 
   public onNotification(notif: string) {
 
      this.ngZone.run(() => { 
        this.notifications.push(notif);  
-       //console.log(this.notifications);
-    });  
-  }
-
-  subscribeForTime() {
-    this.notifService.registerForTimerEvents().subscribe(e => this.onTimeEvent(e));
-  }
-
-  public onTimeEvent(time: string){
-    this.ngZone.run(() => { 
-       this.time = time; 
-    });  
-    //console.log(this.time);
-    this.childEvent.emit(time);
+       this.childEvent.emit(notif);
+    });
   }
 
   SendLineInfo(item: ScheduleLineModel){
@@ -126,18 +110,8 @@ export class TimerComponent implements OnInit {
     data.Id = item.Id;
     data.LineNumber =item.LineNumber;
     this.connection.setNetworkLine(data).subscribe((res) => {
-      this.startTimer();
       this.stations.emit(res);
     })
-  }
-
-  public startTimer() {
-    this.notifService.StartTimer();
-  }
-
-  public stopTimer() {
-    this.notifService.StopTimer();
-    this.time = "";
   }
 
 }

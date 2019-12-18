@@ -40,7 +40,7 @@ import { HomeRideScheduleComponent } from './HomePage/home-ride-schedule/home-ri
 import { TimerComponent } from './timer/timer.component';
 import { NotificationService } from './notification.service';
 import { LogoutComponent } from './HomePage/logout/logout.component';
-
+import { PaypalComponent } from './PassangerPage/paypal/paypal.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +72,8 @@ import { LogoutComponent } from './HomePage/logout/logout.component';
     HomePriceListComponent,
     HomeRideScheduleComponent,
     TimerComponent,
-    LogoutComponent
+    LogoutComponent,
+    PaypalComponent
   ],
   imports: [
     BrowserModule,
@@ -81,7 +82,7 @@ import { LogoutComponent } from './HomePage/logout/logout.component';
     ReactiveFormsModule,
     HttpClientModule,
     AgmCoreModule.forRoot({apiKey: 'AIzaSyDnihJyw_34z5S1KZXp90pfTGAqhFszNJk'}),
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
   ],
   providers: [
     AuthGuard,

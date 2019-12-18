@@ -14,6 +14,7 @@ export class BuyTicketComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private connectionService: ConnectionService) { }
 
+  
   Pricelist: string[];
   selectedType;
   TicketPrice: number;

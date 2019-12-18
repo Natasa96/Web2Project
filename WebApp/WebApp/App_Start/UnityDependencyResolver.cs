@@ -9,6 +9,7 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
+using WebApp.Hubs;
 using WebApp.Models;
 using WebApp.Persistence;
 using WebApp.Persistence.Repository;
@@ -81,6 +82,8 @@ namespace WebApp.App_Start
             container.RegisterType<ITicketPriceRepository, TicketPriceRepository>();
             container.RegisterType<IDepartureRepository, DepartureRepository>();
             container.RegisterType<IScheduleRepository, ScheduleRepository>();
+            container.RegisterType<IPaypalRepository, PaypalRepository>();
+            container.RegisterType<SimulationHub>();
         }
 
         public void Dispose()

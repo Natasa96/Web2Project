@@ -56,6 +56,7 @@ namespace WebApp.Models
         public string Lastname { get; set; }
         public string Document { get; set; }
         public string Type { get; set; }
+        public string Validation { get; set; }
     }
 
     public class CheckTicketViewModel
@@ -71,6 +72,13 @@ namespace WebApp.Models
     {
         public int Price { get; set; }
         public string Type { get; set; }
+        public string Id { get; set; }
+        public string Address { get; set; }
+        public string FullName { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
+        public string Status { get; set; }
+        public string PurchaseUnit { get; set; }
     }
 
     public class PassengerInfoViewModel

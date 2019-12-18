@@ -24,7 +24,7 @@ export class CheckTicketComponent implements OnInit {
     this.connectionService.CheckTicket(this.ticketForm.value).subscribe((res) =>
     {
       this.selectedTicket = res;
-    });
+    })
   }
 
 }

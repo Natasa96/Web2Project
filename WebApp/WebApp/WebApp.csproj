@@ -333,6 +333,10 @@
     <Compile Include="Migrations\201906111642125_DbFixes1.Designer.cs">
       <DependentUpon>201906111642125_DbFixes1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911121615335_paypal.cs" />
+    <Compile Include="Migrations\201911121615335_paypal.Designer.cs">
+      <DependentUpon>201911121615335_paypal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -343,6 +347,7 @@
     <Compile Include="Models\Enums\TicketType.cs" />
     <Compile Include="Models\Enums\TimetableType.cs" />
     <Compile Include="Models\TicketService\DiscountPrice.cs" />
+    <Compile Include="Models\TicketService\PaypalCredentials.cs" />
     <Compile Include="Models\TicketService\Pricelist.cs" />
     <Compile Include="Models\TicketService\Ticket.cs" />
     <Compile Include="Models\TicketService\TicketPrice.cs" />
@@ -357,6 +362,7 @@
     <Compile Include="Persistence\Repository\Interfaces\IDepartureRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\INetworkLineRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IPassengerRepository.cs" />
+    <Compile Include="Persistence\Repository\Interfaces\IPaypalRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IPricelistRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IRepository.cs" />
     <Compile Include="Persistence\Repository\Interfaces\IScheduleRepository.cs" />
@@ -366,6 +372,7 @@
     <Compile Include="Persistence\Repository\Interfaces\ITimetableRepositiry.cs" />
     <Compile Include="Persistence\Repository\NetworkLineRepository.cs" />
     <Compile Include="Persistence\Repository\PassengerRepository.cs" />
+    <Compile Include="Persistence\Repository\PaypalRepository.cs" />
     <Compile Include="Persistence\Repository\PricelistRepository.cs" />
     <Compile Include="Persistence\Repository\Repository.cs" />
     <Compile Include="Persistence\Repository\ScheduleRepository.cs" />
@@ -527,6 +534,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906111642125_DbFixes1.resx">
       <DependentUpon>201906111642125_DbFixes1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911121615335_paypal.resx">
+      <DependentUpon>201911121615335_paypal.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

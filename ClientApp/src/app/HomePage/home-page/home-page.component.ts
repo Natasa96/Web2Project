@@ -20,7 +20,7 @@ export class HomePageComponent implements OnInit {
   }
 
   getLocation(coords: GeoLocation){
-    console.log("Home: lat"+ coords.latitude + " lng: " + coords.latitude);
+    console.log("Home: lat"+ coords.latitude + " lng: " + coords.longitude);
     this.location = coords;
   }
   @ViewChild(MapComponent) child: MapComponent;

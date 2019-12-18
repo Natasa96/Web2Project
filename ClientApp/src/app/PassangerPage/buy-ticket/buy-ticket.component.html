@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row">
+    <div class="row" style="padding-top: 150px; padding-left: 200px;">
       <tr>
         <div class="col-mg-7">
           <label>Select ticket: <select  (change)="onChange($event.target.value)">
@@ -10,8 +10,9 @@
       <tr>
         <div class="col-mg-10">
           <label>Ticket Price: <input readonly [value]="TicketPrice"></label>
+          <label>RSD</label>
         </div>
-        <button (click)="buyTicket()" style="width: 250px; height: 30px;">Buy ticket</button>     
+        <app-paypal [price]="TicketPrice" [type]="selectedType"></app-paypal>    
       </tr>
     </div>
 </div>
